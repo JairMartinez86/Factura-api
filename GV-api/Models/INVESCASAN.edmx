@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="INVESCASANModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="CODCTA" />
+          </Key>
+          <Property Name="CODCTA" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="DESCTA" Type="nchar" MaxLength="250" />
+          <Property Name="DIRECC" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="DPTO" Type="nvarchar" MaxLength="20" />
+          <Property Name="COD" Type="nvarchar" MaxLength="4" />
+          <Property Name="CONTAC" Type="nvarchar" MaxLength="150" />
+          <Property Name="TELEFO" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="TELEFONO1" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="CARGOP" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Plazo" Type="nvarchar" MaxLength="3" />
+          <Property Name="Vendedor" Type="nvarchar" MaxLength="5" />
+          <Property Name="Municipio" Type="nvarchar" MaxLength="4" Nullable="false" />
+          <Property Name="Techo" Type="money" Nullable="false" />
+          <Property Name="Observaciones" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Exonerado" Type="bit" Nullable="false" />
+          <Property Name="FacturarVencido" Type="bit" Nullable="false" />
+          <Property Name="SinCredito" Type="bit" Nullable="false" />
+          <Property Name="Descuento" Type="money" Nullable="false" />
+          <Property Name="Liquidar" Type="bit" Nullable="false" />
+          <Property Name="Distribuidor" Type="bit" Nullable="false" />
+          <Property Name="Bodega" Type="nchar" MaxLength="4" />
+          <Property Name="Especial" Type="bit" Nullable="false" />
+          <Property Name="Sector" Type="nchar" MaxLength="2" Nullable="false" />
+          <Property Name="UltimaFechaPago" Type="datetime" />
+          <Property Name="UltimoPago" Type="money" Nullable="false" />
+          <Property Name="ReciboUltimoPago" Type="nchar" MaxLength="12" Nullable="false" />
+          <Property Name="BodegaProceso" Type="nchar" MaxLength="4" />
+          <Property Name="Clave" Type="bit" Nullable="false" />
+          <Property Name="Lista" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="Cedula" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="Direccnegocio" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Celular" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="Moneda" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="FechaApertura" Type="datetime" />
+          <Property Name="RazonSocial" Type="nchar" MaxLength="250" Nullable="false" />
+          <Property Name="Gracia" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="INVESCASANModelStoreContainer">
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="INVESCASANModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="CODCTA" />
+          </Key>
+          <Property Name="CODCTA" Type="String" MaxLength="6" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DESCTA" Type="String" MaxLength="250" FixedLength="true" Unicode="true" />
+          <Property Name="DIRECC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DPTO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="COD" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CONTAC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TELEFO" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="TELEFONO1" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="CARGOP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Plazo" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Vendedor" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Municipio" Type="String" MaxLength="4" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Techo" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Observaciones" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Exonerado" Type="Boolean" Nullable="false" />
+          <Property Name="FacturarVencido" Type="Boolean" Nullable="false" />
+          <Property Name="SinCredito" Type="Boolean" Nullable="false" />
+          <Property Name="Descuento" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Liquidar" Type="Boolean" Nullable="false" />
+          <Property Name="Distribuidor" Type="Boolean" Nullable="false" />
+          <Property Name="Bodega" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="Especial" Type="Boolean" Nullable="false" />
+          <Property Name="Sector" Type="String" MaxLength="2" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="UltimaFechaPago" Type="DateTime" Precision="3" />
+          <Property Name="UltimoPago" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ReciboUltimoPago" Type="String" MaxLength="12" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="BodegaProceso" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="Clave" Type="Boolean" Nullable="false" />
+          <Property Name="Lista" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Cedula" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Direccnegocio" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Celular" Type="String" MaxLength="12" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Moneda" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="FechaApertura" Type="DateTime" Precision="3" />
+          <Property Name="RazonSocial" Type="String" MaxLength="250" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Gracia" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="INVESCASANEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="INVESCASANModelStoreContainer" CdmEntityContainer="INVESCASANEntities">
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="INVESCASANModel.Clientes">
+              <MappingFragment StoreEntitySet="Clientes">
+                <ScalarProperty Name="CODCTA" ColumnName="CODCTA" />
+                <ScalarProperty Name="DESCTA" ColumnName="DESCTA" />
+                <ScalarProperty Name="DIRECC" ColumnName="DIRECC" />
+                <ScalarProperty Name="DPTO" ColumnName="DPTO" />
+                <ScalarProperty Name="COD" ColumnName="COD" />
+                <ScalarProperty Name="CONTAC" ColumnName="CONTAC" />
+                <ScalarProperty Name="TELEFO" ColumnName="TELEFO" />
+                <ScalarProperty Name="TELEFONO1" ColumnName="TELEFONO1" />
+                <ScalarProperty Name="CARGOP" ColumnName="CARGOP" />
+                <ScalarProperty Name="Plazo" ColumnName="Plazo" />
+                <ScalarProperty Name="Vendedor" ColumnName="Vendedor" />
+                <ScalarProperty Name="Municipio" ColumnName="Municipio" />
+                <ScalarProperty Name="Techo" ColumnName="Techo" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Exonerado" ColumnName="Exonerado" />
+                <ScalarProperty Name="FacturarVencido" ColumnName="FacturarVencido" />
+                <ScalarProperty Name="SinCredito" ColumnName="SinCredito" />
+                <ScalarProperty Name="Descuento" ColumnName="Descuento" />
+                <ScalarProperty Name="Liquidar" ColumnName="Liquidar" />
+                <ScalarProperty Name="Distribuidor" ColumnName="Distribuidor" />
+                <ScalarProperty Name="Bodega" ColumnName="Bodega" />
+                <ScalarProperty Name="Especial" ColumnName="Especial" />
+                <ScalarProperty Name="Sector" ColumnName="Sector" />
+                <ScalarProperty Name="UltimaFechaPago" ColumnName="UltimaFechaPago" />
+                <ScalarProperty Name="UltimoPago" ColumnName="UltimoPago" />
+                <ScalarProperty Name="ReciboUltimoPago" ColumnName="ReciboUltimoPago" />
+                <ScalarProperty Name="BodegaProceso" ColumnName="BodegaProceso" />
+                <ScalarProperty Name="Clave" ColumnName="Clave" />
+                <ScalarProperty Name="Lista" ColumnName="Lista" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Direccnegocio" ColumnName="Direccnegocio" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="Moneda" ColumnName="Moneda" />
+                <ScalarProperty Name="FechaApertura" ColumnName="FechaApertura" />
+                <ScalarProperty Name="RazonSocial" ColumnName="RazonSocial" />
+                <ScalarProperty Name="Gracia" ColumnName="Gracia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
