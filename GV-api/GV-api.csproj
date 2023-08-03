@@ -194,6 +194,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>INVESCASAN.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\TbBodega.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbVendedores.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

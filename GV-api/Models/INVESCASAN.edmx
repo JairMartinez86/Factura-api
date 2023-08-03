@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="INVESCASANModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="INVESCASANModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Clientes">
           <Key>
             <PropertyRef Name="CODCTA" />
@@ -47,11 +47,38 @@
           <Property Name="RazonSocial" Type="nchar" MaxLength="250" Nullable="false" />
           <Property Name="Gracia" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="TbBodega">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="nvarchar" MaxLength="4" Nullable="false" />
+          <Property Name="titulo" Type="nvarchar" MaxLength="50" />
+          <Property Name="SCta" Type="nvarchar" MaxLength="12" />
+          <Property Name="CuentaIngContado" Type="nchar" MaxLength="12" />
+          <Property Name="CuentaIngCredito" Type="nchar" MaxLength="12" />
+          <Property Name="CuentaCajaCordoba" Type="nchar" MaxLength="12" />
+          <Property Name="CuentaCajaDolares" Type="nchar" MaxLength="12" />
+          <Property Name="CuentaCostos" Type="nchar" MaxLength="12" />
+          <Property Name="CuentaInven" Type="nchar" MaxLength="12" />
+          <Property Name="ComisionTarjeta" Type="nchar" MaxLength="12" />
+          <Property Name="CuentaDevoluciones" Type="nchar" MaxLength="12" />
+        </EntityType>
+        <EntityType Name="tbVendedores">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="Titulo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Descrip" Type="nvarchar" MaxLength="255" />
+          <Property Name="Cido" Type="nvarchar" MaxLength="255" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="INVESCASANModelStoreContainer">
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TbBodega" EntityType="Self.TbBodega" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbVendedores" EntityType="Self.tbVendedores" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="INVESCASANModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -99,7 +126,35 @@
         </EntityType>
         <EntityContainer Name="INVESCASANEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Clientes" EntityType="Self.Clientes" />
+          <EntitySet Name="TbBodega" EntityType="INVESCASANModel.TbBodega" />
+          <EntitySet Name="tbVendedores" EntityType="INVESCASANModel.tbVendedores" />
         </EntityContainer>
+        <EntityType Name="TbBodega">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="titulo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SCta" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="CuentaIngContado" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="CuentaIngCredito" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="CuentaCajaCordoba" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="CuentaCajaDolares" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="CuentaCostos" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="CuentaInven" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="ComisionTarjeta" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="CuentaDevoluciones" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tbVendedores">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Titulo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Descrip" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Cido" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -146,6 +201,34 @@
                 <ScalarProperty Name="FechaApertura" ColumnName="FechaApertura" />
                 <ScalarProperty Name="RazonSocial" ColumnName="RazonSocial" />
                 <ScalarProperty Name="Gracia" ColumnName="Gracia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TbBodega">
+            <EntityTypeMapping TypeName="INVESCASANModel.TbBodega">
+              <MappingFragment StoreEntitySet="TbBodega">
+                <ScalarProperty Name="CuentaDevoluciones" ColumnName="CuentaDevoluciones" />
+                <ScalarProperty Name="ComisionTarjeta" ColumnName="ComisionTarjeta" />
+                <ScalarProperty Name="CuentaInven" ColumnName="CuentaInven" />
+                <ScalarProperty Name="CuentaCostos" ColumnName="CuentaCostos" />
+                <ScalarProperty Name="CuentaCajaDolares" ColumnName="CuentaCajaDolares" />
+                <ScalarProperty Name="CuentaCajaCordoba" ColumnName="CuentaCajaCordoba" />
+                <ScalarProperty Name="CuentaIngCredito" ColumnName="CuentaIngCredito" />
+                <ScalarProperty Name="CuentaIngContado" ColumnName="CuentaIngContado" />
+                <ScalarProperty Name="SCta" ColumnName="SCta" />
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbVendedores">
+            <EntityTypeMapping TypeName="INVESCASANModel.tbVendedores">
+              <MappingFragment StoreEntitySet="tbVendedores">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Cido" ColumnName="Cido" />
+                <ScalarProperty Name="Descrip" ColumnName="Descrip" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
