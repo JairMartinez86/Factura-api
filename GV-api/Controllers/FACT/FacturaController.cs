@@ -127,6 +127,7 @@ namespace GV_api.Controllers.FACT
                                          CodCliente = _q.CODCTA.TrimStart().TrimEnd(),
                                          Limite = _q.Techo,
                                          Plazo = _q.Plazo,
+                                         Gracia = _q.Gracia,
                                          Moneda = _q.Moneda.TrimStart().TrimEnd(),
                                          Disponible = 0.0
                                      }).ToList();
