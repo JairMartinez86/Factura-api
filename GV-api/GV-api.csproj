@@ -176,6 +176,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Catalogo.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Clientes.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
@@ -193,6 +196,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>INVESCASAN.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Listadeprecios.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TbBodega.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>

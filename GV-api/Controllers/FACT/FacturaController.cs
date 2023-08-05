@@ -42,10 +42,10 @@ namespace GV_api.Controllers.FACT
                                      Cliente = _q.DESCTA.TrimStart().TrimEnd(),
                                      Ruc = _q.RazonSocial.TrimStart().TrimEnd(),
                                      Cedula = _q.Cedula.TrimStart().TrimEnd(),
-                                     Contacto = string.Concat(_q.Celular.TrimStart().TrimEnd()," ",_q.TELEFO.TrimStart().TrimEnd(), " ", _q.TELEFONO1.TrimStart().TrimEnd()),
+                                     Contacto = string.Concat(_q.Celular.TrimStart().TrimEnd(),"/",_q.TELEFO.TrimStart().TrimEnd(), "/", _q.TELEFONO1.TrimStart().TrimEnd()),
                                      Limite = _q.Techo,
                                      Moneda = _q.Moneda.TrimStart().TrimEnd(),
-                                     Vendedor = _q.Vendedor.TrimStart().TrimEnd(),
+                                     CodVendedor = _q.Vendedor.TrimStart().TrimEnd(),
                                      EsClave = _q.Clave,
                                      Filtro = string.Concat(_q.CODCTA.TrimStart().TrimEnd(), _q.DESCTA.TrimStart().TrimEnd(), _q.Cedula.TrimStart().TrimEnd(), _q.TELEFO.TrimStart().TrimEnd(), _q.TELEFONO1.TrimStart().TrimEnd(), _q.Celular.TrimStart().TrimEnd()),
                                      Key = string.Concat(_q.CODCTA.TrimStart().TrimEnd(), " ", _q.DESCTA.TrimStart().TrimEnd())
@@ -185,6 +185,80 @@ namespace GV_api.Controllers.FACT
                     datos.Nombre = "ESCALVE";
                     datos.d = qClienteClave;
                     lstDatos.Add(datos);
+
+                    json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+        [Route("api/Factura/CargarProductos")]
+        [HttpGet]
+        public string CargarProductos(string CodCliente)
+        {
+            return _CargarProductos(CodCliente);
+        }
+
+        private string _CargarProductos(string CodCliente)
+        {
+            string json = string.Empty;
+            if (CodCliente == null) CodCliente = string.Empty;
+            try
+            {
+                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                {
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+                    Cls_Datos datos = new Cls_Datos();
+                    string strTipo = "Publico";
+
+
+
+
+                    var qProductos = (from _q in _Conexion.Catalogo
+                                         where _q.FUERADELINEA == false
+                                         select new
+                                         {
+                                             Codigo = _q.SSSCTA.TrimStart().TrimEnd(),
+                                             Producto = _q.DESCTA.TrimStart().TrimEnd(),
+                                             ConImpuesto = _q.COBIVA,
+                                             Key = string.Concat(_q.SSSCTA.TrimStart().TrimEnd(), " ", _q.DESCTA.TrimStart().TrimEnd()),
+                                         }).ToList();
+
+
+
+                    datos.Nombre = "PRODUCTOS";
+                    datos.d = qProductos;
+                    lstDatos.Add(datos);
+
+
+
+                    var qPrecios = (from _q in _Conexion.Listadeprecios
+                                      select new
+                                      {
+                                          CodProducto = _q.CodiProd.TrimStart().TrimEnd(),
+                                          Tipo = _q.Tipo.TrimStart().TrimEnd(),
+                                          Precio = _q.Precio,
+                                          Principal = (_q.Tipo.TrimStart().TrimEnd() == strTipo ? true : false)
+                                      }).ToList();
+
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "PRECIOS";
+                    datos.d = qPrecios;
+                    lstDatos.Add(datos);
+
+
+
 
                     json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
                 }

@@ -28,5 +28,7 @@ namespace GV_api.Models
         public virtual DbSet<Clientes> Clientes { get; set; }
         public virtual DbSet<TbBodega> TbBodega { get; set; }
         public virtual DbSet<tbVendedores> tbVendedores { get; set; }
+        public virtual DbSet<Catalogo> Catalogo { get; set; }
+        public virtual DbSet<Listadeprecios> Listadeprecios { get; set; }
     }
 }

@@ -5,6 +5,43 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="INVESCASANModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Catalogo">
+          <Key>
+            <PropertyRef Name="SSSCTA" />
+          </Key>
+          <Property Name="SSSCTA" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="DESCTA" Type="nvarchar" MaxLength="200" />
+          <Property Name="UNIDAD" Type="nchar" MaxLength="15" />
+          <Property Name="GRUPO" Type="nvarchar" MaxLength="2" />
+          <Property Name="SUBGRUPO" Type="nvarchar" MaxLength="5" />
+          <Property Name="PESOUM" Type="float" />
+          <Property Name="COBIVA" Type="bit" Nullable="false" />
+          <Property Name="EXISTENCIAS" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="VALOREXISTENCIAS" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="EXISTENCIASCERRADA" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="VALOREXISTENCIASCERRADA" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="COSPRO" Type="money" Nullable="false" />
+          <Property Name="COSPRO_CE" Type="float" Nullable="false" />
+          <Property Name="FUERADELINEA" Type="bit" Nullable="false" />
+          <Property Name="CLASE" Type="nvarchar" MaxLength="10" />
+          <Property Name="FACTURAR" Type="bit" Nullable="false" />
+          <Property Name="COSTOH" Type="money" Nullable="false" />
+          <Property Name="FLUCTUACION" Type="money" />
+          <Property Name="LIBERAR" Type="bit" />
+          <Property Name="Descuento" Type="money" />
+          <Property Name="COSTOHH" Type="money" />
+          <Property Name="Presentacion" Type="nchar" MaxLength="50" />
+          <Property Name="CodigoProveedor" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="EnLiquidacion" Type="bit" Nullable="false" />
+          <Property Name="Bonificable" Type="bit" Nullable="false" />
+          <Property Name="UnitarioProveedor" Type="money" Nullable="false" />
+          <Property Name="GrupoPresu" Type="nchar" MaxLength="2" Nullable="false" />
+          <Property Name="Clasificacion" Type="nchar" MaxLength="2" />
+          <Property Name="DescripcionProveedor" Type="nchar" MaxLength="100" />
+          <Property Name="BonificarSiempre" Type="bit" Nullable="false" />
+          <Property Name="UnidadesBonificables" Type="int" Nullable="false" />
+          <Property Name="Estrategico" Type="bit" />
+        </EntityType>
         <EntityType Name="Clientes">
           <Key>
             <PropertyRef Name="CODCTA" />
@@ -47,6 +84,17 @@
           <Property Name="RazonSocial" Type="nchar" MaxLength="250" Nullable="false" />
           <Property Name="Gracia" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="Listadeprecios">
+          <Key>
+            <PropertyRef Name="IVA" />
+          </Key>
+          <Property Name="CodiProd" Type="nvarchar" MaxLength="12" />
+          <Property Name="Tipo" Type="nvarchar" MaxLength="255" />
+          <Property Name="Precio" Type="money" />
+          <Property Name="IVA" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="TbBodega">
           <Key>
             <PropertyRef Name="Codigo" />
@@ -74,9 +122,18 @@
           <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityContainer Name="INVESCASANModelStoreContainer">
+          <EntitySet Name="Catalogo" EntityType="Self.Catalogo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TbBodega" EntityType="Self.TbBodega" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbVendedores" EntityType="Self.tbVendedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Listadeprecios" EntityType="Self.Listadeprecios" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Listadeprecios].[CodiProd] AS [CodiProd], 
+    [Listadeprecios].[Tipo] AS [Tipo], 
+    [Listadeprecios].[Precio] AS [Precio], 
+    [Listadeprecios].[IVA] AS [IVA]
+    FROM [dbo].[Listadeprecios] AS [Listadeprecios]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -128,6 +185,8 @@
           <EntitySet Name="Clientes" EntityType="Self.Clientes" />
           <EntitySet Name="TbBodega" EntityType="INVESCASANModel.TbBodega" />
           <EntitySet Name="tbVendedores" EntityType="INVESCASANModel.tbVendedores" />
+          <EntitySet Name="Catalogo" EntityType="INVESCASANModel.Catalogo" />
+          <EntitySet Name="Listadeprecios" EntityType="INVESCASANModel.Listadeprecios" />
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -154,6 +213,52 @@
           <Property Name="Descrip" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Cido" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Activo" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Catalogo">
+          <Key>
+            <PropertyRef Name="SSSCTA" />
+          </Key>
+          <Property Name="SSSCTA" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="DESCTA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UNIDAD" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="GRUPO" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="SUBGRUPO" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="PESOUM" Type="Double" />
+          <Property Name="COBIVA" Type="Boolean" Nullable="false" />
+          <Property Name="EXISTENCIAS" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="VALOREXISTENCIAS" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="EXISTENCIASCERRADA" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="VALOREXISTENCIASCERRADA" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="COSPRO" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="COSPRO_CE" Type="Double" Nullable="false" />
+          <Property Name="FUERADELINEA" Type="Boolean" Nullable="false" />
+          <Property Name="CLASE" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FACTURAR" Type="Boolean" Nullable="false" />
+          <Property Name="COSTOH" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="FLUCTUACION" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="LIBERAR" Type="Boolean" />
+          <Property Name="Descuento" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="COSTOHH" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Presentacion" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="CodigoProveedor" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="EnLiquidacion" Type="Boolean" Nullable="false" />
+          <Property Name="Bonificable" Type="Boolean" Nullable="false" />
+          <Property Name="UnitarioProveedor" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="GrupoPresu" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="Clasificacion" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="DescripcionProveedor" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="BonificarSiempre" Type="Boolean" Nullable="false" />
+          <Property Name="UnidadesBonificables" Type="Int32" Nullable="false" />
+          <Property Name="Estrategico" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Listadeprecios">
+          <Key>
+            <PropertyRef Name="IVA" />
+          </Key>
+          <Property Name="CodiProd" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Tipo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Precio" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IVA" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -229,6 +334,54 @@
                 <ScalarProperty Name="Descrip" ColumnName="Descrip" />
                 <ScalarProperty Name="Titulo" ColumnName="Titulo" />
                 <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Catalogo">
+            <EntityTypeMapping TypeName="INVESCASANModel.Catalogo">
+              <MappingFragment StoreEntitySet="Catalogo">
+                <ScalarProperty Name="Estrategico" ColumnName="Estrategico" />
+                <ScalarProperty Name="UnidadesBonificables" ColumnName="UnidadesBonificables" />
+                <ScalarProperty Name="BonificarSiempre" ColumnName="BonificarSiempre" />
+                <ScalarProperty Name="DescripcionProveedor" ColumnName="DescripcionProveedor" />
+                <ScalarProperty Name="Clasificacion" ColumnName="Clasificacion" />
+                <ScalarProperty Name="GrupoPresu" ColumnName="GrupoPresu" />
+                <ScalarProperty Name="UnitarioProveedor" ColumnName="UnitarioProveedor" />
+                <ScalarProperty Name="Bonificable" ColumnName="Bonificable" />
+                <ScalarProperty Name="EnLiquidacion" ColumnName="EnLiquidacion" />
+                <ScalarProperty Name="CodigoProveedor" ColumnName="CodigoProveedor" />
+                <ScalarProperty Name="Presentacion" ColumnName="Presentacion" />
+                <ScalarProperty Name="COSTOHH" ColumnName="COSTOHH" />
+                <ScalarProperty Name="Descuento" ColumnName="Descuento" />
+                <ScalarProperty Name="LIBERAR" ColumnName="LIBERAR" />
+                <ScalarProperty Name="FLUCTUACION" ColumnName="FLUCTUACION" />
+                <ScalarProperty Name="COSTOH" ColumnName="COSTOH" />
+                <ScalarProperty Name="FACTURAR" ColumnName="FACTURAR" />
+                <ScalarProperty Name="CLASE" ColumnName="CLASE" />
+                <ScalarProperty Name="FUERADELINEA" ColumnName="FUERADELINEA" />
+                <ScalarProperty Name="COSPRO_CE" ColumnName="COSPRO_CE" />
+                <ScalarProperty Name="COSPRO" ColumnName="COSPRO" />
+                <ScalarProperty Name="VALOREXISTENCIASCERRADA" ColumnName="VALOREXISTENCIASCERRADA" />
+                <ScalarProperty Name="EXISTENCIASCERRADA" ColumnName="EXISTENCIASCERRADA" />
+                <ScalarProperty Name="VALOREXISTENCIAS" ColumnName="VALOREXISTENCIAS" />
+                <ScalarProperty Name="EXISTENCIAS" ColumnName="EXISTENCIAS" />
+                <ScalarProperty Name="COBIVA" ColumnName="COBIVA" />
+                <ScalarProperty Name="PESOUM" ColumnName="PESOUM" />
+                <ScalarProperty Name="SUBGRUPO" ColumnName="SUBGRUPO" />
+                <ScalarProperty Name="GRUPO" ColumnName="GRUPO" />
+                <ScalarProperty Name="UNIDAD" ColumnName="UNIDAD" />
+                <ScalarProperty Name="DESCTA" ColumnName="DESCTA" />
+                <ScalarProperty Name="SSSCTA" ColumnName="SSSCTA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Listadeprecios">
+            <EntityTypeMapping TypeName="INVESCASANModel.Listadeprecios">
+              <MappingFragment StoreEntitySet="Listadeprecios">
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="CodiProd" ColumnName="CodiProd" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

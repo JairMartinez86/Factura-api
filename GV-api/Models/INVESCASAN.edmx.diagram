@@ -8,6 +8,8 @@
         <EntityTypeShape EntityType="INVESCASANModel.Clientes" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="INVESCASANModel.TbBodega" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="INVESCASANModel.tbVendedores" Width="1.5" PointX="3.375" PointY="4.75" />
+        <EntityTypeShape EntityType="INVESCASANModel.Catalogo" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="INVESCASANModel.Listadeprecios" Width="1.5" PointX="7.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
