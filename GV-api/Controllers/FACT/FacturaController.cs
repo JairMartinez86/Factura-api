@@ -1,4 +1,5 @@
 ﻿using GV_api.Class;
+using GV_api.Class.FACT;
 using GV_api.Models;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
 
@@ -203,12 +205,12 @@ namespace GV_api.Controllers.FACT
 
         [Route("api/Factura/CargarProductos")]
         [HttpGet]
-        public string CargarProductos(string CodCliente)
+        public string CargarProductos(string CodCliente, decimal Tc)
         {
-            return _CargarProductos(CodCliente);
+            return _CargarProductos(CodCliente, Tc);
         }
 
-        private string _CargarProductos(string CodCliente)
+        private string _CargarProductos(string CodCliente, decimal Tc)
         {
             string json = string.Empty;
             if (CodCliente == null) CodCliente = string.Empty;
@@ -219,6 +221,7 @@ namespace GV_api.Controllers.FACT
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
                     Cls_Datos datos = new Cls_Datos();
                     string strTipo = "Publico";
+                    bool EsDolar = false;
 
 
 
@@ -241,12 +244,13 @@ namespace GV_api.Controllers.FACT
 
 
 
-                    var qPrecios = (from _q in _Conexion.Listadeprecios
-                                      select new
+                    List<Cls_Precio> qPrecios = (from _q in _Conexion.Listadeprecios
+                                      select new Cls_Precio()
                                       {
                                           CodProducto = _q.CodiProd.TrimStart().TrimEnd(),
                                           Tipo = _q.Tipo.TrimStart().TrimEnd(),
-                                          Precio = _q.Precio,
+                                          PrecioCordoba = ((decimal)(!EsDolar? _q.Precio : _q.Precio * Tc)),
+                                          PrecioDolar = ((decimal)(EsDolar ? _q.Precio : _q.Precio / Tc)),
                                           Principal = (_q.Tipo.TrimStart().TrimEnd() == strTipo ? true : false)
                                       }).ToList();
 
@@ -273,6 +277,8 @@ namespace GV_api.Controllers.FACT
 
             return json;
         }
+
+
 
 
 
