@@ -170,12 +170,16 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Class\Cls_Datos.cs" />
     <Compile Include="Class\Cls_Mensaje.cs" />
+    <Compile Include="Class\FACT\Cls_Bonificacion.cs" />
     <Compile Include="Class\FACT\Cls_Precio.cs" />
     <Compile Include="Controllers\FACT\FacturaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Bonificados.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Catalogo.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
@@ -197,6 +201,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>INVESCASAN.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Kardex.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Listadeprecios.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
@@ -270,6 +277,9 @@
     </EntityDeploy>
     <Content Include="Models\INVESCASAN.edmx.diagram">
       <DependentUpon>INVESCASAN.edmx</DependentUpon>
+    </Content>
+    <Content Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

@@ -5,6 +5,19 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="INVESCASANModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Bonificados' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="Bonificados">
+          <Key>
+            <PropertyRef Name="Desde" />
+            <PropertyRef Name="Hasta" />
+            <PropertyRef Name="Bonificacion" />
+          </Key>
+          <Property Name="Codigo" Type="nchar" MaxLength="10" />
+          <Property Name="Desde" Type="smallint" Nullable="false" />
+          <Property Name="Hasta" Type="smallint" Nullable="false" />
+          <Property Name="Bonificacion" Type="smallint" Nullable="false" />
+        </EntityType>
         <EntityType Name="Catalogo">
           <Key>
             <PropertyRef Name="SSSCTA" />
@@ -85,6 +98,35 @@
           <Property Name="Gracia" Type="int" Nullable="false" />
         </EntityType>
         <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Kardex' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="Kardex">
+          <Key>
+            <PropertyRef Name="CodiProd" />
+            <PropertyRef Name="Fecha" />
+            <PropertyRef Name="Entrada" />
+            <PropertyRef Name="Salidas" />
+          </Key>
+          <Property Name="CodiProd" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+          <Property Name="Tipo" Type="nvarchar" MaxLength="3" />
+          <Property Name="Documento" Type="nvarchar" MaxLength="20" />
+          <Property Name="Entrada" Type="money" Nullable="false" />
+          <Property Name="Salidas" Type="money" Nullable="false" />
+          <Property Name="Saldo" Type="money" />
+          <Property Name="Costo" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="PrecioVenta" Type="money" />
+          <Property Name="tipofactura" Type="nchar" MaxLength="2" />
+          <Property Name="Valorentrada" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Valorsalida" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="SaldoValor" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Orden" Type="money" />
+          <Property Name="Bodega" Type="nchar" MaxLength="4" />
+          <Property Name="Cerrada" Type="bit" />
+          <Property Name="Vence" Type="datetime" />
+          <Property Name="Nolote" Type="nchar" MaxLength="12" />
+          <Property Name="BodegaDestino" Type="nchar" MaxLength="4" />
+        </EntityType>
+        <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="Listadeprecios">
           <Key>
@@ -126,6 +168,37 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TbBodega" EntityType="Self.TbBodega" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbVendedores" EntityType="Self.tbVendedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bonificados" EntityType="Self.Bonificados" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Bonificados].[Codigo] AS [Codigo], 
+    [Bonificados].[Desde] AS [Desde], 
+    [Bonificados].[Hasta] AS [Hasta], 
+    [Bonificados].[Bonificacion] AS [Bonificacion]
+    FROM [dbo].[Bonificados] AS [Bonificados]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Kardex" EntityType="Self.Kardex" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Kardex].[CodiProd] AS [CodiProd], 
+    [Kardex].[Fecha] AS [Fecha], 
+    [Kardex].[Tipo] AS [Tipo], 
+    [Kardex].[Documento] AS [Documento], 
+    [Kardex].[Entrada] AS [Entrada], 
+    [Kardex].[Salidas] AS [Salidas], 
+    [Kardex].[Saldo] AS [Saldo], 
+    [Kardex].[Costo] AS [Costo], 
+    [Kardex].[PrecioVenta] AS [PrecioVenta], 
+    [Kardex].[tipofactura] AS [tipofactura], 
+    [Kardex].[Valorentrada] AS [Valorentrada], 
+    [Kardex].[Valorsalida] AS [Valorsalida], 
+    [Kardex].[SaldoValor] AS [SaldoValor], 
+    [Kardex].[Orden] AS [Orden], 
+    [Kardex].[Bodega] AS [Bodega], 
+    [Kardex].[Cerrada] AS [Cerrada], 
+    [Kardex].[Vence] AS [Vence], 
+    [Kardex].[Nolote] AS [Nolote], 
+    [Kardex].[BodegaDestino] AS [BodegaDestino]
+    FROM [dbo].[Kardex] AS [Kardex]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="Listadeprecios" EntityType="Self.Listadeprecios" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Listadeprecios].[CodiProd] AS [CodiProd], 
@@ -187,6 +260,8 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <EntitySet Name="tbVendedores" EntityType="INVESCASANModel.tbVendedores" />
           <EntitySet Name="Catalogo" EntityType="INVESCASANModel.Catalogo" />
           <EntitySet Name="Listadeprecios" EntityType="INVESCASANModel.Listadeprecios" />
+          <EntitySet Name="Kardex" EntityType="INVESCASANModel.Kardex" />
+          <EntitySet Name="Bonificados" EntityType="INVESCASANModel.Bonificados" />
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -259,6 +334,44 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <Property Name="Tipo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Precio" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="IVA" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kardex">
+          <Key>
+            <PropertyRef Name="CodiProd" />
+            <PropertyRef Name="Fecha" />
+            <PropertyRef Name="Entrada" />
+            <PropertyRef Name="Salidas" />
+          </Key>
+          <Property Name="CodiProd" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Tipo" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Documento" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Entrada" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Salidas" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Saldo" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Costo" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="PrecioVenta" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="tipofactura" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="Valorentrada" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="Valorsalida" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="SaldoValor" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="Orden" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Bodega" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="Cerrada" Type="Boolean" />
+          <Property Name="Vence" Type="DateTime" Precision="3" />
+          <Property Name="Nolote" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="BodegaDestino" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Bonificados">
+          <Key>
+            <PropertyRef Name="Desde" />
+            <PropertyRef Name="Hasta" />
+            <PropertyRef Name="Bonificacion" />
+          </Key>
+          <Property Name="Codigo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Desde" Type="Int16" Nullable="false" />
+          <Property Name="Hasta" Type="Int16" Nullable="false" />
+          <Property Name="Bonificacion" Type="Int16" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -382,6 +495,41 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
                 <ScalarProperty Name="Precio" ColumnName="Precio" />
                 <ScalarProperty Name="Tipo" ColumnName="Tipo" />
                 <ScalarProperty Name="CodiProd" ColumnName="CodiProd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kardex">
+            <EntityTypeMapping TypeName="INVESCASANModel.Kardex">
+              <MappingFragment StoreEntitySet="Kardex">
+                <ScalarProperty Name="BodegaDestino" ColumnName="BodegaDestino" />
+                <ScalarProperty Name="Nolote" ColumnName="Nolote" />
+                <ScalarProperty Name="Vence" ColumnName="Vence" />
+                <ScalarProperty Name="Cerrada" ColumnName="Cerrada" />
+                <ScalarProperty Name="Bodega" ColumnName="Bodega" />
+                <ScalarProperty Name="Orden" ColumnName="Orden" />
+                <ScalarProperty Name="SaldoValor" ColumnName="SaldoValor" />
+                <ScalarProperty Name="Valorsalida" ColumnName="Valorsalida" />
+                <ScalarProperty Name="Valorentrada" ColumnName="Valorentrada" />
+                <ScalarProperty Name="tipofactura" ColumnName="tipofactura" />
+                <ScalarProperty Name="PrecioVenta" ColumnName="PrecioVenta" />
+                <ScalarProperty Name="Costo" ColumnName="Costo" />
+                <ScalarProperty Name="Saldo" ColumnName="Saldo" />
+                <ScalarProperty Name="Salidas" ColumnName="Salidas" />
+                <ScalarProperty Name="Entrada" ColumnName="Entrada" />
+                <ScalarProperty Name="Documento" ColumnName="Documento" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="CodiProd" ColumnName="CodiProd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bonificados">
+            <EntityTypeMapping TypeName="INVESCASANModel.Bonificados">
+              <MappingFragment StoreEntitySet="Bonificados">
+                <ScalarProperty Name="Bonificacion" ColumnName="Bonificacion" />
+                <ScalarProperty Name="Hasta" ColumnName="Hasta" />
+                <ScalarProperty Name="Desde" ColumnName="Desde" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

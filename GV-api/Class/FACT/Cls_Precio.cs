@@ -11,6 +11,6 @@ namespace GV_api.Class.FACT
         public string Tipo = string.Empty;
         public decimal PrecioCordoba = 0;
         public decimal PrecioDolar = 0;
-        public bool Principal = false;
+        public bool EsPrincipal = false;
     }
 }
