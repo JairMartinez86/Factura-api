@@ -4,6 +4,7 @@ using GV_api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http;
@@ -17,6 +18,14 @@ namespace GV_api.Controllers.FACT
 {
     public class FacturaController : ApiController
     {
+
+    
+        private decimal f_TasaCambio()
+        {
+            decimal tc = 36.9566m;
+            return tc;
+        }
+
         [Route("api/Factura/Datos")]
         [HttpGet]
         public string Datos()
@@ -86,6 +95,9 @@ namespace GV_api.Controllers.FACT
                     datos.Nombre = "VENDEDORES";
                     datos.d = qVendedores;
                     lstDatos.Add(datos);
+
+
+                    
 
                     json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
                 }
@@ -241,6 +253,11 @@ namespace GV_api.Controllers.FACT
                     lstDatos.Add(datos);
 
 
+                    datos = new Cls_Datos();
+                    datos.Nombre = "TASACAMBIO";
+                    datos.d = f_TasaCambio();
+                    lstDatos.Add(datos);
+
 
 
                     json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
@@ -260,13 +277,13 @@ namespace GV_api.Controllers.FACT
 
         [Route("api/Factura/DatosProducto")]
         [HttpGet]
-        public string DatosProducto(string CodProducto, string CodBodega, string CodCliente, decimal Tc)
+        public string DatosProducto(string CodProducto, string CodBodega, string CodCliente)
         {
-            return v_DatosProducto(CodProducto, CodBodega, CodCliente, Tc);
+            return v_DatosProducto(CodProducto, CodBodega, CodCliente);
         }
 
 
-        private string v_DatosProducto(string CodProducto, string CodBodega, string CodCliente, decimal Tc)
+        private string v_DatosProducto(string CodProducto, string CodBodega, string CodCliente)
         {
             string json = string.Empty;
             if (CodCliente == null) CodCliente = string.Empty;
@@ -280,17 +297,19 @@ namespace GV_api.Controllers.FACT
                     int x = 0;
                     string strTipo = "Publico";
                     bool EsDolar = false;
+                    decimal Tc = f_TasaCambio();
 
 
                     var qExistencia = (from _q in _Conexion.Kardex
-                                     where _q.CodiProd == CodProducto
-                                     group _q by _q.CodiProd into g
+                                     where _q.CodiProd.TrimStart().TrimEnd() == CodProducto
+                                       group _q by  _q.Bodega.TrimStart().TrimEnd() into g
+                                       orderby g.Key
                                      select new
                                      { 
-                                         CodProducto = g.Key.TrimStart().TrimEnd(),
-                                         Bodega = g.FirstOrDefault().Bodega.TrimStart().TrimEnd(),
+                                         CodProducto = CodProducto,
+                                         Bodega = g.Key,
                                          Existencia = g.Sum( s=> s.Entrada - s.Salidas),
-                                         EsPrincipal = (g.FirstOrDefault().Bodega.TrimStart().TrimEnd() == CodBodega ? true  : false)
+                                         EsPrincipal = (g.FirstOrDefault().Bodega == CodBodega ? true  : false)
                                      }).ToList();
 
                     datos.Nombre = "EXISTENCIA";
@@ -301,12 +320,14 @@ namespace GV_api.Controllers.FACT
 
                     List<Cls_Bonificacion> qBonificacion = (from _q in _Conexion.Bonificados
                                          where _q.Codigo.TrimStart().TrimEnd() == CodProducto
+                                         orderby _q.Desde
                                          select new Cls_Bonificacion()
                                          {
                                              CodProducto = _q.Codigo.TrimStart().TrimEnd(),
                                              Escala = string.Concat(_q.Desde, "+", _q.Bonificacion),
                                              Desde = _q.Desde,
                                              Hasta = 0,
+                                             Bonifica = _q.Bonificacion,
                                              Descripcion = string.Empty
                                          }).ToList();
 
@@ -335,6 +356,7 @@ namespace GV_api.Controllers.FACT
 
 
                     List<Cls_Precio> qPrecios = (from _q in _Conexion.Listadeprecios
+                                                 orderby _q.Tipo
                                                  select new Cls_Precio()
                                                  {
                                                      CodProducto = _q.CodiProd.TrimStart().TrimEnd(),

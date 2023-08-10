@@ -12,6 +12,7 @@ namespace GV_api.Class.FACT
         public string Escala = string.Empty;
         public int Desde = 0;
         public int Hasta = 0;
+        public int Bonifica = 0;
         public string Descripcion = string.Empty;
     }
 }
