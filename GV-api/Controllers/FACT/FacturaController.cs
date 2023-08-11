@@ -292,12 +292,19 @@ namespace GV_api.Controllers.FACT
                 using (INVESCASANEntities _Conexion = new INVESCASANEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+                    Clientes cl = _Conexion.Clientes.FirstOrDefault(f => f.CODCTA == CodCliente);
 
                     Cls_Datos datos = new Cls_Datos();
                     int x = 0;
                     string strTipo = "Publico";
                     bool EsDolar = false;
                     decimal Tc = f_TasaCambio();
+
+                    if (cl != null)
+                    {
+                        if (cl.Distribuidor) strTipo = "Distribuid";
+                        if (cl.Especial) strTipo = "Especial";
+                    }
 
 
                     var qExistencia = (from _q in _Conexion.Kardex
@@ -366,6 +373,31 @@ namespace GV_api.Controllers.FACT
                                                      PrecioDolar = ((decimal)(EsDolar ? _q.Precio : _q.Precio / Tc)),
                                                      EsPrincipal = (_q.Tipo.TrimStart().TrimEnd() == strTipo ? true : false)
                                                  }).ToList();
+
+
+
+                    Cls_Precio iPrecio = qPrecios.FirstOrDefault(f => f.EsPrincipal);
+
+                    if(qPrecios != null)
+                    {
+                        if (iPrecio.PrecioCordoba == 0 && iPrecio.Tipo == "Especial" && cl.Distribuidor)
+                        {
+                            iPrecio.EsPrincipal = false;
+                            iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Distribuid");
+                            if (iPrecio != null) iPrecio.EsPrincipal = true;
+                        }
+
+                        if (iPrecio.PrecioCordoba == 0)
+                        {
+                            iPrecio.EsPrincipal = false;
+                            iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Publico");
+                            if (iPrecio != null) iPrecio.EsPrincipal = true;
+                        }
+
+                    }
+
+                    
+
 
 
                     datos = new Cls_Datos();
