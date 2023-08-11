@@ -356,6 +356,7 @@ namespace GV_api.Controllers.FACT
 
 
                     List<Cls_Precio> qPrecios = (from _q in _Conexion.Listadeprecios
+                                                 where _q.CodiProd.TrimStart().TrimEnd() == CodProducto
                                                  orderby _q.Tipo
                                                  select new Cls_Precio()
                                                  {
@@ -367,10 +368,63 @@ namespace GV_api.Controllers.FACT
                                                  }).ToList();
 
 
-
                     datos = new Cls_Datos();
                     datos.Nombre = "PRECIOS";
                     datos.d = qPrecios;
+                    lstDatos.Add(datos);
+
+
+
+                    List<Cls_Descuento> qDescuentoProd = (from _q in _Conexion.Catalogo
+                                          where _q.SSSCTA.TrimStart().TrimEnd() == CodProducto
+                                          select new Cls_Descuento()
+                                          {
+                                              Index = 0,
+                                              Descripcion = "GENERAL",
+                                              PorcDescuento = _q.Descuento == null ? 0m : (decimal)_q.Descuento
+                                          }).Union(
+
+                        (from _q in _Conexion.Clientes
+                         where _q.CODCTA.TrimStart().TrimEnd() == CodCliente
+                         select new Cls_Descuento()
+                        {
+                             Index = 1,
+                            Descripcion = "ADICIONAL",
+                            PorcDescuento = _q.Descuento
+                        })
+                        ).ToList();
+
+
+
+                    if(qDescuentoProd.FindIndex(f => f.Descripcion == "GENERAL" && f.PorcDescuento == 0m) != -1)
+                    {
+
+                        decimal PorcDescMargen = 0;
+                        decimal PrecioP = 0m;
+                        decimal PrecioD = 0m;
+                        Cls_Precio PPublico = qPrecios.FirstOrDefault(f => f.Tipo == "Publico");
+                        Cls_Precio PDist = qPrecios.FirstOrDefault(f => f.Tipo == "Distribuid");
+
+                        if (PPublico != null) PrecioP = PPublico.PrecioCordoba;
+                        if (PDist != null) PrecioD = PDist.PrecioCordoba;
+
+                        if (PrecioP > 0) PorcDescMargen = Math.Abs(Math.Round((((PrecioD / PrecioP) * 100m) - 100m), 2, MidpointRounding.ToEven));
+
+
+
+                        Cls_Descuento Margen = new Cls_Descuento();
+                        Margen.Index = 0;
+                        Margen.Descripcion = "MARGEN";
+                        Margen.PorcDescuento = PorcDescMargen;
+
+                        qDescuentoProd.Add(Margen);
+                    }
+
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "DESCUENTO";
+                    datos.d = qDescuentoProd;
                     lstDatos.Add(datos);
 
 
