@@ -33,5 +33,6 @@ namespace GV_api.Models
         public virtual DbSet<Kardex> Kardex { get; set; }
         public virtual DbSet<Bonificados> Bonificados { get; set; }
         public virtual DbSet<ConfiguraFacturacion> ConfiguraFacturacion { get; set; }
+        public virtual DbSet<TbDepartamento> TbDepartamento { get; set; }
     }
 }

@@ -171,6 +171,15 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <Property Name="ComisionTarjeta" Type="nchar" MaxLength="12" />
           <Property Name="CuentaDevoluciones" Type="nchar" MaxLength="12" />
         </EntityType>
+        <EntityType Name="TbDepartamento">
+          <Key>
+            <PropertyRef Name="CODCTA" />
+          </Key>
+          <Property Name="CODCTA" Type="nvarchar" MaxLength="2" Nullable="false" />
+          <Property Name="DESCTA" Type="nvarchar" MaxLength="15" />
+          <Property Name="ZONA" Type="nchar" MaxLength="1" />
+          <Property Name="CodigoDptoSinRiesgo" Type="nchar" MaxLength="2" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbVendedores">
           <Key>
             <PropertyRef Name="Codigo" />
@@ -185,6 +194,7 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <EntitySet Name="Catalogo" EntityType="Self.Catalogo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TbBodega" EntityType="Self.TbBodega" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TbDepartamento" EntityType="Self.TbDepartamento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbVendedores" EntityType="Self.tbVendedores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bonificados" EntityType="Self.Bonificados" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -295,6 +305,7 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <EntitySet Name="Kardex" EntityType="INVESCASANModel.Kardex" />
           <EntitySet Name="Bonificados" EntityType="INVESCASANModel.Bonificados" />
           <EntitySet Name="ConfiguraFacturacion" EntityType="INVESCASANModel.ConfiguraFacturacion" />
+          <EntitySet Name="TbDepartamento" EntityType="INVESCASANModel.TbDepartamento" />
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -421,6 +432,15 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <Property Name="Vendedor" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
           <Property Name="PorDefecto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="EsdeRuta" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TbDepartamento">
+          <Key>
+            <PropertyRef Name="CODCTA" />
+          </Key>
+          <Property Name="CODCTA" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="DESCTA" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="ZONA" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="CodigoDptoSinRiesgo" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -595,6 +615,16 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
                 <ScalarProperty Name="Secuencia" ColumnName="Secuencia" />
                 <ScalarProperty Name="Bodegas" ColumnName="Bodegas" />
                 <ScalarProperty Name="Serie" ColumnName="Serie" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TbDepartamento">
+            <EntityTypeMapping TypeName="INVESCASANModel.TbDepartamento">
+              <MappingFragment StoreEntitySet="TbDepartamento">
+                <ScalarProperty Name="CodigoDptoSinRiesgo" ColumnName="CodigoDptoSinRiesgo" />
+                <ScalarProperty Name="ZONA" ColumnName="ZONA" />
+                <ScalarProperty Name="DESCTA" ColumnName="DESCTA" />
+                <ScalarProperty Name="CODCTA" ColumnName="CODCTA" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

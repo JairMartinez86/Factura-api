@@ -559,6 +559,61 @@ namespace GV_api.Controllers.FACT
             return json;
         }
 
+        [Route("api/Factura/Direcciones")]
+        [HttpGet]
+        public string Direcciones(string CodCliente)
+        {
+            return v_Direcciones(CodCliente);
+        }
+
+
+        private string v_Direcciones(string CodCliente)
+        {
+            string json = string.Empty;
+            if (CodCliente == null) CodCliente = string.Empty;
+            try
+            {
+                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                {
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+                    var qDireccion = (from _q in _Conexion.Clientes
+                                      join _d in _Conexion.TbDepartamento on _q.DPTO.TrimStart().TrimEnd() equals _d.CODCTA.TrimStart().TrimEnd()
+                                      where _q.CODCTA.TrimStart().TrimEnd() == CodCliente
+                                      select new
+                                      {
+                                          Departamento = _d.DESCTA.TrimStart().TrimEnd(),
+                                          Municipio = string.Empty,
+                                          Direccion = _q.DIRECC.TrimStart().TrimEnd(),
+                                          Descripcion = "PRINCIPAL"
+                                      }).ToList();
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "DIRECCIONES";
+                    datos.d = qDireccion;
+                lstDatos.Add(datos);
+
+
+
+
+
+
+
+                    json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
 
 
     }

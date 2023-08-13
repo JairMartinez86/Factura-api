@@ -217,6 +217,9 @@
     <Compile Include="Models\TbBodega.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TbDepartamento.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbVendedores.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
