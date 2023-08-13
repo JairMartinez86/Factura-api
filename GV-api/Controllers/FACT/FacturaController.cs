@@ -585,7 +585,8 @@ namespace GV_api.Controllers.FACT
                                           Departamento = _d.DESCTA.TrimStart().TrimEnd(),
                                           Municipio = string.Empty,
                                           Direccion = _q.DIRECC.TrimStart().TrimEnd(),
-                                          Descripcion = "PRINCIPAL"
+                                          Descripcion = "PRINCIPAL",
+                                          Filtro = string.Concat(_d.DESCTA.TrimStart().TrimEnd(), _q.DIRECC.TrimStart().TrimEnd())
                                       }).ToList();
 
 
