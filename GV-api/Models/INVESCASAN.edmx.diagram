@@ -12,6 +12,7 @@
         <EntityTypeShape EntityType="INVESCASANModel.Listadeprecios" Width="1.5" PointX="7.375" PointY="0.75" />
         <EntityTypeShape EntityType="INVESCASANModel.Kardex" Width="1.5" PointX="7.375" PointY="3.75" />
         <EntityTypeShape EntityType="INVESCASANModel.Bonificados" Width="1.5" PointX="3.375" PointY="8.75" />
+        <EntityTypeShape EntityType="INVESCASANModel.ConfiguraFacturacion" Width="1.5" PointX="9.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

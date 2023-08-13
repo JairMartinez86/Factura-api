@@ -19,7 +19,62 @@ namespace GV_api.Controllers.FACT
     public class FacturaController : ApiController
     {
 
-    
+
+        [Route("api/Factura/DatosSucursal")]
+        [HttpGet]
+        public string DatosSucursal(string CodBodega)
+        {
+            return v_DatosSucursal(CodBodega);
+        }
+
+        private string v_DatosSucursal(string CodBodega)
+        {
+            string json = string.Empty;
+            if (CodBodega == null) CodBodega = string.Empty;
+            try
+            {
+                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                {
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "FECHA FACTURA";
+                    datos.d = DateTime.Now;
+                    lstDatos.Add(datos);
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "TASA CAMBIO";
+                    datos.d = f_TasaCambio();
+                    lstDatos.Add(datos);
+
+      
+
+                    ConfiguraFacturacion Consecutivo = _Conexion.ConfiguraFacturacion.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega && f.EmiteFactura.TrimStart().TrimEnd() == "S");
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "CONSECUTIVO";
+                    datos.d = Consecutivo == null ? string.Empty : string.Concat(Consecutivo.Serie.TrimStart().TrimEnd(), Consecutivo.Secuencia);
+                    lstDatos.Add(datos);
+
+
+
+                    json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+
         private decimal f_TasaCambio()
         {
             decimal tc = 36.9566m;
@@ -67,14 +122,42 @@ namespace GV_api.Controllers.FACT
                     lstDatos.Add(datos);
 
 
+        
 
-                    var qBodegas = (from _q in _Conexion.TbBodega
-                             select new
-                             {
-                                 Codigo = _q.Codigo.TrimStart().TrimEnd(),
-                                 Bodega = _q.titulo.TrimStart().TrimEnd(),
-                                 Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.titulo.TrimStart().TrimEnd())
-                             }).ToList();
+                     var qBodegas = (from _q in _Conexion.TbBodega
+
+                                     select new Cls_Bodega()
+                                     {
+                                        Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                        Bodega = _q.titulo.TrimStart().TrimEnd(),
+                                        ClienteContado = string.Empty,
+                                        Vendedor = string.Empty,
+                                        Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.titulo.TrimStart().TrimEnd())
+                                    }).ToList();
+
+
+                    foreach(Cls_Bodega b in qBodegas)
+                    {
+                        ConfiguraFacturacion c = _Conexion.ConfiguraFacturacion.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == b.Codigo && f.EmiteFactura.TrimStart().TrimEnd() == "S");
+
+                        b.Facturar = false;
+                        if(c != null)
+                        {
+                            b.ClienteContado = c.ClienteContado.TrimStart().TrimEnd();
+                            b.Vendedor = c.Vendedor.TrimStart().TrimEnd();
+                            b.Facturar = true;
+                        }
+
+                    }
+                    Cls_Bodega[] bEliminar = qBodegas.FindAll(f => !f.Facturar).ToArray();
+
+                    foreach (Cls_Bodega b in bEliminar)
+                    {
+                        qBodegas.Remove(b);
+                    }
+                        
+
+
 
                     datos = new Cls_Datos();
                     datos.Nombre = "BODEGAS";
@@ -143,7 +226,7 @@ namespace GV_api.Controllers.FACT
                                          Plazo = _q.Plazo,
                                          Gracia = _q.Gracia,
                                          Moneda = _q.Moneda.TrimStart().TrimEnd(),
-                                         Disponible = 0.0
+                                         Disponible = _q.Techo
                                      }).ToList();
 
                     datos.Nombre = "CREDITO";

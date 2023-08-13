@@ -98,6 +98,24 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Bonificados' no tiene definid
           <Property Name="Gracia" Type="int" Nullable="false" />
         </EntityType>
         <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'INVESCASAN.dbo.ConfiguraFacturacion' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="ConfiguraFacturacion">
+          <Key>
+            <PropertyRef Name="Serie" />
+            <PropertyRef Name="EmiteFactura" />
+          </Key>
+          <Property Name="Serie" Type="nchar" MaxLength="2" Nullable="false" />
+          <Property Name="Bodegas" Type="nchar" MaxLength="4" />
+          <Property Name="Secuencia" Type="int" />
+          <Property Name="ClienteContado" Type="nchar" MaxLength="5" />
+          <Property Name="EmiteFactura" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="Recibo" Type="smallint" />
+          <Property Name="Colector" Type="smallint" />
+          <Property Name="Vendedor" Type="nchar" MaxLength="2" />
+          <Property Name="PorDefecto" Type="varchar" MaxLength="50" />
+          <Property Name="EsdeRuta" Type="nchar" MaxLength="1" />
+        </EntityType>
+        <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Kardex' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="Kardex">
           <Key>
@@ -175,6 +193,20 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
     [Bonificados].[Hasta] AS [Hasta], 
     [Bonificados].[Bonificacion] AS [Bonificacion]
     FROM [dbo].[Bonificados] AS [Bonificados]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ConfiguraFacturacion" EntityType="Self.ConfiguraFacturacion" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ConfiguraFacturacion].[Serie] AS [Serie], 
+    [ConfiguraFacturacion].[Bodegas] AS [Bodegas], 
+    [ConfiguraFacturacion].[Secuencia] AS [Secuencia], 
+    [ConfiguraFacturacion].[ClienteContado] AS [ClienteContado], 
+    [ConfiguraFacturacion].[EmiteFactura] AS [EmiteFactura], 
+    [ConfiguraFacturacion].[Recibo] AS [Recibo], 
+    [ConfiguraFacturacion].[Colector] AS [Colector], 
+    [ConfiguraFacturacion].[Vendedor] AS [Vendedor], 
+    [ConfiguraFacturacion].[PorDefecto] AS [PorDefecto], 
+    [ConfiguraFacturacion].[EsdeRuta] AS [EsdeRuta]
+    FROM [dbo].[ConfiguraFacturacion] AS [ConfiguraFacturacion]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="Kardex" EntityType="Self.Kardex" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -262,6 +294,7 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <EntitySet Name="Listadeprecios" EntityType="INVESCASANModel.Listadeprecios" />
           <EntitySet Name="Kardex" EntityType="INVESCASANModel.Kardex" />
           <EntitySet Name="Bonificados" EntityType="INVESCASANModel.Bonificados" />
+          <EntitySet Name="ConfiguraFacturacion" EntityType="INVESCASANModel.ConfiguraFacturacion" />
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -372,6 +405,22 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <Property Name="Desde" Type="Int16" Nullable="false" />
           <Property Name="Hasta" Type="Int16" Nullable="false" />
           <Property Name="Bonificacion" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConfiguraFacturacion">
+          <Key>
+            <PropertyRef Name="Serie" />
+            <PropertyRef Name="EmiteFactura" />
+          </Key>
+          <Property Name="Serie" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="Bodegas" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="Secuencia" Type="Int32" />
+          <Property Name="ClienteContado" Type="String" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Name="EmiteFactura" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="Recibo" Type="Int16" />
+          <Property Name="Colector" Type="Int16" />
+          <Property Name="Vendedor" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="PorDefecto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EsdeRuta" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -530,6 +579,22 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
                 <ScalarProperty Name="Hasta" ColumnName="Hasta" />
                 <ScalarProperty Name="Desde" ColumnName="Desde" />
                 <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfiguraFacturacion">
+            <EntityTypeMapping TypeName="INVESCASANModel.ConfiguraFacturacion">
+              <MappingFragment StoreEntitySet="ConfiguraFacturacion">
+                <ScalarProperty Name="EsdeRuta" ColumnName="EsdeRuta" />
+                <ScalarProperty Name="PorDefecto" ColumnName="PorDefecto" />
+                <ScalarProperty Name="Vendedor" ColumnName="Vendedor" />
+                <ScalarProperty Name="Colector" ColumnName="Colector" />
+                <ScalarProperty Name="Recibo" ColumnName="Recibo" />
+                <ScalarProperty Name="EmiteFactura" ColumnName="EmiteFactura" />
+                <ScalarProperty Name="ClienteContado" ColumnName="ClienteContado" />
+                <ScalarProperty Name="Secuencia" ColumnName="Secuencia" />
+                <ScalarProperty Name="Bodegas" ColumnName="Bodegas" />
+                <ScalarProperty Name="Serie" ColumnName="Serie" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -170,9 +170,11 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Class\Cls_Datos.cs" />
     <Compile Include="Class\Cls_Mensaje.cs" />
+    <Compile Include="Class\FACT\Cls_Bodega.cs" />
     <Compile Include="Class\FACT\Cls_Bonificacion.cs" />
     <Compile Include="Class\FACT\Cls_Descuento.cs" />
     <Compile Include="Class\FACT\Cls_Precio.cs" />
+    <Compile Include="Class\SIS\ServerController.cs" />
     <Compile Include="Controllers\FACT\FacturaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -186,6 +188,9 @@
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Clientes.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfiguraFacturacion.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\INVESCASAN.Context.cs">
@@ -307,6 +312,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\Default\" />
     <Folder Include="Views\Factura\" />
+    <Folder Include="Views\Server\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\bootstrap.min.js.map" />
