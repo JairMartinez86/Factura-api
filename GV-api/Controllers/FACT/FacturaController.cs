@@ -379,6 +379,7 @@ namespace GV_api.Controllers.FACT
                                              Producto = _q.DESCTA.TrimStart().TrimEnd(),
                                              ConImpuesto = _q.COBIVA,
                                              Key = string.Concat(_q.SSSCTA.TrimStart().TrimEnd(), " ", _q.DESCTA.TrimStart().TrimEnd()),
+                                             Bonificable = _q.Bonificable
                                          }).ToList();
 
 
