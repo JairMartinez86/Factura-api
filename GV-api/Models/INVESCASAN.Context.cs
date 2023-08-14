@@ -53,5 +53,22 @@ namespace GV_api.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("spu_ObtenerSaldoCuenta", numCuentaParameter, fechaParameter, dMonedaParameter);
         }
+    
+        public virtual int RetornaSaldoVencidoAmbasMonedas(string numCuenta, Nullable<System.DateTime> fecha, Nullable<int> ddias, ObjectParameter dResultado)
+        {
+            var numCuentaParameter = numCuenta != null ?
+                new ObjectParameter("numCuenta", numCuenta) :
+                new ObjectParameter("numCuenta", typeof(string));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("fecha", fecha) :
+                new ObjectParameter("fecha", typeof(System.DateTime));
+    
+            var ddiasParameter = ddias.HasValue ?
+                new ObjectParameter("Ddias", ddias) :
+                new ObjectParameter("Ddias", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RetornaSaldoVencidoAmbasMonedas", numCuentaParameter, fechaParameter, ddiasParameter, dResultado);
+        }
     }
 }

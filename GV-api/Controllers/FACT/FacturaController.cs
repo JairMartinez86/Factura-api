@@ -3,6 +3,7 @@ using GV_api.Class.FACT;
 using GV_api.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -222,7 +223,9 @@ namespace GV_api.Controllers.FACT
                     decimal Tc = f_TasaCambio();
                     decimal Techo = cl.Techo;
                     decimal Disponible = 0m;
-
+                    decimal SaldoVencido = 0m;
+                    ObjectParameter output = new ObjectParameter("dResultado", typeof(decimal));
+         
 
                     var qSaldoCor = (from _q in _Conexion.spu_ObtenerSaldoCuenta(CodCliente, DateTime.Now.Date, "C")
                                  select new
@@ -235,6 +238,12 @@ namespace GV_api.Controllers.FACT
                                      {
                                          Sald = _q,
                                      }).ToList();
+
+
+                    _Conexion.RetornaSaldoVencidoAmbasMonedas(CodCliente, DateTime.Now.Date, 15, output);
+                    SaldoVencido = (decimal)output.Value;
+
+
 
                     if (qSaldoCor != null)
                     {
@@ -267,7 +276,9 @@ namespace GV_api.Controllers.FACT
                                          Plazo = _q.Plazo,
                                          Gracia = _q.Gracia,
                                          Moneda = _q.Moneda.TrimStart().TrimEnd(),
-                                         Disponible = Disponible
+                                         Disponible = Disponible,
+                                         FacturarVencido = _q.FacturarVencido,
+                                         SaldoVencido = SaldoVencido
                                      }).ToList();
 
                     datos.Nombre = "CREDITO";

@@ -190,6 +190,12 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <Property Name="Cido" Type="nvarchar" MaxLength="255" />
           <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
+        <Function Name="RetornaSaldoVencidoAmbasMonedas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="numCuenta" Type="varchar" Mode="In" />
+          <Parameter Name="fecha" Type="datetime" Mode="In" />
+          <Parameter Name="Ddias" Type="int" Mode="In" />
+          <Parameter Name="dResultado" Type="money" Mode="InOut" />
+        </Function>
         <Function Name="spu_ObtenerSaldoCuenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="numCuenta" Type="varchar" Mode="In" />
           <Parameter Name="fecha" Type="datetime" Mode="In" />
@@ -315,6 +321,12 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
             <Parameter Name="numCuenta" Mode="In" Type="String" />
             <Parameter Name="fecha" Mode="In" Type="DateTime" />
             <Parameter Name="dMoneda" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="RetornaSaldoVencidoAmbasMonedas">
+            <Parameter Name="numCuenta" Mode="In" Type="String" />
+            <Parameter Name="fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="Ddias" Mode="In" Type="Int32" />
+            <Parameter Name="dResultado" Mode="InOut" Type="Decimal" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="TbBodega">
@@ -639,6 +651,7 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="spu_ObtenerSaldoCuenta" FunctionName="INVESCASANModel.Store.spu_ObtenerSaldoCuenta" />
+          <FunctionImportMapping FunctionImportName="RetornaSaldoVencidoAmbasMonedas" FunctionName="INVESCASANModel.Store.RetornaSaldoVencidoAmbasMonedas" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
