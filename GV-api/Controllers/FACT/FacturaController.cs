@@ -216,6 +216,47 @@ namespace GV_api.Controllers.FACT
 
                     Cls_Datos datos = new Cls_Datos();
 
+                    Clientes cl = _Conexion.Clientes.FirstOrDefault(f => f.CODCTA.TrimStart().TrimEnd() == CodCliente);
+                    decimal saldoCor = 0m;
+                    decimal saldoDol = 0m;
+                    decimal Tc = f_TasaCambio();
+                    decimal Techo = cl.Techo;
+                    decimal Disponible = 0m;
+
+
+                    var qSaldoCor = (from _q in _Conexion.spu_ObtenerSaldoCuenta(CodCliente, DateTime.Now.Date, "C")
+                                 select new
+                                 {
+                                     Sald = _q,
+                                 }).ToList();
+
+                    var qSaldoDol = (from _q in _Conexion.spu_ObtenerSaldoCuenta(CodCliente, DateTime.Now.Date, "D")
+                                     select new
+                                     {
+                                         Sald = _q,
+                                     }).ToList();
+
+                    if (qSaldoCor != null)
+                    {
+                       if(qSaldoCor.First().Sald != null) saldoCor = qSaldoCor.First().Sald.Value;
+                    }
+
+                    if (qSaldoDol != null)
+                    {
+                        if (qSaldoDol.First().Sald != null) saldoDol = qSaldoDol.First().Sald.Value;
+                    }
+
+
+                    if(cl.Moneda == "C")
+                    {
+                        Disponible = (Techo - saldoCor) - Math.Round(saldoDol * Tc, 2, MidpointRounding.ToEven);
+                    }
+                    else
+                    {
+                        Disponible = (Techo - saldoDol) - Math.Round(saldoCor / Tc, 2, MidpointRounding.ToEven);
+                    }
+              
+
 
                     var qCredito = (from _q in _Conexion.Clientes
                                      where _q.CODCTA.TrimStart().TrimEnd() == CodCliente
@@ -226,7 +267,7 @@ namespace GV_api.Controllers.FACT
                                          Plazo = _q.Plazo,
                                          Gracia = _q.Gracia,
                                          Moneda = _q.Moneda.TrimStart().TrimEnd(),
-                                         Disponible = _q.Techo
+                                         Disponible = Disponible
                                      }).ToList();
 
                     datos.Nombre = "CREDITO";

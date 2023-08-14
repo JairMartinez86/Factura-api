@@ -12,6 +12,8 @@ namespace GV_api.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class INVESCASANEntities : DbContext
     {
@@ -34,5 +36,22 @@ namespace GV_api.Models
         public virtual DbSet<Bonificados> Bonificados { get; set; }
         public virtual DbSet<ConfiguraFacturacion> ConfiguraFacturacion { get; set; }
         public virtual DbSet<TbDepartamento> TbDepartamento { get; set; }
+    
+        public virtual ObjectResult<Nullable<decimal>> spu_ObtenerSaldoCuenta(string numCuenta, Nullable<System.DateTime> fecha, string dMoneda)
+        {
+            var numCuentaParameter = numCuenta != null ?
+                new ObjectParameter("numCuenta", numCuenta) :
+                new ObjectParameter("numCuenta", typeof(string));
+    
+            var fechaParameter = fecha.HasValue ?
+                new ObjectParameter("fecha", fecha) :
+                new ObjectParameter("fecha", typeof(System.DateTime));
+    
+            var dMonedaParameter = dMoneda != null ?
+                new ObjectParameter("dMoneda", dMoneda) :
+                new ObjectParameter("dMoneda", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("spu_ObtenerSaldoCuenta", numCuentaParameter, fechaParameter, dMonedaParameter);
+        }
     }
 }

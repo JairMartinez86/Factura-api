@@ -190,6 +190,11 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <Property Name="Cido" Type="nvarchar" MaxLength="255" />
           <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
+        <Function Name="spu_ObtenerSaldoCuenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="numCuenta" Type="varchar" Mode="In" />
+          <Parameter Name="fecha" Type="datetime" Mode="In" />
+          <Parameter Name="dMoneda" Type="nchar" Mode="In" />
+        </Function>
         <EntityContainer Name="INVESCASANModelStoreContainer">
           <EntitySet Name="Catalogo" EntityType="Self.Catalogo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
@@ -306,6 +311,11 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
           <EntitySet Name="Bonificados" EntityType="INVESCASANModel.Bonificados" />
           <EntitySet Name="ConfiguraFacturacion" EntityType="INVESCASANModel.ConfiguraFacturacion" />
           <EntitySet Name="TbDepartamento" EntityType="INVESCASANModel.TbDepartamento" />
+          <FunctionImport Name="spu_ObtenerSaldoCuenta" ReturnType="Collection(Decimal)">
+            <Parameter Name="numCuenta" Mode="In" Type="String" />
+            <Parameter Name="fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="dMoneda" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -628,6 +638,7 @@ advertencia 6002: La tabla o vista 'INVESCASAN.dbo.Listadeprecios' no tiene defi
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spu_ObtenerSaldoCuenta" FunctionName="INVESCASANModel.Store.spu_ObtenerSaldoCuenta" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
