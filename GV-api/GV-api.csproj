@@ -56,6 +56,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Cors, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.9\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -193,6 +194,9 @@
     <Compile Include="Models\ConfiguraFacturacion.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ControlInventario.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\INVESCASAN.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -221,6 +225,12 @@
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbVendedores.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Venta.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VentaDetalle.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

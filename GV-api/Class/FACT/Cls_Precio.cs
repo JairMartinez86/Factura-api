@@ -12,5 +12,6 @@ namespace GV_api.Class.FACT
         public decimal PrecioCordoba = 0;
         public decimal PrecioDolar = 0;
         public bool EsPrincipal = false;
+        public bool Liberado = false;
     }
 }

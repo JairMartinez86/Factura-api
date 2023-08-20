@@ -3,15 +3,18 @@ using GV_api.Class.FACT;
 using GV_api.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Transactions;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
+using IsolationLevel = System.Transactions.IsolationLevel;
 using RouteAttribute = System.Web.Http.RouteAttribute;
 
 
@@ -23,12 +26,12 @@ namespace GV_api.Controllers.FACT
 
         [Route("api/Factura/DatosSucursal")]
         [HttpGet]
-        public string DatosSucursal(string CodBodega)
+        public string DatosSucursal(string CodBodega, string TipoFactura)
         {
-            return v_DatosSucursal(CodBodega);
+            return v_DatosSucursal(CodBodega, TipoFactura);
         }
 
-        private string v_DatosSucursal(string CodBodega)
+        private string v_DatosSucursal(string CodBodega, string TipoFactura)
         {
             string json = string.Empty;
             if (CodBodega == null) CodBodega = string.Empty;
@@ -49,13 +52,28 @@ namespace GV_api.Controllers.FACT
                     datos.d = f_TasaCambio();
                     lstDatos.Add(datos);
 
-      
+                    string NoDoc = string.Empty;
+                    string Serie = string.Empty;
 
-                    ConfiguraFacturacion Consecutivo = _Conexion.ConfiguraFacturacion.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega && f.EmiteFactura.TrimStart().TrimEnd() == "S");
+                    if(TipoFactura == "Factura")
+                    {
+                        ConfiguraFacturacion Consecutivo = _Conexion.ConfiguraFacturacion.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega && f.EmiteFactura.TrimStart().TrimEnd() == "S");
+
+                        NoDoc = Consecutivo == null ? string.Empty : string.Concat(Consecutivo.Serie.TrimStart().TrimEnd(), Consecutivo.Secuencia);
+                        Serie = Consecutivo == null ? string.Empty : Consecutivo.Serie.TrimStart().TrimEnd();
+                    }
+                    else
+                    {
+                        ControlInventario Consecutivo = _Conexion.ControlInventario.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega);
+
+                        NoDoc = Consecutivo == null ? string.Empty : string.Concat(Consecutivo.Serie.TrimStart().TrimEnd(), Consecutivo.Secuencia);
+                        Serie = Consecutivo == null ? string.Empty : Consecutivo.Serie.TrimStart().TrimEnd();
+                    }
+
 
                     datos = new Cls_Datos();
                     datos.Nombre = "CONSECUTIVO";
-                    datos.d = Consecutivo == null ? string.Empty : string.Concat(Consecutivo.Serie.TrimStart().TrimEnd(), Consecutivo.Secuencia);
+                    datos.d = string.Concat(NoDoc, ";", Serie);
                     lstDatos.Add(datos);
 
 
@@ -435,6 +453,10 @@ namespace GV_api.Controllers.FACT
                     string strTipo = "Publico";
                     bool EsDolar = false;
                     decimal Tc = f_TasaCambio();
+                    bool LiberadoPrecio = false;
+
+                    Catalogo ct = _Conexion.Catalogo.FirstOrDefault(f => f.SSSCTA.TrimStart().TrimEnd() == CodProducto);
+                    if (ct != null) LiberadoPrecio = ct.LIBERAR == null ? false : (bool)ct.LIBERAR;
 
                     if (cl != null)
                     {
@@ -507,7 +529,8 @@ namespace GV_api.Controllers.FACT
                                                      Tipo = _q.Tipo.TrimStart().TrimEnd(),
                                                      PrecioCordoba = ((decimal)(!EsDolar ? _q.Precio : _q.Precio * Tc)),
                                                      PrecioDolar = ((decimal)(EsDolar ? _q.Precio : _q.Precio / Tc)),
-                                                     EsPrincipal = (_q.Tipo.TrimStart().TrimEnd() == strTipo ? true : false)
+                                                     EsPrincipal = (_q.Tipo.TrimStart().TrimEnd() == strTipo ? true : false),
+                                                     Liberado = false
                                                  }).ToList();
 
 
@@ -516,6 +539,7 @@ namespace GV_api.Controllers.FACT
 
                     if(qPrecios != null)
                     {
+
                         if (iPrecio.PrecioCordoba == 0 && iPrecio.Tipo == "Especial" && cl.Distribuidor)
                         {
                             iPrecio.EsPrincipal = false;
@@ -529,6 +553,8 @@ namespace GV_api.Controllers.FACT
                             iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Publico");
                             if (iPrecio != null) iPrecio.EsPrincipal = true;
                         }
+
+                        if (iPrecio.EsPrincipal) iPrecio.Liberado = LiberadoPrecio;
 
                     }
 
@@ -668,6 +694,259 @@ namespace GV_api.Controllers.FACT
             return json;
         }
 
+
+
+        [Route("api/Factura/Get")]
+        [HttpGet]
+        public string Get()
+        {
+            return v_Get();
+        }
+
+
+        private string v_Get()
+        {
+            string json = string.Empty;
+
+            try
+            {
+                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                {
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+                    var qDoc = (from _q in _Conexion.Venta
+                                      select new
+                                      {
+                                          _q.NoFactura,
+                                          _q.NoPedido,
+                                          _q.Fecha,
+                                          _q.CodCliente,
+                                          _q.NomCliente,
+                                          _q.Nombre,
+                                          _q.CodBodega,
+                                          _q.NomBodega,
+                                          _q.CodVendedor,
+                                          _q.NomVendedor,
+                                          _q.TipoVenta,
+                                          _q.Vence,
+                                          _q.TotalCordoba,
+                                          _q.TotalDolar,
+                                          _q.Estado,
+                                          _q.UsuarioRegistra
+                                      }).ToList();
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "DOCUENTOS";
+                    datos.d = qDoc;
+                    lstDatos.Add(datos);
+
+
+
+
+
+
+
+                    json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+
+        [Route("api/Factura/Guardar")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult Guardar(Venta d)
+        {
+            if (ModelState.IsValid)
+            {
+
+                return Ok(v_Guardar(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string v_Guardar(Venta d)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                    {
+
+                       
+                        bool esNuevo = false;
+          
+                        Venta _v = _Conexion.Venta.Find(d.IdVenta);
+
+                        if (_v == null)
+                        {
+                            _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.{(d.TipoDocumento == "Factura" ? "ConfiguraFacturacion" : "ControlInventario")} SET Secuencia += 1    WHERE  Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'");
+                            _Conexion.SaveChanges();
+
+                            int Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM {(d.TipoDocumento == "Factura" ? "ConfiguraFacturacion" : "ControlInventario")} WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
+
+                            _v = new Venta();
+                            d.IdVenta = Guid.NewGuid();
+                            d.NoFactura = string.Empty;
+                            d.NoPedido = string.Empty;
+                            d.Estado = "Solicitado";
+                            if (d.TipoDocumento == "Factura") d.NoFactura = string.Concat(d.Serie, Consecutivo);
+                            if (d.TipoDocumento == "Pedido") d.NoPedido = string.Concat(d.Serie, Consecutivo);
+                            esNuevo = true;
+                        }
+
+                        _v.IdVenta = d.IdVenta;
+                        _v.Serie = d.Serie;
+                        _v.NoFactura = d.NoFactura;
+                        _v.NoPedido = d.NoPedido;
+                        _v.TipoDocumento = d.TipoDocumento;
+                        _v.CodCliente = d.CodCliente;
+                        _v.NomCliente = d.NomCliente;
+                        _v.Nombre = d.Nombre;
+                        _v.RucCedula = d.RucCedula;
+                        _v.Contanto = d.Contanto;
+                        _v.Limite = d.Limite;
+                        _v.Disponible = d.Disponible;
+                        _v.CodBodega = d.CodBodega;
+                        _v.NomBodega = d.NomBodega;
+                        _v.CodVendedor = d.CodVendedor;
+                        _v.NomVendedor = d.NomVendedor;
+                        _v.EsContraentrega = d.EsContraentrega;
+                        _v.EsExportacion = d.EsExportacion;
+                        _v.OrdenCompra = d.OrdenCompra;
+                        _v.Fecha = d.Fecha;
+                        _v.Plazo = d.Plazo;
+                        _v.Vence = d.Vence;
+                        _v.Moneda = d.Moneda;
+                        _v.TipoVenta = d.TipoVenta;
+                        _v.TipoImpuesto = d.TipoImpuesto;
+                        _v.TipoExoneracion = d.TipoExoneracion;
+                        _v.NoExoneracion = d.NoExoneracion;
+                        _v.EsDelivery = d.EsDelivery;
+                        _v.Direccion = d.Direccion;
+                        _v.Observaciones = d.Observaciones;
+                        _v.Impuesto = d.Impuesto;
+                        _v.Exonerado = d.Exonerado;
+                        _v.TotalCordoba = d.TotalCordoba;
+                        _v.TotalDolar = d.TotalDolar;
+                        _v.TasaCambio = d.TasaCambio;
+                        _v.PedirAutorizacion = d.PedirAutorizacion;
+                        _v.FechaRegistro = DateTime.Now;
+                        _v.UsuarioRegistra = d.UsuarioRegistra;
+                        _v.Estado = d.Estado;
+                 
+
+                        if (esNuevo)
+                        {
+                            _Conexion.Venta.Add(_v);
+                        }
+                        else
+                        {
+                            _Conexion.VentaDetalle.RemoveRange(_v.VentaDetalle);
+                        }
+
+                        
+
+
+                        foreach (VentaDetalle det in d.VentaDetalle)
+                        {
+                            VentaDetalle _vDet = new VentaDetalle();
+                            _vDet.IdVentaDetalle = Guid.NewGuid();
+                            _vDet.IdVenta = _v.IdVenta;
+                            _vDet.Index = det.Index;
+                            _vDet.Codigo = det.Codigo;
+                            _vDet.Producto = det.Producto;
+                            _vDet.Precio = det.Precio;
+                            _vDet.PrecioCordoba = det.PrecioCordoba;
+                            _vDet.PrecioDolar = det.PrecioDolar;
+                            _vDet.PorcDescuento = det.PorcDescuento;
+                            _vDet.PorcDescuentoAdicional = det.PorcDescuentoAdicional;
+                            _vDet.PorcImpuesto = det.PorcImpuesto;
+                            _vDet.Cantidad = det.Cantidad;
+                            _vDet.SubTotal = det.SubTotal;
+                            _vDet.SubTotalCordoba = det.SubTotalCordoba;
+                            _vDet.SubTotalDolar = det.SubTotalDolar;
+                            _vDet.Descuento = det.Descuento;
+                            _vDet.DescuentoCordoba = det.DescuentoCordoba;
+                            _vDet.DescuentoDolar = det.DescuentoDolar;
+                            _vDet.DescuentoAdicional = det.DescuentoAdicional;
+                            _vDet.DescuentoAdicionalCordoba = det.DescuentoAdicionalCordoba;
+                            _vDet.DescuentoAdicionalDolar = det.DescuentoAdicionalDolar;
+                            _vDet.SubTotalNeto = det.SubTotalNeto;
+                            _vDet.SubTotalNetoCordoba = det.SubTotalNetoCordoba;
+                            _vDet.SubTotalNetoDolar = det.SubTotalNetoDolar;
+                            _vDet.Impuesto = det.Impuesto;
+                            _vDet.ImpuestoCordoba = det.ImpuestoCordoba;
+                            _vDet.ImpuestoDolar = det.ImpuestoDolar;
+                            _vDet.ImpuestoExo = det.ImpuestoExo;
+                            _vDet.ImpuestoExoCordoba = det.ImpuestoExoCordoba;
+                            _vDet.ImpuestoExoDolar = det.ImpuestoExoDolar;
+                            _vDet.Total = det.Total;
+                            _vDet.TotalCordoba = det.TotalCordoba;
+                            _vDet.TotalDolar = det.TotalDolar;
+                            _vDet.EsBonif = det.EsBonif;
+                            _vDet.EsBonifLibre = det.EsBonifLibre;
+                            _vDet.EsExonerado = det.EsExonerado;
+                            _vDet.PrecioLiberado = det.PrecioLiberado;
+                            _vDet.IndexUnion = det.IndexUnion;
+
+
+                            _v.VentaDetalle.Add(_vDet);
+                        }
+
+
+
+
+                        List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "DOCUMENTO";
+                        datos.d =  _v.TipoDocumento == "Factura" ? _v.NoFactura : _v.NoPedido;
+                        lstDatos.Add(datos);
+
+                        _Conexion.SaveChanges();
+
+                        scope.Complete();
+
+
+
+                        json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
 
 
     }
