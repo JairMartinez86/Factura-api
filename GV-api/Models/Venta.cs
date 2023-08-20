@@ -63,6 +63,7 @@ namespace GV_api.Models
         public Nullable<System.DateTime> FechaAnula { get; set; }
         public string UsuarioAnula { get; set; }
         public string Estado { get; set; }
+        public string MotivoAnulacion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VentaDetalle> VentaDetalle { get; set; }

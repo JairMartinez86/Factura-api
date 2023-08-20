@@ -698,13 +698,13 @@ namespace GV_api.Controllers.FACT
 
         [Route("api/Factura/Get")]
         [HttpGet]
-        public string Get()
+        public string Get(DateTime Fecha1, DateTime Fecha2)
         {
-            return v_Get();
+            return v_Get(Fecha1, Fecha2);
         }
 
 
-        private string v_Get()
+        private string v_Get(DateTime Fecha1, DateTime Fecha2)
         {
             string json = string.Empty;
 
@@ -715,8 +715,11 @@ namespace GV_api.Controllers.FACT
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
                     var qDoc = (from _q in _Conexion.Venta
-                                      select new
+                                where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2
+                                select new
                                       {
+                                          _q.IdVenta,
+                                          _q.Serie,
                                           _q.NoFactura,
                                           _q.NoPedido,
                                           _q.Fecha,
@@ -732,8 +735,10 @@ namespace GV_api.Controllers.FACT
                                           _q.TotalCordoba,
                                           _q.TotalDolar,
                                           _q.Estado,
-                                          _q.UsuarioRegistra
-                                      }).ToList();
+                                          UsuarioRegistra = _q.Estado == "Anulado"  ? _q.UsuarioAnula : _q.UsuarioRegistra,
+                                          Index = 0,
+                                    Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
+                                }).Take(500).ToList();
 
 
                     Cls_Datos datos = new Cls_Datos();
@@ -810,6 +815,9 @@ namespace GV_api.Controllers.FACT
                             d.NoFactura = string.Empty;
                             d.NoPedido = string.Empty;
                             d.Estado = "Solicitado";
+                            d.MotivoAnulacion = string.Empty;
+                            _v.FechaRegistro = DateTime.Now;
+                            _v.UsuarioRegistra = d.UsuarioRegistra;
                             if (d.TipoDocumento == "Factura") d.NoFactura = string.Concat(d.Serie, Consecutivo);
                             if (d.TipoDocumento == "Pedido") d.NoPedido = string.Concat(d.Serie, Consecutivo);
                             esNuevo = true;
@@ -851,10 +859,11 @@ namespace GV_api.Controllers.FACT
                         _v.TotalDolar = d.TotalDolar;
                         _v.TasaCambio = d.TasaCambio;
                         _v.PedirAutorizacion = d.PedirAutorizacion;
-                        _v.FechaRegistro = DateTime.Now;
-                        _v.UsuarioRegistra = d.UsuarioRegistra;
                         _v.Estado = d.Estado;
-                 
+                        _v.MotivoAnulacion = d.MotivoAnulacion;
+                        _v.UsuarioModifica = d.UsuarioRegistra;
+                        _v.FechaModifica = DateTime.Now;
+
 
                         if (esNuevo)
                         {
@@ -948,6 +957,87 @@ namespace GV_api.Controllers.FACT
 
         }
 
+
+
+
+        [Route("api/Factura/Anular")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult Anular(Guid IdDoc, string Motivo, string Usuario)
+        {
+            if (ModelState.IsValid)
+            {
+
+                return Ok(v_Anular(IdDoc, Motivo, Usuario));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string v_Anular(Guid IdDoc, string Motivo, string Usuario)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                    {
+
+
+                
+                        Venta _v = _Conexion.Venta.Find(IdDoc);
+
+                        if (_v != null)
+                        {
+                            if(_v.Estado == "Anulado")
+                            {
+                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>El documento se encuentra anulado.</b>", 1);
+                                return json;
+                            }
+                                
+                            _v.Estado = "Anulado";
+                            _v.MotivoAnulacion = Motivo;
+                            _v.UsuarioAnula = Usuario;
+                        }
+       
+
+                        List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "ANULAR";
+                        datos.d = "<b>Registro Anulado<b/>";
+                        lstDatos.Add(datos);
+
+                        _Conexion.SaveChanges();
+
+                        scope.Complete();
+
+
+
+                        json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
 
     }
 }

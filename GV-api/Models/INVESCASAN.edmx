@@ -251,6 +251,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="FechaAnula" Type="datetime2" Precision="7" />
           <Property Name="UsuarioAnula" Type="nvarchar" MaxLength="50" />
           <Property Name="Estado" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="MotivoAnulacion" Type="nvarchar" MaxLength="4000" />
         </EntityType>
         <EntityType Name="VentaDetalle">
           <Key>
@@ -662,6 +663,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="FechaAnula" Type="DateTime" Precision="7" />
           <Property Name="UsuarioAnula" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Estado" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MotivoAnulacion" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="VentaDetalle" Relationship="INVESCASANModel.FK_VentaDetalle_Venta" FromRole="Venta" ToRole="VentaDetalle" />
         </EntityType>
         <EntityType Name="VentaDetalle">
@@ -922,6 +924,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <EntitySetMapping Name="Venta">
             <EntityTypeMapping TypeName="INVESCASANModel.Venta">
               <MappingFragment StoreEntitySet="Venta">
+                <ScalarProperty Name="MotivoAnulacion" ColumnName="MotivoAnulacion" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="UsuarioAnula" ColumnName="UsuarioAnula" />
                 <ScalarProperty Name="FechaAnula" ColumnName="FechaAnula" />

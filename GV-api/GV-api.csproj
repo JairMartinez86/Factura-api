@@ -175,7 +175,7 @@
     <Compile Include="Class\FACT\Cls_Bonificacion.cs" />
     <Compile Include="Class\FACT\Cls_Descuento.cs" />
     <Compile Include="Class\FACT\Cls_Precio.cs" />
-    <Compile Include="Class\SIS\ServerController.cs" />
+    <Compile Include="Controllers\SIS\ServerController.cs" />
     <Compile Include="Controllers\FACT\FacturaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -323,6 +323,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Class\SIS\" />
     <Folder Include="Views\Default\" />
     <Folder Include="Views\Factura\" />
     <Folder Include="Views\Server\" />
