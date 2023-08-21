@@ -714,38 +714,117 @@ namespace GV_api.Controllers.FACT
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
-                    var qDoc = (from _q in _Conexion.Venta
-                                where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && (Tipo == "Pedido" || ((_q.NoFactura != string.Empty && !esCola) || (esCola && _q.Estado == string.Empty)))
-                                orderby  _q.CodBodega descending, (_q.TipoDocumento == "Factura" ? _q.NoFactura : _q.NoPedido)  descending  
-                                select new
-                                      {
-                                          _q.IdVenta,
-                                          _q.Serie,
-                                          _q.NoFactura,
-                                          _q.NoPedido,
-                                          _q.Fecha,
-                                          _q.CodCliente,
-                                          _q.NomCliente,
-                                          _q.Nombre,
-                                          _q.CodBodega,
-                                          _q.NomBodega,
-                                          _q.CodVendedor,
-                                          _q.NomVendedor,
-                                          _q.TipoVenta,
-                                          _q.Vence,
-                                          _q.TotalCordoba,
-                                          _q.TotalDolar,
-                                          _q.Estado,
-                                          UsuarioRegistra = _q.Estado == "Anulado"  ? _q.UsuarioAnula : _q.UsuarioRegistra,
-                                          Index = 0,
-                                    Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
-                                }).Take(500).ToList();
+                    if(Tipo == "Factura")
+                    {
+                        if(esCola)
+                        {
+                            var qDoc = (from _q in _Conexion.Venta
+                                        where  _q.TipoDocumento == Tipo && _q.Estado == string.Empty
+                                        orderby _q.CodBodega descending, _q.Fecha descending
+                                        select new
+                                        {
+                                            _q.IdVenta,
+                                            _q.Serie,
+                                            _q.NoFactura,
+                                            _q.NoPedido,
+                                            _q.Fecha,
+                                            _q.CodCliente,
+                                            _q.NomCliente,
+                                            _q.Nombre,
+                                            _q.CodBodega,
+                                            _q.NomBodega,
+                                            _q.CodVendedor,
+                                            _q.NomVendedor,
+                                            _q.TipoVenta,
+                                            _q.Vence,
+                                            _q.TotalCordoba,
+                                            _q.TotalDolar,
+                                            _q.Estado,
+                                            _q.UsuarioRegistra,
+                                            Index = 0,
+                                            Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
+                                        }).Take(500).ToList();
 
 
-                    Cls_Datos datos = new Cls_Datos();
-                    datos.Nombre = "DOCUENTOS";
-                    datos.d = qDoc;
-                    lstDatos.Add(datos);
+                            Cls_Datos datos = new Cls_Datos();
+                            datos.Nombre = "DOCUENTOS";
+                            datos.d = qDoc;
+                            lstDatos.Add(datos);
+                        }
+                        else
+                        {
+                            var qDoc = (from _q in _Conexion.Venta
+                                        where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && _q.NoFactura != string.Empty
+                                        orderby _q.CodBodega descending, _q.NoFactura descending
+                                        select new
+                                        {
+                                            _q.IdVenta,
+                                            _q.Serie,
+                                            _q.NoFactura,
+                                            _q.NoPedido,
+                                            _q.Fecha,
+                                            _q.CodCliente,
+                                            _q.NomCliente,
+                                            _q.Nombre,
+                                            _q.CodBodega,
+                                            _q.NomBodega,
+                                            _q.CodVendedor,
+                                            _q.NomVendedor,
+                                            _q.TipoVenta,
+                                            _q.Vence,
+                                            _q.TotalCordoba,
+                                            _q.TotalDolar,
+                                            _q.Estado,
+                                            UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
+                                            Index = 0,
+                                            Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
+                                        }).Take(500).ToList();
+
+
+                            Cls_Datos datos = new Cls_Datos();
+                            datos.Nombre = "DOCUENTOS";
+                            datos.d = qDoc;
+                            lstDatos.Add(datos);
+                        }
+                        
+
+                    }
+                    else
+                    {
+                        var qDoc = (from _q in _Conexion.Venta
+                                    where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo
+                                    orderby _q.CodBodega descending, _q.NoPedido descending
+                                    select new
+                                    {
+                                        _q.IdVenta,
+                                        _q.Serie,
+                                        _q.NoFactura,
+                                        _q.NoPedido,
+                                        _q.Fecha,
+                                        _q.CodCliente,
+                                        _q.NomCliente,
+                                        _q.Nombre,
+                                        _q.CodBodega,
+                                        _q.NomBodega,
+                                        _q.CodVendedor,
+                                        _q.NomVendedor,
+                                        _q.TipoVenta,
+                                        _q.Vence,
+                                        _q.TotalCordoba,
+                                        _q.TotalDolar,
+                                        _q.Estado,
+                                        UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
+                                        Index = 0,
+                                        Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
+                                    }).Take(500).ToList();
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "DOCUENTOS";
+                        datos.d = qDoc;
+                        lstDatos.Add(datos);
+
+                    }
 
 
 
