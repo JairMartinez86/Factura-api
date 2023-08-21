@@ -828,7 +828,7 @@ namespace GV_api.Controllers.FACT
                             d.NoFactura = string.Empty;
                             d.NoPedido = string.Empty;
                             d.Estado = "Solicitado";
-                            if (d.TipoDocumento == "Factura") d.Estado = "Sin Imprimir";
+                            if (d.TipoDocumento == "Factura") d.Estado = string.Empty;
                             d.MotivoAnulacion = string.Empty;
                             _v.FechaRegistro = DateTime.Now;
                             _v.UsuarioRegistra = d.UsuarioRegistra;
