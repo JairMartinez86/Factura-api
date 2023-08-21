@@ -832,7 +832,7 @@ namespace GV_api.Controllers.FACT
                             d.MotivoAnulacion = string.Empty;
                             _v.FechaRegistro = DateTime.Now;
                             _v.UsuarioRegistra = d.UsuarioRegistra;
-                            if (d.TipoDocumento == "Factura") d.NoFactura = string.Concat(d.Serie, Consecutivo);
+                            if (d.TipoDocumento == "Factura") d.NoFactura = string.Empty;
                             if (d.TipoDocumento == "Pedido") d.NoPedido = string.Concat(d.Serie, Consecutivo);
                             esNuevo = true;
                         }
