@@ -806,16 +806,29 @@ namespace GV_api.Controllers.FACT
 
                         if (_v == null)
                         {
-                            _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.{(d.TipoDocumento == "Factura" ? "ConfiguraFacturacion" : "ControlInventario")} SET Secuencia += 1    WHERE  Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'");
-                            _Conexion.SaveChanges();
+                            //_Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.{(d.TipoDocumento == "Factura" ? "ConfiguraFacturacion" : "ControlInventario")} SET Secuencia += 1    WHERE  Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'");
+                            //_Conexion.SaveChanges();
 
-                            int Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM {(d.TipoDocumento == "Factura" ? "ConfiguraFacturacion" : "ControlInventario")} WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
+                            //int Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM {(d.TipoDocumento == "Factura" ? "ConfiguraFacturacion" : "ControlInventario")} WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
+
+                            int Consecutivo = 1;
+
+                            if (d.TipoDocumento == "Pedido")
+                            {
+                                _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.ControlInventario SET Secuencia += 1    WHERE  Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'");
+                                _Conexion.SaveChanges();
+
+                                Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ControlInventario WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
+
+                            }
+
 
                             _v = new Venta();
                             d.IdVenta = Guid.NewGuid();
                             d.NoFactura = string.Empty;
                             d.NoPedido = string.Empty;
                             d.Estado = "Solicitado";
+                            if (d.TipoDocumento == "Factura") d.Estado = "Sin Imprimir";
                             d.MotivoAnulacion = string.Empty;
                             _v.FechaRegistro = DateTime.Now;
                             _v.UsuarioRegistra = d.UsuarioRegistra;
