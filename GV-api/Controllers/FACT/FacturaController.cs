@@ -814,7 +814,7 @@ namespace GV_api.Controllers.FACT
                                         _q.TotalDolar,
                                         _q.EsDelivery,
                                         _q.EsContraentrega,
-                                        _q.EsExportacion
+                                        _q.EsExportacion,
                                         _q.Estado,
                                         UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
                                         Index = 0,
