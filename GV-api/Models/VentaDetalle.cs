@@ -53,6 +53,8 @@ namespace GV_api.Models
         public bool PrecioLiberado { get; set; }
         public decimal Margen { get; set; }
         public bool PedirAutorizado { get; set; }
+        public bool Autorizado { get; set; }
+        public string UsuarioAutoriza { get; set; }
         public int IndexUnion { get; set; }
     
         public virtual Venta Venta { get; set; }

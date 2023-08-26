@@ -972,6 +972,13 @@ namespace GV_api.Controllers.FACT
                             esNuevo = true;
                         }
 
+                        if(_v.TipoDocumento == "Factura" || _v.NoFactura != string.Empty || _v.Estado != "Solicitado")
+                        {
+                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No se permite modificacion al documento.</>", 1);
+                            return json;
+
+                        }
+
                         _v.IdVenta = d.IdVenta;
                         _v.Serie = d.Serie;
                         _v.NoFactura = d.NoFactura;
@@ -1068,6 +1075,8 @@ namespace GV_api.Controllers.FACT
                             _vDet.PrecioLiberado = det.PrecioLiberado;
                             _vDet.Margen = det.Margen;
                             _vDet.PedirAutorizado = det.PedirAutorizado;
+                            _vDet.Autorizado = det.Autorizado;
+                            _vDet.UsuarioAutoriza = det.UsuarioAutoriza;
                             _vDet.IndexUnion = det.IndexUnion;
 
 
@@ -1212,7 +1221,53 @@ namespace GV_api.Controllers.FACT
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
-                    var qDetalle = _Conexion.VentaDetalle.Where(w => w.IdVenta == IdVenta).ToList();
+                    var qDetalle = (from _q in _Conexion.VentaDetalle
+                                    where _q.IdVenta == IdVenta
+                                    select new
+                                    {
+                                        _q.IdVentaDetalle,
+                                        _q.IdVenta,
+                                        _q.Index,
+                                        _q.Codigo,
+                                        _q.Producto,
+                                        _q.Precio,
+                                        _q.PrecioCordoba,
+                                        _q.PrecioDolar,
+                                        _q.PorcDescuento,
+                                        _q.PorcDescuentoAdicional,
+                                        _q.PorcImpuesto,
+                                        _q.Cantidad,
+                                        _q.SubTotal,
+                                        _q.SubTotalCordoba,
+                                        _q.SubTotalDolar,
+                                        _q.Descuento,
+                                        _q.DescuentoCordoba,
+                                        _q.DescuentoDolar,
+                                        _q.DescuentoAdicional,
+                                        _q.DescuentoAdicionalCordoba,
+                                        _q.DescuentoAdicionalDolar,
+                                        _q.SubTotalNeto,
+                                        _q.SubTotalNetoCordoba,
+                                        _q.SubTotalNetoDolar,
+                                        _q.Impuesto,
+                                        _q.ImpuestoCordoba,
+                                        _q.ImpuestoDolar,
+                                        _q.ImpuestoExo,
+                                        _q.ImpuestoExoCordoba,
+                                        _q.ImpuestoExoDolar,
+                                        _q.Total,
+                                        _q.TotalCordoba,
+                                        _q.TotalDolar,
+                                        _q.EsBonif,
+                                        _q.EsBonifLibre,
+                                        _q.EsExonerado,
+                                        _q.PrecioLiberado,
+                                        _q.Margen,
+                                        _q.PedirAutorizado,
+                                        _q.Autorizado,
+                                        _q.UsuarioAutoriza,
+                                        _q.IndexUnion
+                                    }).ToList();
 
 
                     Cls_Datos datos = new Cls_Datos();
