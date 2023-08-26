@@ -294,6 +294,8 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="EsBonifLibre" Type="bit" Nullable="false" />
           <Property Name="EsExonerado" Type="bit" Nullable="false" />
           <Property Name="PrecioLiberado" Type="bit" Nullable="false" />
+          <Property Name="Margen" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PedirAutorizado" Type="bit" Nullable="false" />
           <Property Name="IndexUnion" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_VentaDetalle_Venta">
@@ -707,6 +709,8 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="EsBonifLibre" Type="Boolean" Nullable="false" />
           <Property Name="EsExonerado" Type="Boolean" Nullable="false" />
           <Property Name="PrecioLiberado" Type="Boolean" Nullable="false" />
+          <Property Name="Margen" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="PedirAutorizado" Type="Boolean" Nullable="false" />
           <Property Name="IndexUnion" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Venta" Relationship="INVESCASANModel.FK_VentaDetalle_Venta" FromRole="VentaDetalle" ToRole="Venta" />
         </EntityType>
@@ -975,6 +979,8 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
             <EntityTypeMapping TypeName="INVESCASANModel.VentaDetalle">
               <MappingFragment StoreEntitySet="VentaDetalle">
                 <ScalarProperty Name="IndexUnion" ColumnName="IndexUnion" />
+                <ScalarProperty Name="PedirAutorizado" ColumnName="PedirAutorizado" />
+                <ScalarProperty Name="Margen" ColumnName="Margen" />
                 <ScalarProperty Name="PrecioLiberado" ColumnName="PrecioLiberado" />
                 <ScalarProperty Name="EsExonerado" ColumnName="EsExonerado" />
                 <ScalarProperty Name="EsBonifLibre" ColumnName="EsBonifLibre" />

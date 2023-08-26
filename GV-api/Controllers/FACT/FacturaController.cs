@@ -1019,6 +1019,8 @@ namespace GV_api.Controllers.FACT
                             _vDet.EsBonifLibre = det.EsBonifLibre;
                             _vDet.EsExonerado = det.EsExonerado;
                             _vDet.PrecioLiberado = det.PrecioLiberado;
+                            _vDet.Margen = det.Margen;
+                            _vDet.PedirAutorizado = det.PedirAutorizado;
                             _vDet.IndexUnion = det.IndexUnion;
 
 
