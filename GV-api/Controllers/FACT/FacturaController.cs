@@ -740,6 +740,9 @@ namespace GV_api.Controllers.FACT
                                             _q.TotalCordoba,
                                             _q.TotalDolar,
                                             _q.Estado,
+                                            _q.EsDelivery,
+                                            _q.EsContraentrega,
+                                            _q.EsExportacion,
                                             _q.UsuarioRegistra,
                                             Index = 0,
                                             Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
