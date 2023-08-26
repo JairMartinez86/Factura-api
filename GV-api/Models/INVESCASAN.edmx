@@ -217,7 +217,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="NomCliente" Type="nvarchar" MaxLength="1000" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="1000" Nullable="false" />
           <Property Name="RucCedula" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Contanto" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Contacto" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Limite" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Disponible" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="CodBodega" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -631,7 +631,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="NomCliente" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="RucCedula" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Contanto" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Contacto" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Limite" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Disponible" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -962,7 +962,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
                 <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
                 <ScalarProperty Name="Disponible" ColumnName="Disponible" />
                 <ScalarProperty Name="Limite" ColumnName="Limite" />
-                <ScalarProperty Name="Contanto" ColumnName="Contanto" />
+                <ScalarProperty Name="Contacto" ColumnName="Contacto" />
                 <ScalarProperty Name="RucCedula" ColumnName="RucCedula" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="NomCliente" ColumnName="NomCliente" />

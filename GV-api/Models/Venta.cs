@@ -29,7 +29,7 @@ namespace GV_api.Models
         public string NomCliente { get; set; }
         public string Nombre { get; set; }
         public string RucCedula { get; set; }
-        public string Contanto { get; set; }
+        public string Contacto { get; set; }
         public decimal Limite { get; set; }
         public decimal Disponible { get; set; }
         public string CodBodega { get; set; }

@@ -724,34 +724,48 @@ namespace GV_api.Controllers.FACT
                                         select new
                                         {
                                             _q.IdVenta,
+                                            _q.TipoDocumento,
                                             _q.Serie,
                                             _q.NoFactura,
                                             _q.NoPedido,
-                                            _q.Fecha,
                                             _q.CodCliente,
                                             _q.NomCliente,
                                             _q.Nombre,
+                                            _q.RucCedula,
+                                            _q.Contacto,
+                                            _q.Limite,
+                                            _q.Disponible,
                                             _q.CodBodega,
                                             _q.NomBodega,
                                             _q.CodVendedor,
                                             _q.NomVendedor,
-                                            _q.TipoVenta,
-                                            _q.Vence,
-                                            _q.TotalCordoba,
-                                            _q.TotalDolar,
-                                            _q.Estado,
-                                            _q.EsDelivery,
                                             _q.EsContraentrega,
                                             _q.EsExportacion,
+                                            _q.OrdenCompra,
+                                            _q.Fecha,
+                                            _q.Plazo,
+                                            _q.Vence,
+                                            _q.Moneda,
+                                            _q.TipoVenta,
+                                            _q.TipoImpuesto,
+                                            _q.TipoExoneracion,
+                                            _q.NoExoneracion,
+                                            _q.EsDelivery,
+                                            _q.Direccion,
+                                            _q.Observaciones,
+                                            _q.Impuesto,
+                                            _q.Exonerado,
+                                            _q.TotalCordoba,
+                                            _q.TotalDolar,
+                                            _q.TasaCambio,
                                             _q.PedirAutorizacion,
-                                            _q.UsuarioRegistra,
-                                            Index = 0,
+                                            _q.Estado,
                                             Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
-                                        }).Take(500).ToList();
+                                        }).ToList();
 
 
                             Cls_Datos datos = new Cls_Datos();
-                            datos.Nombre = "DOCUENTOS";
+                            datos.Nombre = "DOCUMENTOS";
                             datos.d = qDoc;
                             lstDatos.Add(datos);
                         }
@@ -763,34 +777,49 @@ namespace GV_api.Controllers.FACT
                                         select new
                                         {
                                             _q.IdVenta,
+                                            _q.TipoDocumento,
                                             _q.Serie,
                                             _q.NoFactura,
                                             _q.NoPedido,
-                                            _q.Fecha,
                                             _q.CodCliente,
                                             _q.NomCliente,
                                             _q.Nombre,
+                                            _q.RucCedula,
+                                            _q.Contacto,
+                                            _q.Limite,
+                                            _q.Disponible,
                                             _q.CodBodega,
                                             _q.NomBodega,
                                             _q.CodVendedor,
                                             _q.NomVendedor,
-                                            _q.TipoVenta,
-                                            _q.Vence,
-                                            _q.TotalCordoba,
-                                            _q.TotalDolar,
-                                            _q.EsDelivery,
                                             _q.EsContraentrega,
                                             _q.EsExportacion,
+                                            _q.OrdenCompra,
+                                            _q.Fecha,
+                                            _q.Plazo,
+                                            _q.Vence,
+                                            _q.Moneda,
+                                            _q.TipoVenta,
+                                            _q.TipoImpuesto,
+                                            _q.TipoExoneracion,
+                                            _q.NoExoneracion,
+                                            _q.EsDelivery,
+                                            _q.Direccion,
+                                            _q.Observaciones,
+                                            _q.Impuesto,
+                                            _q.Exonerado,
+                                            _q.TotalCordoba,
+                                            _q.TotalDolar,
+                                            _q.TasaCambio,
                                             _q.PedirAutorizacion,
                                             _q.Estado,
                                             UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
-                                            Index = 0,
                                             Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
-                                        }).Take(500).ToList();
+                                        }).ToList();
 
 
                             Cls_Datos datos = new Cls_Datos();
-                            datos.Nombre = "DOCUENTOS";
+                            datos.Nombre = "DOCUMENTOS";
                             datos.d = qDoc;
                             lstDatos.Add(datos);
                         }
@@ -805,34 +834,49 @@ namespace GV_api.Controllers.FACT
                                     select new
                                     {
                                         _q.IdVenta,
+                                        _q.TipoDocumento,
                                         _q.Serie,
                                         _q.NoFactura,
                                         _q.NoPedido,
-                                        _q.Fecha,
                                         _q.CodCliente,
                                         _q.NomCliente,
                                         _q.Nombre,
+                                        _q.RucCedula,
+                                        _q.Contacto,
+                                        _q.Limite,
+                                        _q.Disponible,
                                         _q.CodBodega,
                                         _q.NomBodega,
                                         _q.CodVendedor,
                                         _q.NomVendedor,
-                                        _q.TipoVenta,
-                                        _q.Vence,
-                                        _q.TotalCordoba,
-                                        _q.TotalDolar,
-                                        _q.EsDelivery,
                                         _q.EsContraentrega,
                                         _q.EsExportacion,
+                                        _q.OrdenCompra,
+                                        _q.Fecha,
+                                        _q.Plazo,
+                                        _q.Vence,
+                                        _q.Moneda,
+                                        _q.TipoVenta,
+                                        _q.TipoImpuesto,
+                                        _q.TipoExoneracion,
+                                        _q.NoExoneracion,
+                                        _q.EsDelivery,
+                                        _q.Direccion,
+                                        _q.Observaciones,
+                                        _q.Impuesto,
+                                        _q.Exonerado,
+                                        _q.TotalCordoba,
+                                        _q.TotalDolar,
+                                        _q.TasaCambio,
                                         _q.PedirAutorizacion,
                                         _q.Estado,
                                         UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
-                                        Index = 0,
                                         Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
-                                    }).Take(500).ToList();
+                                    }).ToList();
 
 
                         Cls_Datos datos = new Cls_Datos();
-                        datos.Nombre = "DOCUENTOS";
+                        datos.Nombre = "DOCUMENTOS";
                         datos.d = qDoc;
                         lstDatos.Add(datos);
 
@@ -937,7 +981,7 @@ namespace GV_api.Controllers.FACT
                         _v.NomCliente = d.NomCliente;
                         _v.Nombre = d.Nombre;
                         _v.RucCedula = d.RucCedula;
-                        _v.Contanto = d.Contanto;
+                        _v.Contacto = d.Contacto;
                         _v.Limite = d.Limite;
                         _v.Disponible = d.Disponible;
                         _v.CodBodega = d.CodBodega;
@@ -1144,6 +1188,53 @@ namespace GV_api.Controllers.FACT
 
             return json;
 
+        }
+
+
+
+
+
+        [Route("api/Factura/GetDetalle")]
+        [HttpGet]
+        public string GetDetalle(Guid IdVenta)
+        {
+            return v_GetDetalle(IdVenta);
+        }
+
+
+        private string v_GetDetalle(Guid IdVenta)
+        {
+            string json = string.Empty;
+
+            try
+            {
+                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                {
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+                    var qDetalle = _Conexion.VentaDetalle.Where(w => w.IdVenta == IdVenta).ToList();
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "DETALLE VENTA";
+                    datos.d = qDetalle;
+                    lstDatos.Add(datos);
+
+
+
+
+                    json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
         }
 
     }
