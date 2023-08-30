@@ -182,6 +182,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AUDESCASAN.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AUDESCASAN.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AUDESCASAN.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AUDESCASAN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AUDESCASAN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AUDESCASAN.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Bonificados.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
@@ -217,6 +232,9 @@
     </Compile>
     <Compile Include="Models\Listadeprecios.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Perfiles1.cs">
+      <DependentUpon>AUDESCASAN.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TbBodega.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
@@ -255,6 +273,16 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Models\AUDESCASAN.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AUDESCASAN.edmx</DependentUpon>
+      <LastGenOutput>AUDESCASAN.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\AUDESCASAN.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AUDESCASAN.edmx</DependentUpon>
+      <LastGenOutput>AUDESCASAN.cs</LastGenOutput>
+    </Content>
     <Content Include="Models\INVESCASAN.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>INVESCASAN.Context.cs</LastGenOutput>
@@ -299,6 +327,13 @@
     </Content>
     <Content Include="..\.editorconfig">
       <Link>.editorconfig</Link>
+    </Content>
+    <EntityDeploy Include="Models\AUDESCASAN.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AUDESCASAN.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\AUDESCASAN.edmx.diagram">
+      <DependentUpon>AUDESCASAN.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

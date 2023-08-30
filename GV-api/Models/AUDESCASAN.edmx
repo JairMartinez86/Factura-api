@@ -1,0 +1,905 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AUDESCASANGVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'AUDESCASANGV.dbo.Perfiles1' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="Perfiles1">
+          <Key>
+            <PropertyRef Name="Bodega" />
+            <PropertyRef Name="Facturacion" />
+            <PropertyRef Name="Caja" />
+            <PropertyRef Name="CuentasxCobrar" />
+            <PropertyRef Name="ReportesdeVenta" />
+            <PropertyRef Name="Inventarios" />
+            <PropertyRef Name="Importaciones" />
+            <PropertyRef Name="Utiles" />
+            <PropertyRef Name="Presupuesto" />
+            <PropertyRef Name="Contabilidad" />
+            <PropertyRef Name="ReportesdeVentas" />
+            <PropertyRef Name="Graba" />
+            <PropertyRef Name="Modifica" />
+            <PropertyRef Name="Anula" />
+            <PropertyRef Name="Consulta" />
+            <PropertyRef Name="Facturas" />
+            <PropertyRef Name="ModificaFacturas" />
+            <PropertyRef Name="AnulaFacturas" />
+            <PropertyRef Name="ReporesFactura" />
+            <PropertyRef Name="ReimprimeFacturas" />
+            <PropertyRef Name="Tablas" />
+            <PropertyRef Name="ParametrosFacturacion" />
+            <PropertyRef Name="InterfazContable" />
+            <PropertyRef Name="TransferenciaInformacion" />
+            <PropertyRef Name="Auditoria" />
+            <PropertyRef Name="Usuarios" />
+            <PropertyRef Name="CatalogoProductos" />
+            <PropertyRef Name="Proveedores" />
+            <PropertyRef Name="Compras" />
+            <PropertyRef Name="Traslados" />
+            <PropertyRef Name="Ajustes" />
+            <PropertyRef Name="Devoluciones" />
+            <PropertyRef Name="Armados" />
+            <PropertyRef Name="Consignaciones" />
+            <PropertyRef Name="ReportesInventario" />
+            <PropertyRef Name="TarjetasKardex" />
+            <PropertyRef Name="InsertaInventario" />
+            <PropertyRef Name="ActualizaInventario" />
+            <PropertyRef Name="ReportesCosto" />
+            <PropertyRef Name="CerrarInv" />
+            <PropertyRef Name="ConsultaInventario" />
+            <PropertyRef Name="AnulaInventario" />
+            <PropertyRef Name="InsertaFacturacion" />
+            <PropertyRef Name="ConsultaFacturacion" />
+            <PropertyRef Name="AnulaFacturacion" />
+            <PropertyRef Name="ActualizaFacturacion" />
+            <PropertyRef Name="InsertaCxC" />
+            <PropertyRef Name="ActualizaCxC" />
+            <PropertyRef Name="ConsultaCxC" />
+            <PropertyRef Name="AnulaCxC" />
+            <PropertyRef Name="ModificaPreciosVenta" />
+            <PropertyRef Name="Clientes" />
+            <PropertyRef Name="NotasCredito" />
+            <PropertyRef Name="Proceso" />
+            <PropertyRef Name="PorIva" />
+            <PropertyRef Name="ACTIVO" />
+            <PropertyRef Name="Fisico" />
+            <PropertyRef Name="CatalogoCuentas" />
+            <PropertyRef Name="Diarios" />
+            <PropertyRef Name="Cheque" />
+            <PropertyRef Name="EstadosFinancieros" />
+            <PropertyRef Name="ActualizarSaldosLibro" />
+            <PropertyRef Name="ReportesC" />
+            <PropertyRef Name="CierreCuentas" />
+            <PropertyRef Name="Nomina" />
+            <PropertyRef Name="Gestion" />
+            <PropertyRef Name="ProcesosNomina" />
+            <PropertyRef Name="Prefarmaco" />
+            <PropertyRef Name="PreEquipos" />
+            <PropertyRef Name="Preconsumo" />
+            <PropertyRef Name="Pedidos" />
+            <PropertyRef Name="ProcesoNomina" />
+            <PropertyRef Name="EditaClientes" />
+            <PropertyRef Name="CuentaporPagar" />
+            <PropertyRef Name="PresupuestoGastos" />
+            <PropertyRef Name="InformacionCrediticia" />
+            <PropertyRef Name="FichaCliente" />
+            <PropertyRef Name="AbonoSuper" />
+            <PropertyRef Name="AutorizaCr" />
+            <PropertyRef Name="InformacionCredicticia" />
+            <PropertyRef Name="EstadoCuenta" />
+            <PropertyRef Name="InformesRecupera" />
+            <PropertyRef Name="InformesCartera" />
+            <PropertyRef Name="ModificaPunto" />
+            <PropertyRef Name="EscFacturacion" />
+            <PropertyRef Name="EscCaja" />
+            <PropertyRef Name="EscCartera" />
+            <PropertyRef Name="EscInventario" />
+            <PropertyRef Name="EscReporteria" />
+            <PropertyRef Name="EscCorrecciones" />
+            <PropertyRef Name="EscFacturas" />
+            <PropertyRef Name="EscReporteVentas" />
+            <PropertyRef Name="EscReimprime" />
+            <PropertyRef Name="EscAnula" />
+            <PropertyRef Name="EscPedidos" />
+            <PropertyRef Name="EscFacturaRuta" />
+            <PropertyRef Name="EscProforma" />
+            <PropertyRef Name="EscCertificado" />
+            <PropertyRef Name="EscExistenciasBodega" />
+            <PropertyRef Name="EscTransInventario" />
+            <PropertyRef Name="EscReporteInventario" />
+            <PropertyRef Name="ValidaInventarios" />
+            <PropertyRef Name="AplicarDeslizamiento" />
+            <PropertyRef Name="Certificados" />
+            <PropertyRef Name="Lista" />
+            <PropertyRef Name="OtrasUtilidades" />
+            <PropertyRef Name="ProformaProveedores" />
+            <PropertyRef Name="IngresosPolizas" />
+            <PropertyRef Name="Liquidaciones" />
+            <PropertyRef Name="CxP" />
+            <PropertyRef Name="Syscompras" />
+            <PropertyRef Name="SysRequisa" />
+            <PropertyRef Name="SysReempaque" />
+            <PropertyRef Name="SysMovimientos" />
+            <PropertyRef Name="SysDevoluciones" />
+            <PropertyRef Name="Syskardex" />
+            <PropertyRef Name="SysreImprimir" />
+            <PropertyRef Name="Sysimprimirpedido" />
+            <PropertyRef Name="Syscancelarpedido" />
+            <PropertyRef Name="Syscertificado" />
+            <PropertyRef Name="EscReporteVenta" />
+            <PropertyRef Name="EscPresupuesto" />
+            <PropertyRef Name="Web" />
+            <PropertyRef Name="LE" />
+            <PropertyRef Name="LF" />
+            <PropertyRef Name="LC" />
+            <PropertyRef Name="LP" />
+            <PropertyRef Name="Margenes" />
+            <PropertyRef Name="CuentasPorPagar" />
+            <PropertyRef Name="Expica" />
+            <PropertyRef Name="Proforma" />
+            <PropertyRef Name="CorrigeCheques" />
+            <PropertyRef Name="UserAgenda" />
+            <PropertyRef Name="Agenda" />
+            <PropertyRef Name="SeguimientoVisitas" />
+          </Key>
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" />
+          <Property Name="Usuario" Type="nvarchar" MaxLength="50" />
+          <Property Name="Clave" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cargo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Ubicacion" Type="nvarchar" MaxLength="50" />
+          <Property Name="Bodega" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="Facturacion" Type="bit" Nullable="false" />
+          <Property Name="Caja" Type="bit" Nullable="false" />
+          <Property Name="CuentasxCobrar" Type="bit" Nullable="false" />
+          <Property Name="ReportesdeVenta" Type="bit" Nullable="false" />
+          <Property Name="Inventarios" Type="bit" Nullable="false" />
+          <Property Name="Importaciones" Type="bit" Nullable="false" />
+          <Property Name="Utiles" Type="bit" Nullable="false" />
+          <Property Name="Presupuesto" Type="bit" Nullable="false" />
+          <Property Name="Contabilidad" Type="bit" Nullable="false" />
+          <Property Name="ReportesdeVentas" Type="bit" Nullable="false" />
+          <Property Name="Graba" Type="bit" Nullable="false" />
+          <Property Name="Modifica" Type="bit" Nullable="false" />
+          <Property Name="Anula" Type="bit" Nullable="false" />
+          <Property Name="Consulta" Type="bit" Nullable="false" />
+          <Property Name="Facturas" Type="bit" Nullable="false" />
+          <Property Name="ModificaFacturas" Type="bit" Nullable="false" />
+          <Property Name="AnulaFacturas" Type="bit" Nullable="false" />
+          <Property Name="ReporesFactura" Type="bit" Nullable="false" />
+          <Property Name="ReimprimeFacturas" Type="bit" Nullable="false" />
+          <Property Name="Tablas" Type="bit" Nullable="false" />
+          <Property Name="ParametrosFacturacion" Type="bit" Nullable="false" />
+          <Property Name="InterfazContable" Type="bit" Nullable="false" />
+          <Property Name="TransferenciaInformacion" Type="bit" Nullable="false" />
+          <Property Name="Auditoria" Type="bit" Nullable="false" />
+          <Property Name="Usuarios" Type="bit" Nullable="false" />
+          <Property Name="CatalogoProductos" Type="bit" Nullable="false" />
+          <Property Name="Proveedores" Type="bit" Nullable="false" />
+          <Property Name="Compras" Type="bit" Nullable="false" />
+          <Property Name="Traslados" Type="bit" Nullable="false" />
+          <Property Name="Ajustes" Type="bit" Nullable="false" />
+          <Property Name="Devoluciones" Type="bit" Nullable="false" />
+          <Property Name="Armados" Type="bit" Nullable="false" />
+          <Property Name="Consignaciones" Type="bit" Nullable="false" />
+          <Property Name="ReportesInventario" Type="bit" Nullable="false" />
+          <Property Name="TarjetasKardex" Type="bit" Nullable="false" />
+          <Property Name="InsertaInventario" Type="bit" Nullable="false" />
+          <Property Name="ActualizaInventario" Type="bit" Nullable="false" />
+          <Property Name="ReportesCosto" Type="bit" Nullable="false" />
+          <Property Name="CerrarInv" Type="bit" Nullable="false" />
+          <Property Name="ConsultaInventario" Type="bit" Nullable="false" />
+          <Property Name="AnulaInventario" Type="bit" Nullable="false" />
+          <Property Name="InsertaFacturacion" Type="bit" Nullable="false" />
+          <Property Name="ConsultaFacturacion" Type="bit" Nullable="false" />
+          <Property Name="AnulaFacturacion" Type="bit" Nullable="false" />
+          <Property Name="ActualizaFacturacion" Type="bit" Nullable="false" />
+          <Property Name="InsertaCxC" Type="bit" Nullable="false" />
+          <Property Name="ActualizaCxC" Type="bit" Nullable="false" />
+          <Property Name="ConsultaCxC" Type="bit" Nullable="false" />
+          <Property Name="AnulaCxC" Type="bit" Nullable="false" />
+          <Property Name="ModificaPreciosVenta" Type="bit" Nullable="false" />
+          <Property Name="Clientes" Type="bit" Nullable="false" />
+          <Property Name="NotasCredito" Type="bit" Nullable="false" />
+          <Property Name="Proceso" Type="bit" Nullable="false" />
+          <Property Name="PorIva" Type="bit" Nullable="false" />
+          <Property Name="ACTIVO" Type="bit" Nullable="false" />
+          <Property Name="Fisico" Type="bit" Nullable="false" />
+          <Property Name="CatalogoCuentas" Type="bit" Nullable="false" />
+          <Property Name="Diarios" Type="bit" Nullable="false" />
+          <Property Name="Cheque" Type="bit" Nullable="false" />
+          <Property Name="EstadosFinancieros" Type="bit" Nullable="false" />
+          <Property Name="ActualizarSaldosLibro" Type="bit" Nullable="false" />
+          <Property Name="ReportesC" Type="bit" Nullable="false" />
+          <Property Name="CierreCuentas" Type="bit" Nullable="false" />
+          <Property Name="Nomina" Type="bit" Nullable="false" />
+          <Property Name="Gestion" Type="bit" Nullable="false" />
+          <Property Name="ProcesosNomina" Type="bit" Nullable="false" />
+          <Property Name="Prefarmaco" Type="bit" Nullable="false" />
+          <Property Name="PreEquipos" Type="bit" Nullable="false" />
+          <Property Name="Preconsumo" Type="bit" Nullable="false" />
+          <Property Name="Pedidos" Type="bit" Nullable="false" />
+          <Property Name="ProcesoNomina" Type="bit" Nullable="false" />
+          <Property Name="EditaClientes" Type="bit" Nullable="false" />
+          <Property Name="CuentaporPagar" Type="bit" Nullable="false" />
+          <Property Name="PresupuestoGastos" Type="bit" Nullable="false" />
+          <Property Name="InformacionCrediticia" Type="bit" Nullable="false" />
+          <Property Name="FichaCliente" Type="bit" Nullable="false" />
+          <Property Name="AbonoSuper" Type="bit" Nullable="false" />
+          <Property Name="AutorizaCr" Type="bit" Nullable="false" />
+          <Property Name="InformacionCredicticia" Type="bit" Nullable="false" />
+          <Property Name="EstadoCuenta" Type="bit" Nullable="false" />
+          <Property Name="InformesRecupera" Type="bit" Nullable="false" />
+          <Property Name="InformesCartera" Type="bit" Nullable="false" />
+          <Property Name="ModificaPunto" Type="bit" Nullable="false" />
+          <Property Name="EscFacturacion" Type="bit" Nullable="false" />
+          <Property Name="EscCaja" Type="bit" Nullable="false" />
+          <Property Name="EscCartera" Type="bit" Nullable="false" />
+          <Property Name="EscInventario" Type="bit" Nullable="false" />
+          <Property Name="EscReporteria" Type="bit" Nullable="false" />
+          <Property Name="EscCorrecciones" Type="bit" Nullable="false" />
+          <Property Name="EscFacturas" Type="bit" Nullable="false" />
+          <Property Name="EscReporteVentas" Type="bit" Nullable="false" />
+          <Property Name="EscReimprime" Type="bit" Nullable="false" />
+          <Property Name="EscAnula" Type="bit" Nullable="false" />
+          <Property Name="EscPedidos" Type="bit" Nullable="false" />
+          <Property Name="EscFacturaRuta" Type="bit" Nullable="false" />
+          <Property Name="EscProforma" Type="bit" Nullable="false" />
+          <Property Name="EscCertificado" Type="bit" Nullable="false" />
+          <Property Name="EscExistenciasBodega" Type="bit" Nullable="false" />
+          <Property Name="EscTransInventario" Type="bit" Nullable="false" />
+          <Property Name="EscReporteInventario" Type="bit" Nullable="false" />
+          <Property Name="ValidaInventarios" Type="bit" Nullable="false" />
+          <Property Name="AplicarDeslizamiento" Type="bit" Nullable="false" />
+          <Property Name="Certificados" Type="bit" Nullable="false" />
+          <Property Name="Lista" Type="bit" Nullable="false" />
+          <Property Name="OtrasUtilidades" Type="bit" Nullable="false" />
+          <Property Name="ProformaProveedores" Type="bit" Nullable="false" />
+          <Property Name="IngresosPolizas" Type="bit" Nullable="false" />
+          <Property Name="Liquidaciones" Type="bit" Nullable="false" />
+          <Property Name="CxP" Type="bit" Nullable="false" />
+          <Property Name="Syscompras" Type="bit" Nullable="false" />
+          <Property Name="SysRequisa" Type="bit" Nullable="false" />
+          <Property Name="SysReempaque" Type="bit" Nullable="false" />
+          <Property Name="SysMovimientos" Type="bit" Nullable="false" />
+          <Property Name="SysDevoluciones" Type="bit" Nullable="false" />
+          <Property Name="Syskardex" Type="bit" Nullable="false" />
+          <Property Name="SysreImprimir" Type="bit" Nullable="false" />
+          <Property Name="Sysimprimirpedido" Type="bit" Nullable="false" />
+          <Property Name="Syscancelarpedido" Type="bit" Nullable="false" />
+          <Property Name="Syscertificado" Type="bit" Nullable="false" />
+          <Property Name="EscReporteVenta" Type="bit" Nullable="false" />
+          <Property Name="EscPresupuesto" Type="bit" Nullable="false" />
+          <Property Name="Web" Type="bit" Nullable="false" />
+          <Property Name="Correo" Type="nchar" MaxLength="50" />
+          <Property Name="Nivel" Type="nchar" MaxLength="2" />
+          <Property Name="LE" Type="bit" Nullable="false" />
+          <Property Name="LF" Type="bit" Nullable="false" />
+          <Property Name="LC" Type="bit" Nullable="false" />
+          <Property Name="LP" Type="bit" Nullable="false" />
+          <Property Name="Margenes" Type="bit" Nullable="false" />
+          <Property Name="CuentasPorPagar" Type="bit" Nullable="false" />
+          <Property Name="Expica" Type="bit" Nullable="false" />
+          <Property Name="Proforma" Type="bit" Nullable="false" />
+          <Property Name="CorrigeCheques" Type="bit" Nullable="false" />
+          <Property Name="UserAgenda" Type="bit" Nullable="false" />
+          <Property Name="Agenda" Type="bit" Nullable="false" />
+          <Property Name="SeguimientoVisitas" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="AUDESCASANGVModelStoreContainer">
+          <EntitySet Name="Perfiles1" EntityType="Self.Perfiles1" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Perfiles1].[Nombre] AS [Nombre], 
+    [Perfiles1].[Usuario] AS [Usuario], 
+    [Perfiles1].[Clave] AS [Clave], 
+    [Perfiles1].[Cargo] AS [Cargo], 
+    [Perfiles1].[Ubicacion] AS [Ubicacion], 
+    [Perfiles1].[Bodega] AS [Bodega], 
+    [Perfiles1].[Facturacion] AS [Facturacion], 
+    [Perfiles1].[Caja] AS [Caja], 
+    [Perfiles1].[CuentasxCobrar] AS [CuentasxCobrar], 
+    [Perfiles1].[ReportesdeVenta] AS [ReportesdeVenta], 
+    [Perfiles1].[Inventarios] AS [Inventarios], 
+    [Perfiles1].[Importaciones] AS [Importaciones], 
+    [Perfiles1].[Utiles] AS [Utiles], 
+    [Perfiles1].[Presupuesto] AS [Presupuesto], 
+    [Perfiles1].[Contabilidad] AS [Contabilidad], 
+    [Perfiles1].[ReportesdeVentas] AS [ReportesdeVentas], 
+    [Perfiles1].[Graba] AS [Graba], 
+    [Perfiles1].[Modifica] AS [Modifica], 
+    [Perfiles1].[Anula] AS [Anula], 
+    [Perfiles1].[Consulta] AS [Consulta], 
+    [Perfiles1].[Facturas] AS [Facturas], 
+    [Perfiles1].[ModificaFacturas] AS [ModificaFacturas], 
+    [Perfiles1].[AnulaFacturas] AS [AnulaFacturas], 
+    [Perfiles1].[ReporesFactura] AS [ReporesFactura], 
+    [Perfiles1].[ReimprimeFacturas] AS [ReimprimeFacturas], 
+    [Perfiles1].[Tablas] AS [Tablas], 
+    [Perfiles1].[ParametrosFacturacion] AS [ParametrosFacturacion], 
+    [Perfiles1].[InterfazContable] AS [InterfazContable], 
+    [Perfiles1].[TransferenciaInformacion] AS [TransferenciaInformacion], 
+    [Perfiles1].[Auditoria] AS [Auditoria], 
+    [Perfiles1].[Usuarios] AS [Usuarios], 
+    [Perfiles1].[CatalogoProductos] AS [CatalogoProductos], 
+    [Perfiles1].[Proveedores] AS [Proveedores], 
+    [Perfiles1].[Compras] AS [Compras], 
+    [Perfiles1].[Traslados] AS [Traslados], 
+    [Perfiles1].[Ajustes] AS [Ajustes], 
+    [Perfiles1].[Devoluciones] AS [Devoluciones], 
+    [Perfiles1].[Armados] AS [Armados], 
+    [Perfiles1].[Consignaciones] AS [Consignaciones], 
+    [Perfiles1].[ReportesInventario] AS [ReportesInventario], 
+    [Perfiles1].[TarjetasKardex] AS [TarjetasKardex], 
+    [Perfiles1].[InsertaInventario] AS [InsertaInventario], 
+    [Perfiles1].[ActualizaInventario] AS [ActualizaInventario], 
+    [Perfiles1].[ReportesCosto] AS [ReportesCosto], 
+    [Perfiles1].[CerrarInv] AS [CerrarInv], 
+    [Perfiles1].[ConsultaInventario] AS [ConsultaInventario], 
+    [Perfiles1].[AnulaInventario] AS [AnulaInventario], 
+    [Perfiles1].[InsertaFacturacion] AS [InsertaFacturacion], 
+    [Perfiles1].[ConsultaFacturacion] AS [ConsultaFacturacion], 
+    [Perfiles1].[AnulaFacturacion] AS [AnulaFacturacion], 
+    [Perfiles1].[ActualizaFacturacion] AS [ActualizaFacturacion], 
+    [Perfiles1].[InsertaCxC] AS [InsertaCxC], 
+    [Perfiles1].[ActualizaCxC] AS [ActualizaCxC], 
+    [Perfiles1].[ConsultaCxC] AS [ConsultaCxC], 
+    [Perfiles1].[AnulaCxC] AS [AnulaCxC], 
+    [Perfiles1].[ModificaPreciosVenta] AS [ModificaPreciosVenta], 
+    [Perfiles1].[Clientes] AS [Clientes], 
+    [Perfiles1].[NotasCredito] AS [NotasCredito], 
+    [Perfiles1].[Proceso] AS [Proceso], 
+    [Perfiles1].[PorIva] AS [PorIva], 
+    [Perfiles1].[ACTIVO] AS [ACTIVO], 
+    [Perfiles1].[Fisico] AS [Fisico], 
+    [Perfiles1].[CatalogoCuentas] AS [CatalogoCuentas], 
+    [Perfiles1].[Diarios] AS [Diarios], 
+    [Perfiles1].[Cheque] AS [Cheque], 
+    [Perfiles1].[EstadosFinancieros] AS [EstadosFinancieros], 
+    [Perfiles1].[ActualizarSaldosLibro] AS [ActualizarSaldosLibro], 
+    [Perfiles1].[ReportesC] AS [ReportesC], 
+    [Perfiles1].[CierreCuentas] AS [CierreCuentas], 
+    [Perfiles1].[Nomina] AS [Nomina], 
+    [Perfiles1].[Gestion] AS [Gestion], 
+    [Perfiles1].[ProcesosNomina] AS [ProcesosNomina], 
+    [Perfiles1].[Prefarmaco] AS [Prefarmaco], 
+    [Perfiles1].[PreEquipos] AS [PreEquipos], 
+    [Perfiles1].[Preconsumo] AS [Preconsumo], 
+    [Perfiles1].[Pedidos] AS [Pedidos], 
+    [Perfiles1].[ProcesoNomina] AS [ProcesoNomina], 
+    [Perfiles1].[EditaClientes] AS [EditaClientes], 
+    [Perfiles1].[CuentaporPagar] AS [CuentaporPagar], 
+    [Perfiles1].[PresupuestoGastos] AS [PresupuestoGastos], 
+    [Perfiles1].[InformacionCrediticia] AS [InformacionCrediticia], 
+    [Perfiles1].[FichaCliente] AS [FichaCliente], 
+    [Perfiles1].[AbonoSuper] AS [AbonoSuper], 
+    [Perfiles1].[AutorizaCr] AS [AutorizaCr], 
+    [Perfiles1].[InformacionCredicticia] AS [InformacionCredicticia], 
+    [Perfiles1].[EstadoCuenta] AS [EstadoCuenta], 
+    [Perfiles1].[InformesRecupera] AS [InformesRecupera], 
+    [Perfiles1].[InformesCartera] AS [InformesCartera], 
+    [Perfiles1].[ModificaPunto] AS [ModificaPunto], 
+    [Perfiles1].[EscFacturacion] AS [EscFacturacion], 
+    [Perfiles1].[EscCaja] AS [EscCaja], 
+    [Perfiles1].[EscCartera] AS [EscCartera], 
+    [Perfiles1].[EscInventario] AS [EscInventario], 
+    [Perfiles1].[EscReporteria] AS [EscReporteria], 
+    [Perfiles1].[EscCorrecciones] AS [EscCorrecciones], 
+    [Perfiles1].[EscFacturas] AS [EscFacturas], 
+    [Perfiles1].[EscReporteVentas] AS [EscReporteVentas], 
+    [Perfiles1].[EscReimprime] AS [EscReimprime], 
+    [Perfiles1].[EscAnula] AS [EscAnula], 
+    [Perfiles1].[EscPedidos] AS [EscPedidos], 
+    [Perfiles1].[EscFacturaRuta] AS [EscFacturaRuta], 
+    [Perfiles1].[EscProforma] AS [EscProforma], 
+    [Perfiles1].[EscCertificado] AS [EscCertificado], 
+    [Perfiles1].[EscExistenciasBodega] AS [EscExistenciasBodega], 
+    [Perfiles1].[EscTransInventario] AS [EscTransInventario], 
+    [Perfiles1].[EscReporteInventario] AS [EscReporteInventario], 
+    [Perfiles1].[ValidaInventarios] AS [ValidaInventarios], 
+    [Perfiles1].[AplicarDeslizamiento] AS [AplicarDeslizamiento], 
+    [Perfiles1].[Certificados] AS [Certificados], 
+    [Perfiles1].[Lista] AS [Lista], 
+    [Perfiles1].[OtrasUtilidades] AS [OtrasUtilidades], 
+    [Perfiles1].[ProformaProveedores] AS [ProformaProveedores], 
+    [Perfiles1].[IngresosPolizas] AS [IngresosPolizas], 
+    [Perfiles1].[Liquidaciones] AS [Liquidaciones], 
+    [Perfiles1].[CxP] AS [CxP], 
+    [Perfiles1].[Syscompras] AS [Syscompras], 
+    [Perfiles1].[SysRequisa] AS [SysRequisa], 
+    [Perfiles1].[SysReempaque] AS [SysReempaque], 
+    [Perfiles1].[SysMovimientos] AS [SysMovimientos], 
+    [Perfiles1].[SysDevoluciones] AS [SysDevoluciones], 
+    [Perfiles1].[Syskardex] AS [Syskardex], 
+    [Perfiles1].[SysreImprimir] AS [SysreImprimir], 
+    [Perfiles1].[Sysimprimirpedido] AS [Sysimprimirpedido], 
+    [Perfiles1].[Syscancelarpedido] AS [Syscancelarpedido], 
+    [Perfiles1].[Syscertificado] AS [Syscertificado], 
+    [Perfiles1].[EscReporteVenta] AS [EscReporteVenta], 
+    [Perfiles1].[EscPresupuesto] AS [EscPresupuesto], 
+    [Perfiles1].[Web] AS [Web], 
+    [Perfiles1].[Correo] AS [Correo], 
+    [Perfiles1].[Nivel] AS [Nivel], 
+    [Perfiles1].[LE] AS [LE], 
+    [Perfiles1].[LF] AS [LF], 
+    [Perfiles1].[LC] AS [LC], 
+    [Perfiles1].[LP] AS [LP], 
+    [Perfiles1].[Margenes] AS [Margenes], 
+    [Perfiles1].[CuentasPorPagar] AS [CuentasPorPagar], 
+    [Perfiles1].[Expica] AS [Expica], 
+    [Perfiles1].[Proforma] AS [Proforma], 
+    [Perfiles1].[CorrigeCheques] AS [CorrigeCheques], 
+    [Perfiles1].[UserAgenda] AS [UserAgenda], 
+    [Perfiles1].[Agenda] AS [Agenda], 
+    [Perfiles1].[SeguimientoVisitas] AS [SeguimientoVisitas]
+    FROM [dbo].[Perfiles1] AS [Perfiles1]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AUDESCASANGVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Perfiles1">
+          <Key>
+            <PropertyRef Name="Bodega" />
+            <PropertyRef Name="Facturacion" />
+            <PropertyRef Name="Caja" />
+            <PropertyRef Name="CuentasxCobrar" />
+            <PropertyRef Name="ReportesdeVenta" />
+            <PropertyRef Name="Inventarios" />
+            <PropertyRef Name="Importaciones" />
+            <PropertyRef Name="Utiles" />
+            <PropertyRef Name="Presupuesto" />
+            <PropertyRef Name="Contabilidad" />
+            <PropertyRef Name="ReportesdeVentas" />
+            <PropertyRef Name="Graba" />
+            <PropertyRef Name="Modifica" />
+            <PropertyRef Name="Anula" />
+            <PropertyRef Name="Consulta" />
+            <PropertyRef Name="Facturas" />
+            <PropertyRef Name="ModificaFacturas" />
+            <PropertyRef Name="AnulaFacturas" />
+            <PropertyRef Name="ReporesFactura" />
+            <PropertyRef Name="ReimprimeFacturas" />
+            <PropertyRef Name="Tablas" />
+            <PropertyRef Name="ParametrosFacturacion" />
+            <PropertyRef Name="InterfazContable" />
+            <PropertyRef Name="TransferenciaInformacion" />
+            <PropertyRef Name="Auditoria" />
+            <PropertyRef Name="Usuarios" />
+            <PropertyRef Name="CatalogoProductos" />
+            <PropertyRef Name="Proveedores" />
+            <PropertyRef Name="Compras" />
+            <PropertyRef Name="Traslados" />
+            <PropertyRef Name="Ajustes" />
+            <PropertyRef Name="Devoluciones" />
+            <PropertyRef Name="Armados" />
+            <PropertyRef Name="Consignaciones" />
+            <PropertyRef Name="ReportesInventario" />
+            <PropertyRef Name="TarjetasKardex" />
+            <PropertyRef Name="InsertaInventario" />
+            <PropertyRef Name="ActualizaInventario" />
+            <PropertyRef Name="ReportesCosto" />
+            <PropertyRef Name="CerrarInv" />
+            <PropertyRef Name="ConsultaInventario" />
+            <PropertyRef Name="AnulaInventario" />
+            <PropertyRef Name="InsertaFacturacion" />
+            <PropertyRef Name="ConsultaFacturacion" />
+            <PropertyRef Name="AnulaFacturacion" />
+            <PropertyRef Name="ActualizaFacturacion" />
+            <PropertyRef Name="InsertaCxC" />
+            <PropertyRef Name="ActualizaCxC" />
+            <PropertyRef Name="ConsultaCxC" />
+            <PropertyRef Name="AnulaCxC" />
+            <PropertyRef Name="ModificaPreciosVenta" />
+            <PropertyRef Name="Clientes" />
+            <PropertyRef Name="NotasCredito" />
+            <PropertyRef Name="Proceso" />
+            <PropertyRef Name="PorIva" />
+            <PropertyRef Name="ACTIVO" />
+            <PropertyRef Name="Fisico" />
+            <PropertyRef Name="CatalogoCuentas" />
+            <PropertyRef Name="Diarios" />
+            <PropertyRef Name="Cheque" />
+            <PropertyRef Name="EstadosFinancieros" />
+            <PropertyRef Name="ActualizarSaldosLibro" />
+            <PropertyRef Name="ReportesC" />
+            <PropertyRef Name="CierreCuentas" />
+            <PropertyRef Name="Nomina" />
+            <PropertyRef Name="Gestion" />
+            <PropertyRef Name="ProcesosNomina" />
+            <PropertyRef Name="Prefarmaco" />
+            <PropertyRef Name="PreEquipos" />
+            <PropertyRef Name="Preconsumo" />
+            <PropertyRef Name="Pedidos" />
+            <PropertyRef Name="ProcesoNomina" />
+            <PropertyRef Name="EditaClientes" />
+            <PropertyRef Name="CuentaporPagar" />
+            <PropertyRef Name="PresupuestoGastos" />
+            <PropertyRef Name="InformacionCrediticia" />
+            <PropertyRef Name="FichaCliente" />
+            <PropertyRef Name="AbonoSuper" />
+            <PropertyRef Name="AutorizaCr" />
+            <PropertyRef Name="InformacionCredicticia" />
+            <PropertyRef Name="EstadoCuenta" />
+            <PropertyRef Name="InformesRecupera" />
+            <PropertyRef Name="InformesCartera" />
+            <PropertyRef Name="ModificaPunto" />
+            <PropertyRef Name="EscFacturacion" />
+            <PropertyRef Name="EscCaja" />
+            <PropertyRef Name="EscCartera" />
+            <PropertyRef Name="EscInventario" />
+            <PropertyRef Name="EscReporteria" />
+            <PropertyRef Name="EscCorrecciones" />
+            <PropertyRef Name="EscFacturas" />
+            <PropertyRef Name="EscReporteVentas" />
+            <PropertyRef Name="EscReimprime" />
+            <PropertyRef Name="EscAnula" />
+            <PropertyRef Name="EscPedidos" />
+            <PropertyRef Name="EscFacturaRuta" />
+            <PropertyRef Name="EscProforma" />
+            <PropertyRef Name="EscCertificado" />
+            <PropertyRef Name="EscExistenciasBodega" />
+            <PropertyRef Name="EscTransInventario" />
+            <PropertyRef Name="EscReporteInventario" />
+            <PropertyRef Name="ValidaInventarios" />
+            <PropertyRef Name="AplicarDeslizamiento" />
+            <PropertyRef Name="Certificados" />
+            <PropertyRef Name="Lista" />
+            <PropertyRef Name="OtrasUtilidades" />
+            <PropertyRef Name="ProformaProveedores" />
+            <PropertyRef Name="IngresosPolizas" />
+            <PropertyRef Name="Liquidaciones" />
+            <PropertyRef Name="CxP" />
+            <PropertyRef Name="Syscompras" />
+            <PropertyRef Name="SysRequisa" />
+            <PropertyRef Name="SysReempaque" />
+            <PropertyRef Name="SysMovimientos" />
+            <PropertyRef Name="SysDevoluciones" />
+            <PropertyRef Name="Syskardex" />
+            <PropertyRef Name="SysreImprimir" />
+            <PropertyRef Name="Sysimprimirpedido" />
+            <PropertyRef Name="Syscancelarpedido" />
+            <PropertyRef Name="Syscertificado" />
+            <PropertyRef Name="EscReporteVenta" />
+            <PropertyRef Name="EscPresupuesto" />
+            <PropertyRef Name="Web" />
+            <PropertyRef Name="LE" />
+            <PropertyRef Name="LF" />
+            <PropertyRef Name="LC" />
+            <PropertyRef Name="LP" />
+            <PropertyRef Name="Margenes" />
+            <PropertyRef Name="CuentasPorPagar" />
+            <PropertyRef Name="Expica" />
+            <PropertyRef Name="Proforma" />
+            <PropertyRef Name="CorrigeCheques" />
+            <PropertyRef Name="UserAgenda" />
+            <PropertyRef Name="Agenda" />
+            <PropertyRef Name="SeguimientoVisitas" />
+          </Key>
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Clave" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cargo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Ubicacion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Bodega" Type="String" MaxLength="4" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Facturacion" Type="Boolean" Nullable="false" />
+          <Property Name="Caja" Type="Boolean" Nullable="false" />
+          <Property Name="CuentasxCobrar" Type="Boolean" Nullable="false" />
+          <Property Name="ReportesdeVenta" Type="Boolean" Nullable="false" />
+          <Property Name="Inventarios" Type="Boolean" Nullable="false" />
+          <Property Name="Importaciones" Type="Boolean" Nullable="false" />
+          <Property Name="Utiles" Type="Boolean" Nullable="false" />
+          <Property Name="Presupuesto" Type="Boolean" Nullable="false" />
+          <Property Name="Contabilidad" Type="Boolean" Nullable="false" />
+          <Property Name="ReportesdeVentas" Type="Boolean" Nullable="false" />
+          <Property Name="Graba" Type="Boolean" Nullable="false" />
+          <Property Name="Modifica" Type="Boolean" Nullable="false" />
+          <Property Name="Anula" Type="Boolean" Nullable="false" />
+          <Property Name="Consulta" Type="Boolean" Nullable="false" />
+          <Property Name="Facturas" Type="Boolean" Nullable="false" />
+          <Property Name="ModificaFacturas" Type="Boolean" Nullable="false" />
+          <Property Name="AnulaFacturas" Type="Boolean" Nullable="false" />
+          <Property Name="ReporesFactura" Type="Boolean" Nullable="false" />
+          <Property Name="ReimprimeFacturas" Type="Boolean" Nullable="false" />
+          <Property Name="Tablas" Type="Boolean" Nullable="false" />
+          <Property Name="ParametrosFacturacion" Type="Boolean" Nullable="false" />
+          <Property Name="InterfazContable" Type="Boolean" Nullable="false" />
+          <Property Name="TransferenciaInformacion" Type="Boolean" Nullable="false" />
+          <Property Name="Auditoria" Type="Boolean" Nullable="false" />
+          <Property Name="Usuarios" Type="Boolean" Nullable="false" />
+          <Property Name="CatalogoProductos" Type="Boolean" Nullable="false" />
+          <Property Name="Proveedores" Type="Boolean" Nullable="false" />
+          <Property Name="Compras" Type="Boolean" Nullable="false" />
+          <Property Name="Traslados" Type="Boolean" Nullable="false" />
+          <Property Name="Ajustes" Type="Boolean" Nullable="false" />
+          <Property Name="Devoluciones" Type="Boolean" Nullable="false" />
+          <Property Name="Armados" Type="Boolean" Nullable="false" />
+          <Property Name="Consignaciones" Type="Boolean" Nullable="false" />
+          <Property Name="ReportesInventario" Type="Boolean" Nullable="false" />
+          <Property Name="TarjetasKardex" Type="Boolean" Nullable="false" />
+          <Property Name="InsertaInventario" Type="Boolean" Nullable="false" />
+          <Property Name="ActualizaInventario" Type="Boolean" Nullable="false" />
+          <Property Name="ReportesCosto" Type="Boolean" Nullable="false" />
+          <Property Name="CerrarInv" Type="Boolean" Nullable="false" />
+          <Property Name="ConsultaInventario" Type="Boolean" Nullable="false" />
+          <Property Name="AnulaInventario" Type="Boolean" Nullable="false" />
+          <Property Name="InsertaFacturacion" Type="Boolean" Nullable="false" />
+          <Property Name="ConsultaFacturacion" Type="Boolean" Nullable="false" />
+          <Property Name="AnulaFacturacion" Type="Boolean" Nullable="false" />
+          <Property Name="ActualizaFacturacion" Type="Boolean" Nullable="false" />
+          <Property Name="InsertaCxC" Type="Boolean" Nullable="false" />
+          <Property Name="ActualizaCxC" Type="Boolean" Nullable="false" />
+          <Property Name="ConsultaCxC" Type="Boolean" Nullable="false" />
+          <Property Name="AnulaCxC" Type="Boolean" Nullable="false" />
+          <Property Name="ModificaPreciosVenta" Type="Boolean" Nullable="false" />
+          <Property Name="Clientes" Type="Boolean" Nullable="false" />
+          <Property Name="NotasCredito" Type="Boolean" Nullable="false" />
+          <Property Name="Proceso" Type="Boolean" Nullable="false" />
+          <Property Name="PorIva" Type="Boolean" Nullable="false" />
+          <Property Name="ACTIVO" Type="Boolean" Nullable="false" />
+          <Property Name="Fisico" Type="Boolean" Nullable="false" />
+          <Property Name="CatalogoCuentas" Type="Boolean" Nullable="false" />
+          <Property Name="Diarios" Type="Boolean" Nullable="false" />
+          <Property Name="Cheque" Type="Boolean" Nullable="false" />
+          <Property Name="EstadosFinancieros" Type="Boolean" Nullable="false" />
+          <Property Name="ActualizarSaldosLibro" Type="Boolean" Nullable="false" />
+          <Property Name="ReportesC" Type="Boolean" Nullable="false" />
+          <Property Name="CierreCuentas" Type="Boolean" Nullable="false" />
+          <Property Name="Nomina" Type="Boolean" Nullable="false" />
+          <Property Name="Gestion" Type="Boolean" Nullable="false" />
+          <Property Name="ProcesosNomina" Type="Boolean" Nullable="false" />
+          <Property Name="Prefarmaco" Type="Boolean" Nullable="false" />
+          <Property Name="PreEquipos" Type="Boolean" Nullable="false" />
+          <Property Name="Preconsumo" Type="Boolean" Nullable="false" />
+          <Property Name="Pedidos" Type="Boolean" Nullable="false" />
+          <Property Name="ProcesoNomina" Type="Boolean" Nullable="false" />
+          <Property Name="EditaClientes" Type="Boolean" Nullable="false" />
+          <Property Name="CuentaporPagar" Type="Boolean" Nullable="false" />
+          <Property Name="PresupuestoGastos" Type="Boolean" Nullable="false" />
+          <Property Name="InformacionCrediticia" Type="Boolean" Nullable="false" />
+          <Property Name="FichaCliente" Type="Boolean" Nullable="false" />
+          <Property Name="AbonoSuper" Type="Boolean" Nullable="false" />
+          <Property Name="AutorizaCr" Type="Boolean" Nullable="false" />
+          <Property Name="InformacionCredicticia" Type="Boolean" Nullable="false" />
+          <Property Name="EstadoCuenta" Type="Boolean" Nullable="false" />
+          <Property Name="InformesRecupera" Type="Boolean" Nullable="false" />
+          <Property Name="InformesCartera" Type="Boolean" Nullable="false" />
+          <Property Name="ModificaPunto" Type="Boolean" Nullable="false" />
+          <Property Name="EscFacturacion" Type="Boolean" Nullable="false" />
+          <Property Name="EscCaja" Type="Boolean" Nullable="false" />
+          <Property Name="EscCartera" Type="Boolean" Nullable="false" />
+          <Property Name="EscInventario" Type="Boolean" Nullable="false" />
+          <Property Name="EscReporteria" Type="Boolean" Nullable="false" />
+          <Property Name="EscCorrecciones" Type="Boolean" Nullable="false" />
+          <Property Name="EscFacturas" Type="Boolean" Nullable="false" />
+          <Property Name="EscReporteVentas" Type="Boolean" Nullable="false" />
+          <Property Name="EscReimprime" Type="Boolean" Nullable="false" />
+          <Property Name="EscAnula" Type="Boolean" Nullable="false" />
+          <Property Name="EscPedidos" Type="Boolean" Nullable="false" />
+          <Property Name="EscFacturaRuta" Type="Boolean" Nullable="false" />
+          <Property Name="EscProforma" Type="Boolean" Nullable="false" />
+          <Property Name="EscCertificado" Type="Boolean" Nullable="false" />
+          <Property Name="EscExistenciasBodega" Type="Boolean" Nullable="false" />
+          <Property Name="EscTransInventario" Type="Boolean" Nullable="false" />
+          <Property Name="EscReporteInventario" Type="Boolean" Nullable="false" />
+          <Property Name="ValidaInventarios" Type="Boolean" Nullable="false" />
+          <Property Name="AplicarDeslizamiento" Type="Boolean" Nullable="false" />
+          <Property Name="Certificados" Type="Boolean" Nullable="false" />
+          <Property Name="Lista" Type="Boolean" Nullable="false" />
+          <Property Name="OtrasUtilidades" Type="Boolean" Nullable="false" />
+          <Property Name="ProformaProveedores" Type="Boolean" Nullable="false" />
+          <Property Name="IngresosPolizas" Type="Boolean" Nullable="false" />
+          <Property Name="Liquidaciones" Type="Boolean" Nullable="false" />
+          <Property Name="CxP" Type="Boolean" Nullable="false" />
+          <Property Name="Syscompras" Type="Boolean" Nullable="false" />
+          <Property Name="SysRequisa" Type="Boolean" Nullable="false" />
+          <Property Name="SysReempaque" Type="Boolean" Nullable="false" />
+          <Property Name="SysMovimientos" Type="Boolean" Nullable="false" />
+          <Property Name="SysDevoluciones" Type="Boolean" Nullable="false" />
+          <Property Name="Syskardex" Type="Boolean" Nullable="false" />
+          <Property Name="SysreImprimir" Type="Boolean" Nullable="false" />
+          <Property Name="Sysimprimirpedido" Type="Boolean" Nullable="false" />
+          <Property Name="Syscancelarpedido" Type="Boolean" Nullable="false" />
+          <Property Name="Syscertificado" Type="Boolean" Nullable="false" />
+          <Property Name="EscReporteVenta" Type="Boolean" Nullable="false" />
+          <Property Name="EscPresupuesto" Type="Boolean" Nullable="false" />
+          <Property Name="Web" Type="Boolean" Nullable="false" />
+          <Property Name="Correo" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Nivel" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="LE" Type="Boolean" Nullable="false" />
+          <Property Name="LF" Type="Boolean" Nullable="false" />
+          <Property Name="LC" Type="Boolean" Nullable="false" />
+          <Property Name="LP" Type="Boolean" Nullable="false" />
+          <Property Name="Margenes" Type="Boolean" Nullable="false" />
+          <Property Name="CuentasPorPagar" Type="Boolean" Nullable="false" />
+          <Property Name="Expica" Type="Boolean" Nullable="false" />
+          <Property Name="Proforma" Type="Boolean" Nullable="false" />
+          <Property Name="CorrigeCheques" Type="Boolean" Nullable="false" />
+          <Property Name="UserAgenda" Type="Boolean" Nullable="false" />
+          <Property Name="Agenda" Type="Boolean" Nullable="false" />
+          <Property Name="SeguimientoVisitas" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="AUDESCASANGVEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Perfiles1" EntityType="Self.Perfiles1" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AUDESCASANGVModelStoreContainer" CdmEntityContainer="AUDESCASANGVEntities">
+          <EntitySetMapping Name="Perfiles1">
+            <EntityTypeMapping TypeName="AUDESCASANGVModel.Perfiles1">
+              <MappingFragment StoreEntitySet="Perfiles1">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Clave" ColumnName="Clave" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
+                <ScalarProperty Name="Bodega" ColumnName="Bodega" />
+                <ScalarProperty Name="Facturacion" ColumnName="Facturacion" />
+                <ScalarProperty Name="Caja" ColumnName="Caja" />
+                <ScalarProperty Name="CuentasxCobrar" ColumnName="CuentasxCobrar" />
+                <ScalarProperty Name="ReportesdeVenta" ColumnName="ReportesdeVenta" />
+                <ScalarProperty Name="Inventarios" ColumnName="Inventarios" />
+                <ScalarProperty Name="Importaciones" ColumnName="Importaciones" />
+                <ScalarProperty Name="Utiles" ColumnName="Utiles" />
+                <ScalarProperty Name="Presupuesto" ColumnName="Presupuesto" />
+                <ScalarProperty Name="Contabilidad" ColumnName="Contabilidad" />
+                <ScalarProperty Name="ReportesdeVentas" ColumnName="ReportesdeVentas" />
+                <ScalarProperty Name="Graba" ColumnName="Graba" />
+                <ScalarProperty Name="Modifica" ColumnName="Modifica" />
+                <ScalarProperty Name="Anula" ColumnName="Anula" />
+                <ScalarProperty Name="Consulta" ColumnName="Consulta" />
+                <ScalarProperty Name="Facturas" ColumnName="Facturas" />
+                <ScalarProperty Name="ModificaFacturas" ColumnName="ModificaFacturas" />
+                <ScalarProperty Name="AnulaFacturas" ColumnName="AnulaFacturas" />
+                <ScalarProperty Name="ReporesFactura" ColumnName="ReporesFactura" />
+                <ScalarProperty Name="ReimprimeFacturas" ColumnName="ReimprimeFacturas" />
+                <ScalarProperty Name="Tablas" ColumnName="Tablas" />
+                <ScalarProperty Name="ParametrosFacturacion" ColumnName="ParametrosFacturacion" />
+                <ScalarProperty Name="InterfazContable" ColumnName="InterfazContable" />
+                <ScalarProperty Name="TransferenciaInformacion" ColumnName="TransferenciaInformacion" />
+                <ScalarProperty Name="Auditoria" ColumnName="Auditoria" />
+                <ScalarProperty Name="Usuarios" ColumnName="Usuarios" />
+                <ScalarProperty Name="CatalogoProductos" ColumnName="CatalogoProductos" />
+                <ScalarProperty Name="Proveedores" ColumnName="Proveedores" />
+                <ScalarProperty Name="Compras" ColumnName="Compras" />
+                <ScalarProperty Name="Traslados" ColumnName="Traslados" />
+                <ScalarProperty Name="Ajustes" ColumnName="Ajustes" />
+                <ScalarProperty Name="Devoluciones" ColumnName="Devoluciones" />
+                <ScalarProperty Name="Armados" ColumnName="Armados" />
+                <ScalarProperty Name="Consignaciones" ColumnName="Consignaciones" />
+                <ScalarProperty Name="ReportesInventario" ColumnName="ReportesInventario" />
+                <ScalarProperty Name="TarjetasKardex" ColumnName="TarjetasKardex" />
+                <ScalarProperty Name="InsertaInventario" ColumnName="InsertaInventario" />
+                <ScalarProperty Name="ActualizaInventario" ColumnName="ActualizaInventario" />
+                <ScalarProperty Name="ReportesCosto" ColumnName="ReportesCosto" />
+                <ScalarProperty Name="CerrarInv" ColumnName="CerrarInv" />
+                <ScalarProperty Name="ConsultaInventario" ColumnName="ConsultaInventario" />
+                <ScalarProperty Name="AnulaInventario" ColumnName="AnulaInventario" />
+                <ScalarProperty Name="InsertaFacturacion" ColumnName="InsertaFacturacion" />
+                <ScalarProperty Name="ConsultaFacturacion" ColumnName="ConsultaFacturacion" />
+                <ScalarProperty Name="AnulaFacturacion" ColumnName="AnulaFacturacion" />
+                <ScalarProperty Name="ActualizaFacturacion" ColumnName="ActualizaFacturacion" />
+                <ScalarProperty Name="InsertaCxC" ColumnName="InsertaCxC" />
+                <ScalarProperty Name="ActualizaCxC" ColumnName="ActualizaCxC" />
+                <ScalarProperty Name="ConsultaCxC" ColumnName="ConsultaCxC" />
+                <ScalarProperty Name="AnulaCxC" ColumnName="AnulaCxC" />
+                <ScalarProperty Name="ModificaPreciosVenta" ColumnName="ModificaPreciosVenta" />
+                <ScalarProperty Name="Clientes" ColumnName="Clientes" />
+                <ScalarProperty Name="NotasCredito" ColumnName="NotasCredito" />
+                <ScalarProperty Name="Proceso" ColumnName="Proceso" />
+                <ScalarProperty Name="PorIva" ColumnName="PorIva" />
+                <ScalarProperty Name="ACTIVO" ColumnName="ACTIVO" />
+                <ScalarProperty Name="Fisico" ColumnName="Fisico" />
+                <ScalarProperty Name="CatalogoCuentas" ColumnName="CatalogoCuentas" />
+                <ScalarProperty Name="Diarios" ColumnName="Diarios" />
+                <ScalarProperty Name="Cheque" ColumnName="Cheque" />
+                <ScalarProperty Name="EstadosFinancieros" ColumnName="EstadosFinancieros" />
+                <ScalarProperty Name="ActualizarSaldosLibro" ColumnName="ActualizarSaldosLibro" />
+                <ScalarProperty Name="ReportesC" ColumnName="ReportesC" />
+                <ScalarProperty Name="CierreCuentas" ColumnName="CierreCuentas" />
+                <ScalarProperty Name="Nomina" ColumnName="Nomina" />
+                <ScalarProperty Name="Gestion" ColumnName="Gestion" />
+                <ScalarProperty Name="ProcesosNomina" ColumnName="ProcesosNomina" />
+                <ScalarProperty Name="Prefarmaco" ColumnName="Prefarmaco" />
+                <ScalarProperty Name="PreEquipos" ColumnName="PreEquipos" />
+                <ScalarProperty Name="Preconsumo" ColumnName="Preconsumo" />
+                <ScalarProperty Name="Pedidos" ColumnName="Pedidos" />
+                <ScalarProperty Name="ProcesoNomina" ColumnName="ProcesoNomina" />
+                <ScalarProperty Name="EditaClientes" ColumnName="EditaClientes" />
+                <ScalarProperty Name="CuentaporPagar" ColumnName="CuentaporPagar" />
+                <ScalarProperty Name="PresupuestoGastos" ColumnName="PresupuestoGastos" />
+                <ScalarProperty Name="InformacionCrediticia" ColumnName="InformacionCrediticia" />
+                <ScalarProperty Name="FichaCliente" ColumnName="FichaCliente" />
+                <ScalarProperty Name="AbonoSuper" ColumnName="AbonoSuper" />
+                <ScalarProperty Name="AutorizaCr" ColumnName="AutorizaCr" />
+                <ScalarProperty Name="InformacionCredicticia" ColumnName="InformacionCredicticia" />
+                <ScalarProperty Name="EstadoCuenta" ColumnName="EstadoCuenta" />
+                <ScalarProperty Name="InformesRecupera" ColumnName="InformesRecupera" />
+                <ScalarProperty Name="InformesCartera" ColumnName="InformesCartera" />
+                <ScalarProperty Name="ModificaPunto" ColumnName="ModificaPunto" />
+                <ScalarProperty Name="EscFacturacion" ColumnName="EscFacturacion" />
+                <ScalarProperty Name="EscCaja" ColumnName="EscCaja" />
+                <ScalarProperty Name="EscCartera" ColumnName="EscCartera" />
+                <ScalarProperty Name="EscInventario" ColumnName="EscInventario" />
+                <ScalarProperty Name="EscReporteria" ColumnName="EscReporteria" />
+                <ScalarProperty Name="EscCorrecciones" ColumnName="EscCorrecciones" />
+                <ScalarProperty Name="EscFacturas" ColumnName="EscFacturas" />
+                <ScalarProperty Name="EscReporteVentas" ColumnName="EscReporteVentas" />
+                <ScalarProperty Name="EscReimprime" ColumnName="EscReimprime" />
+                <ScalarProperty Name="EscAnula" ColumnName="EscAnula" />
+                <ScalarProperty Name="EscPedidos" ColumnName="EscPedidos" />
+                <ScalarProperty Name="EscFacturaRuta" ColumnName="EscFacturaRuta" />
+                <ScalarProperty Name="EscProforma" ColumnName="EscProforma" />
+                <ScalarProperty Name="EscCertificado" ColumnName="EscCertificado" />
+                <ScalarProperty Name="EscExistenciasBodega" ColumnName="EscExistenciasBodega" />
+                <ScalarProperty Name="EscTransInventario" ColumnName="EscTransInventario" />
+                <ScalarProperty Name="EscReporteInventario" ColumnName="EscReporteInventario" />
+                <ScalarProperty Name="ValidaInventarios" ColumnName="ValidaInventarios" />
+                <ScalarProperty Name="AplicarDeslizamiento" ColumnName="AplicarDeslizamiento" />
+                <ScalarProperty Name="Certificados" ColumnName="Certificados" />
+                <ScalarProperty Name="Lista" ColumnName="Lista" />
+                <ScalarProperty Name="OtrasUtilidades" ColumnName="OtrasUtilidades" />
+                <ScalarProperty Name="ProformaProveedores" ColumnName="ProformaProveedores" />
+                <ScalarProperty Name="IngresosPolizas" ColumnName="IngresosPolizas" />
+                <ScalarProperty Name="Liquidaciones" ColumnName="Liquidaciones" />
+                <ScalarProperty Name="CxP" ColumnName="CxP" />
+                <ScalarProperty Name="Syscompras" ColumnName="Syscompras" />
+                <ScalarProperty Name="SysRequisa" ColumnName="SysRequisa" />
+                <ScalarProperty Name="SysReempaque" ColumnName="SysReempaque" />
+                <ScalarProperty Name="SysMovimientos" ColumnName="SysMovimientos" />
+                <ScalarProperty Name="SysDevoluciones" ColumnName="SysDevoluciones" />
+                <ScalarProperty Name="Syskardex" ColumnName="Syskardex" />
+                <ScalarProperty Name="SysreImprimir" ColumnName="SysreImprimir" />
+                <ScalarProperty Name="Sysimprimirpedido" ColumnName="Sysimprimirpedido" />
+                <ScalarProperty Name="Syscancelarpedido" ColumnName="Syscancelarpedido" />
+                <ScalarProperty Name="Syscertificado" ColumnName="Syscertificado" />
+                <ScalarProperty Name="EscReporteVenta" ColumnName="EscReporteVenta" />
+                <ScalarProperty Name="EscPresupuesto" ColumnName="EscPresupuesto" />
+                <ScalarProperty Name="Web" ColumnName="Web" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Nivel" ColumnName="Nivel" />
+                <ScalarProperty Name="LE" ColumnName="LE" />
+                <ScalarProperty Name="LF" ColumnName="LF" />
+                <ScalarProperty Name="LC" ColumnName="LC" />
+                <ScalarProperty Name="LP" ColumnName="LP" />
+                <ScalarProperty Name="Margenes" ColumnName="Margenes" />
+                <ScalarProperty Name="CuentasPorPagar" ColumnName="CuentasPorPagar" />
+                <ScalarProperty Name="Expica" ColumnName="Expica" />
+                <ScalarProperty Name="Proforma" ColumnName="Proforma" />
+                <ScalarProperty Name="CorrigeCheques" ColumnName="CorrigeCheques" />
+                <ScalarProperty Name="UserAgenda" ColumnName="UserAgenda" />
+                <ScalarProperty Name="Agenda" ColumnName="Agenda" />
+                <ScalarProperty Name="SeguimientoVisitas" ColumnName="SeguimientoVisitas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
