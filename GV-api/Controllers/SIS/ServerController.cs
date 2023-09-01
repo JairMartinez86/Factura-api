@@ -196,7 +196,7 @@ namespace GV_api.Class.SIS
 
             Cls_Datos datos2 = new Cls_Datos();
             datos2.Nombre = "DESCONECCION";
-            datos2.d = Desconectar ? "-1" : "120";
+            datos2.d = Desconectar ? "-1" : "7200";
 
 
             return new Cls_Datos[] { datos, datos2 };

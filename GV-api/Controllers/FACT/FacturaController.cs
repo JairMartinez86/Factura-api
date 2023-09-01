@@ -829,7 +829,7 @@ namespace GV_api.Controllers.FACT
                     else
                     {
                         var qDoc = (from _q in _Conexion.Venta
-                                    where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo
+                                    where (_q.Estado == "Solicitado" || _q.Estado == "Autorizado") && _q.TipoDocumento == Tipo
                                     orderby _q.CodBodega descending, _q.NoPedido descending
                                     select new
                                     {
@@ -1015,9 +1015,9 @@ namespace GV_api.Controllers.FACT
                         _v.TotalDolar = d.TotalDolar;
                         _v.TasaCambio = d.TasaCambio;
                         _v.PedirAutorizacion = d.PedirAutorizacion;
-                        _v.Estado = d.Estado;
                         _v.MotivoAnulacion = d.MotivoAnulacion;
                         _v.UsuarioModifica = d.UsuarioRegistra;
+                        if (!_v.PedirAutorizacion && _v.Estado == "Solicitado") _v.Estado = "Autorizado";
                         _v.FechaModifica = DateTime.Now;
 
 
