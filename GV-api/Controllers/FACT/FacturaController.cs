@@ -49,7 +49,7 @@ namespace GV_api.Controllers.FACT
 
                     datos = new Cls_Datos();
                     datos.Nombre = "TASA CAMBIO";
-                    datos.d = f_TasaCambio();
+                    datos.d = f_TasaCambio(_Conexion, DateTime.Now);
                     lstDatos.Add(datos);
 
                     string NoDoc = string.Empty;
@@ -94,9 +94,12 @@ namespace GV_api.Controllers.FACT
 
 
 
-        private decimal f_TasaCambio()
-        {
-            decimal tc = 36.9566m;
+        private decimal f_TasaCambio( INVESCASANEntities _Conexion, DateTime fecha)
+        {           
+            List<decimal> lst = _Conexion.Database.SqlQuery<decimal>($"SELECT DESCTA FROM AUDESCASANGV.dbo.TIPCAMB WHERE CODCTA = CAST('{string.Format("{0:yyyy-MM-dd}", fecha)}' AS DATE)").ToList();
+
+            decimal tc = 1;
+            if (lst.Count > 0) tc = lst.First();
             return tc;
         }
 
@@ -238,7 +241,7 @@ namespace GV_api.Controllers.FACT
                     Clientes cl = _Conexion.Clientes.FirstOrDefault(f => f.CODCTA.TrimStart().TrimEnd() == CodCliente);
                     decimal saldoCor = 0m;
                     decimal saldoDol = 0m;
-                    decimal Tc = f_TasaCambio();
+                    decimal Tc = f_TasaCambio(_Conexion, DateTime.Now);
                     decimal Techo = cl.Techo;
                     decimal Disponible = 0m;
                     decimal SaldoVencido = 0m;
@@ -409,7 +412,7 @@ namespace GV_api.Controllers.FACT
 
                     datos = new Cls_Datos();
                     datos.Nombre = "TASACAMBIO";
-                    datos.d = f_TasaCambio();
+                    datos.d = f_TasaCambio(_Conexion, DateTime.Now);
                     lstDatos.Add(datos);
 
 
@@ -452,7 +455,7 @@ namespace GV_api.Controllers.FACT
                     int x = 0;
                     string strTipo = "Publico";
                     bool EsDolar = false;
-                    decimal Tc = f_TasaCambio();
+                    decimal Tc = f_TasaCambio(_Conexion, DateTime.Now);
                     bool LiberadoPrecio = false;
 
                     Catalogo ct = _Conexion.Catalogo.FirstOrDefault(f => f.SSSCTA.TrimStart().TrimEnd() == CodProducto);
