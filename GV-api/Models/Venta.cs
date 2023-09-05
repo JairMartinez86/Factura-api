@@ -21,6 +21,7 @@ namespace GV_api.Models
         }
     
         public System.Guid IdVenta { get; set; }
+        public long ID { get; set; }
         public string TipoDocumento { get; set; }
         public string Serie { get; set; }
         public string NoFactura { get; set; }

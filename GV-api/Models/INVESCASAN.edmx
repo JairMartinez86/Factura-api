@@ -209,6 +209,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
             <PropertyRef Name="IdVenta" />
           </Key>
           <Property Name="IdVenta" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TipoDocumento" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Serie" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="NoFactura" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -625,6 +626,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
             <PropertyRef Name="IdVenta" />
           </Key>
           <Property Name="IdVenta" Type="Guid" Nullable="false" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TipoDocumento" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Serie" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="NoFactura" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -975,6 +977,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
                 <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
                 <ScalarProperty Name="Serie" ColumnName="Serie" />
                 <ScalarProperty Name="TipoDocumento" ColumnName="TipoDocumento" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IdVenta" ColumnName="IdVenta" />
               </MappingFragment>
             </EntityTypeMapping>

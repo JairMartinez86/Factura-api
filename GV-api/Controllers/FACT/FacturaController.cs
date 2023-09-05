@@ -1,18 +1,24 @@
 ﻿using GV_api.Class;
 using GV_api.Class.FACT;
+using GV_api.Class.SIS;
 using GV_api.Models;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Security.Cryptography.Xml;
 using System.Transactions;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using System.Web.Razor.Parser.SyntaxTree;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using IsolationLevel = System.Transactions.IsolationLevel;
 using RouteAttribute = System.Web.Http.RouteAttribute;
@@ -557,7 +563,7 @@ namespace GV_api.Controllers.FACT
                             if (iPrecio != null) iPrecio.EsPrincipal = true;
                         }
 
-                        if (iPrecio.EsPrincipal) iPrecio.Liberado = LiberadoPrecio;
+                        if (iPrecio.EsPrincipal) iPrecio.Liberado = false; //LiberadoPrecio;
 
                     }
 
@@ -776,7 +782,7 @@ namespace GV_api.Controllers.FACT
                         {
                             var qDoc = (from _q in _Conexion.Venta
                                         where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && _q.NoFactura != string.Empty
-                                        orderby _q.CodBodega descending, _q.NoFactura descending
+                                        orderby _q.FechaRegistro descending
                                         select new
                                         {
                                             _q.IdVenta,
@@ -833,10 +839,11 @@ namespace GV_api.Controllers.FACT
                     {
                         var qDoc = (from _q in _Conexion.Venta
                                     where (_q.Estado == "Solicitado" || _q.Estado == "Autorizado") && _q.TipoDocumento == Tipo
-                                    orderby _q.CodBodega descending, _q.NoPedido descending
+                                    orderby  _q.FechaRegistro descending
                                     select new
                                     {
                                         _q.IdVenta,
+                                        _q.ID,
                                         _q.TipoDocumento,
                                         _q.Serie,
                                         _q.NoFactura,
@@ -911,6 +918,7 @@ namespace GV_api.Controllers.FACT
         [System.Web.Http.HttpPost]
         public IHttpActionResult Guardar(Venta d)
         {
+        
             if (ModelState.IsValid)
             {
 
@@ -944,11 +952,6 @@ namespace GV_api.Controllers.FACT
 
                         if (_v == null)
                         {
-                            //_Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.{(d.TipoDocumento == "Factura" ? "ConfiguraFacturacion" : "ControlInventario")} SET Secuencia += 1    WHERE  Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'");
-                            //_Conexion.SaveChanges();
-
-                            //int Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM {(d.TipoDocumento == "Factura" ? "ConfiguraFacturacion" : "ControlInventario")} WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
-
                             int Consecutivo = 1;
 
                             if (d.TipoDocumento == "Pedido")
@@ -960,12 +963,18 @@ namespace GV_api.Controllers.FACT
 
                             }
 
+                   
+
 
                             _v = new Venta();
                             d.IdVenta = Guid.NewGuid();
                             d.NoFactura = string.Empty;
                             d.NoPedido = string.Empty;
                             d.Estado = "Solicitado";
+                            _v.NoPedido = d.NoPedido;
+                            _v.NoFactura = d.NoFactura;
+                            _v.TipoDocumento = d.TipoDocumento;
+                            _v.Estado = d.Estado;
                             if (d.TipoDocumento == "Factura") d.Estado = string.Empty;
                             d.MotivoAnulacion = string.Empty;
                             _v.FechaRegistro = DateTime.Now;
@@ -975,7 +984,7 @@ namespace GV_api.Controllers.FACT
                             esNuevo = true;
                         }
 
-                        if(_v.TipoDocumento == "Factura" || _v.NoFactura != string.Empty || _v.Estado != "Solicitado")
+                        if( _v.NoFactura != string.Empty || _v.Estado != "Solicitado")
                         {
                             json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No se permite modificacion al documento.</>", 1);
                             return json;
@@ -1031,9 +1040,14 @@ namespace GV_api.Controllers.FACT
                         else
                         {
                             _Conexion.VentaDetalle.RemoveRange(_v.VentaDetalle);
+                            _Conexion.SaveChanges();
+
+                            _Conexion.Database.ExecuteSqlCommand($"DELETE FROM DBO.Kardex WHERE Documento = 'FAC_{_v.ID}' AND Tipo ='F01'");
+
+                            _Conexion.SaveChanges();
                         }
 
-                        
+                        _Conexion.SaveChanges();
 
 
                         foreach (VentaDetalle det in d.VentaDetalle)
@@ -1084,8 +1098,25 @@ namespace GV_api.Controllers.FACT
 
 
                             _v.VentaDetalle.Add(_vDet);
+
+
+
+                            _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].Kardex ( CodiProd, Fecha, Tipo, Documento, Entrada, Salidas, Costo, Bodega, BodegaDestino, Cerrada, Nolote, Vence)" +
+                                $"VALUES( '{det.Codigo}' , '{_v.Fecha.ToShortDateString()}','F01', '{string.Concat("FAC_", _v.ID)}' ,0,{det.Cantidad},0,'{_v.CodBodega}', '{_v.CodBodega}', 0, NULL, NULL)");
+
+                            _Conexion.SaveChanges();
                         }
 
+
+                        _Conexion.SaveChanges();
+
+
+                        if (_v.TipoDocumento == "Factura")
+                        {
+                            json = AsignarConsecutivoFactura(_v, _Conexion);
+
+                            if (json != string.Empty) return json;
+                        }
 
 
 
@@ -1097,7 +1128,8 @@ namespace GV_api.Controllers.FACT
                         datos.d =  _v.TipoDocumento == "Factura" ? _v.NoFactura : _v.NoPedido;
                         lstDatos.Add(datos);
 
-                        _Conexion.SaveChanges();
+
+                      
 
                         scope.Complete();
 
@@ -1164,11 +1196,58 @@ namespace GV_api.Controllers.FACT
                                 json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>El documento se encuentra anulado.</b>", 1);
                                 return json;
                             }
-                                
+
+                            if (_v.TipoDocumento == "Factura" && _v.Fecha.Date != DateTime.Now.Date)
+                            {
+                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>No se permite anular factura con dias anteriores al del servidor.</b>", 1);
+                                return json;
+                            }
+
                             _v.Estado = "Anulado";
                             _v.MotivoAnulacion = Motivo;
                             _v.UsuarioAnula = Usuario;
+
+
+                            _Conexion.Database.ExecuteSqlCommand($"DELETE FROM DBO.Kardex WHERE Documento = '{_v.NoFactura}' OR Documento = 'FAC_{_v.ID}' AND Tipo ='F01'");
+
+                            if(_v.NoFactura != string.Empty)
+                            {
+
+                                _Conexion.Database.ExecuteSqlCommand($"UPDATE [dbo].MovFacturacion  SET Valor = 0, DesCliente = 'Factura Anulada', IVA = 0,Descuento = 0,Lp = 0,Plazo = 0,Retencion = 0,Anulada = 1,ValorVencimiento = 0" +
+                                    $"WHERE Referencia = '{_v.NoFactura}' AND Serie = '{_v.Serie}'");
+
+
+                                _Conexion.Database.ExecuteSqlCommand($"UPDATE [dbo].DetaFacturacion SET Cantidad = 0,PrecioUnitario = 0,ValorTotal = 0,CostoTotal = 0,Iva = 0,PorDescuento = 0,Descuento = 0,Anulada = 1" +
+                                    $"WHERE Referencia = '{_v.NoFactura}' AND Serie = '{_v.Serie}'");
+
+
+
+                                _Conexion.Database.ExecuteSqlCommand($"DELETE FROM DBO.MovInventarios WHERE Documento = '{_v.NoFactura}' OR Documento = 'FAC_{_v.ID}' AND Tipo ='F01'");
+
+
+                                _Conexion.Database.ExecuteSqlCommand($"UPDATE  [dbo].Tb_Facturacion SET Cantidad = 0,PrecioUnitario = 0, ValorTotal = 0, Iva = 0,Descuento = 0,ValorCordobas = 0,IvaCordobas = 0,DescCordobas = 0,equivalente = 0" +
+                                    $"WHERE Referencia = '{_v.NoFactura}'");
+
+
+
+                                _Conexion.Database.ExecuteSqlCommand($"UPDATE [dbo].Transacciones SET Cordobas = 0,Dolares = 0,Tarjetas1 = 0,Tarjetas2 = 0,Total = 0,Cliente = 'ANULADA',TotalCordobas = 0,TotalDolares = 0,Iva = 0,alcaldia = 0" +
+                                    $"WHERE Documento = '{_v.NoFactura}'");
+
+
+                                _Conexion.Database.ExecuteSqlCommand($"UPDATE [dbo].TransaccionesCaja SET ValorEfectivo = 0,ValorDolar = 0,Iva = 0" +
+                                    $"WHERE Documento = '{_v.NoFactura}'");
+
+                                _Conexion.Database.ExecuteSqlCommand($"DELETE FROM [dbo].tbCartera WHERE DocA = '{_v.NoFactura}' AND DocD = '{_v.NoFactura}'");
+
+
+
+                            }
+
+
+                            _Conexion.SaveChanges();
                         }
+
+
        
 
                         List<Cls_Datos> lstDatos = new List<Cls_Datos>();
@@ -1180,6 +1259,8 @@ namespace GV_api.Controllers.FACT
                         lstDatos.Add(datos);
 
                         _Conexion.SaveChanges();
+
+                      
 
                         scope.Complete();
 
@@ -1202,6 +1283,200 @@ namespace GV_api.Controllers.FACT
 
         }
 
+
+        [Route("api/Factura/Imprimir")]
+        [HttpGet]
+        public string Imprimir(Guid IdVenta)
+        {
+            return v_Imprimir(IdVenta);
+        }
+
+        private string v_Imprimir(Guid IdVenta)
+        {
+            string json = string.Empty;
+
+            try
+            {
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                    {
+                        List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+
+                        Venta _v = _Conexion.Venta.Find(IdVenta);
+
+
+                        json = AsignarConsecutivoFactura(_v, _Conexion);
+
+                        if (json != string.Empty) return json;
+
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "FACTURA";
+                        datos.d = "";
+                        lstDatos.Add(datos);
+
+
+
+                        datos = new Cls_Datos();
+                        datos.Nombre = "MANIFIESTO";
+                        datos.d = "";
+                        lstDatos.Add(datos);
+
+
+
+                        _Conexion.SaveChanges();
+
+                        scope.Complete();
+
+
+                        json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+                    }
+
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+        private string AsignarConsecutivoFactura(Venta _v , INVESCASANEntities _Conexion)
+        {
+            string json = string.Empty;
+
+            try
+            {
+                if (_v.NoFactura == "" && _v.Estado != "Anulado")
+                {
+
+
+                    if(_v.PedirAutorizacion)
+                    {
+                        json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>Se requiere autorización, por favor genere un pedido.</b>", 1);
+                        return json;
+                    }
+
+
+                    _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.ConfiguraFacturacion SET Secuencia += 1    WHERE  Serie = '{_v.Serie}' AND Bodegas = '{_v.CodBodega}'");
+                    _Conexion.SaveChanges();
+
+                    int Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ConfiguraFacturacion WHERE Serie = '{_v.Serie}' AND Bodegas = '{_v.CodBodega}'").First();
+
+                    _v.NoFactura = string.Concat(_v.Serie, Consecutivo);
+                    _v.TipoDocumento = "Factura";
+                    _v.Estado = "Facturada";
+                    _Conexion.SaveChanges();
+
+
+                    decimal Descuento = _v.VentaDetalle.Sum(s => s.DescuentoCordoba + s.DescuentoAdicionalCordoba);
+                    decimal ImpuetoCordoba = _v.VentaDetalle.Sum(s => s.ImpuestoCordoba);
+                    decimal ImpuetoExoCordoba = _v.VentaDetalle.Sum(s => s.ImpuestoExoCordoba);
+                    string Letas = Cls_Letras.NumeroALetras(_v.TotalCordoba);
+                    Clientes cl = _Conexion.Clientes.Find(_v.CodCliente);
+
+
+                    _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.Kardex SET Documento = '{_v.NoFactura}' WHERE Documento = 'FAC_{_v.ID}'");
+
+
+
+
+                    _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].MovFacturacion(Referencia, Fecha, Valor, CodigoVend, CodCliente, DesCliente, TipoCambio, Iva, Descuento, Lp," +
+                    $"Moneda, TipoFactura, Plazo, ValorenLetras, Cerrada, Retencion, FechaVence, ValorVencimiento," +
+                       $"Bodega, Serie, Anulada, Cancelada, Observaciones, Refe, Cedula, FechaProceso, EsPlan, Usuario, Dpto, Cod, Hora)" +
+                       $"VALUES('{_v.NoFactura}', '{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba}, '{_v.CodVendedor}', '{_v.CodCliente}', '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}', {_v.TasaCambio} , {_v.Impuesto}, {Descuento}, {(_v.TipoExoneracion == "Exonerado" ? "1" : "0")}," +
+                       $"'{_v.Moneda}', '{(_v.TipoVenta == "Contado" ? "C" : "R")}', {_v.Plazo}, '{Letas}', 0, 0, '{_v.Vence.ToShortDateString()}',  {_v.TotalCordoba}," +
+                       $"'{_v.CodBodega}', '{_v.Serie}', '', 0, '{_v.Observaciones}', '', '{_v.RucCedula}', '{_v.Fecha.ToShortDateString()}', '{(_v.Observaciones.Contains("CONTINUACION PLAN") ? "P" : "C")}', '{_v.UsuarioRegistra}', '{cl.DPTO}', '{cl.Municipio}', NULL)");
+
+
+                    _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].Transacciones(Documento, Fecha, Cordobas, Dolares, Cheques, Tarjetas1, Tarjetas2," +
+                        $"Transferencia, Total, Cliente, NumeroTarjeta1, NumeroTarjeta2, NumeroCheque, Banco, Usuario, Tipo, NotaCredito, MinutasDeposito, Moneda," +
+                        $"TipoCambio, CuentaContable, Observaciones, POS1, POS2, Bodega, Exonerada, Carta, Retencion, Porcentaje, alcaldia, IR, Exoneracion, Iva," +
+                        $"TotalCordobas, TotalDolares, ROC)" +
+                        $"VALUES('{_v.NoFactura}',  '{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba},0, 0, 0, 0," +
+                        $"0, {_v.TotalCordoba}, '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}',  '', '', '', '', '{_v.CodBodega}', '{(_v.TipoVenta == "Contado" ? "C" : "R")}', 0, 0, '{_v.Moneda}'," +
+                        $"{_v.TasaCambio}, '0', '0', '', '', '{_v.CodBodega}', 0, '{_v.CodCliente}', {ImpuetoCordoba}, 0, 0, 0, 0, {ImpuetoCordoba}," +
+                        $"0, 0, '0')");
+
+
+
+                    _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].TransaccionesCaja(Banco, FormaPago, Tipo, Documento, ValorEfectivo, ValorCheque, TipoCambio," +
+                        $"NumeroTarjeta, Observaciones, Fecha, Cliente, Cedula, Referencia, Bodega, ValorDolar, CuentaContable, Iva)" +
+                        $"VALUES('00', 'EF', 'FC', '{_v.NoFactura}', 0, 0, {_v.TasaCambio}," +
+                        $"'', '', '{_v.Fecha.ToShortDateString()}', '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}', '', '', '{_v.CodBodega}', 0, '', {ImpuetoCordoba})");
+
+
+                    if (_v.TipoExoneracion == "Exonerado")
+                    {
+
+                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].Transacciones(Documento, Fecha, Cordobas, Dolares, Cheques, Tarjetas1, Tarjetas2," +
+                       $"Transferencia, Total, Cliente, NumeroTarjeta1, NumeroTarjeta2, NumeroCheque, Banco, Usuario, Tipo, NotaCredito, MinutasDeposito, Moneda," +
+                       $"TipoCambio, CuentaContable, Observaciones, POS1, POS2, Bodega, Exonerada, Carta, Retencion, Porcentaje, alcaldia, IR, Exoneracion, Iva," +
+                       $"TotalCordobas, TotalDolares, ROC)" +
+                       $"VALUES('{_v.NoFactura}',  '{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba},0, 0, 0, 0," +
+                       $"0, {_v.TotalCordoba}, '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}',  '', '', '', '', '{_v.CodBodega}', 'EX', 0, 0, '{_v.Moneda}'," +
+                       $"{_v.TasaCambio}, '0', '0', '', '', '{_v.CodBodega}', 0, '{_v.CodCliente}', {ImpuetoExoCordoba}, 0, 0, 0, 0, {ImpuetoExoCordoba}," +
+                       $"0, 0, '0')");
+
+
+
+                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].TransaccionesCaja(Banco, FormaPago, Tipo, Documento, ValorEfectivo, ValorCheque, TipoCambio," +
+                            $"NumeroTarjeta, Observaciones, Fecha, Cliente, Cedula, Referencia, Bodega, ValorDolar, CuentaContable, Iva)" +
+                            $"VALUES('00', 'EF', 'EX', '{_v.NoFactura}', {ImpuetoExoCordoba}, 0, {_v.TasaCambio}," +
+                            $"'', '', '{_v.Fecha.ToShortDateString()}', '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}', '', '', '{_v.CodBodega}', 0, '', {ImpuetoExoCordoba})");
+
+                    }
+
+
+
+
+
+                    foreach (VentaDetalle det in _v.VentaDetalle)
+                    {
+
+                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].MovInventarios(CodiProd, Tipo, Cantidad, Costo, ValorTotal, IVA, Bodega, Documento, Fecha, Serie, Cerrada, Proveedor," +
+                            $"Referencia, BodegaOrigen, FechaProceso, Observaciones, EnProceso, Procesado, BodegaDestino, Nolote, Vence)" +
+                            $"VALUES('{det.Codigo}','F01',{det.Cantidad},0, {det.TotalCordoba}, {det.ImpuestoCordoba}, '{_v.CodBodega}', '{_v.NoFactura}','{_v.Fecha.ToShortDateString()}','{_v.Serie}',0,0," +
+                            $"0,'{_v.CodBodega}','{_v.Fecha.ToShortDateString()}','',0,0, '{_v.CodBodega}', NULL, NULL)");
+
+
+
+
+                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO .[dbo].DetaFacturacion(Serie, Referencia, Fecha, Codigo, Cantidad, PrecioUnitario, ValorTotal," +
+                            $"CostoTotal, Iva, PorDescuento, Descuento, Cerrada, Bonificacion, Anulada, Bodega, Refe)" +
+                            $"VALUES('{_v.Serie}', '{_v.NoFactura}', '{_v.Fecha.ToShortDateString()}', '{det.Codigo}', {det.Cantidad}, {det.PrecioCordoba}, {det.SubTotalCordoba}," +
+                            $"0, {det.ImpuestoCordoba}, {Math.Round(det.PorcDescuento * 100M, 2, MidpointRounding.ToEven)}, {det.DescuentoCordoba + det.DescuentoAdicionalCordoba}, 0, 0, 0, '{_v.CodBodega}', NULL)");
+
+
+                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].Tb_Facturacion(Referencia, Codigo, Cantidad, PrecioUnitario, ValorTotal, Iva, Descuento, CodCliente," +
+                            $"PorDescuento, Letras, ValorNeto, TP, ValorCordobas, IvaCordobas, DescCordobas, Fecha, TipoCambio,equivalente)" +
+                            $"VALUES('{_v.NoFactura}', '{det.Codigo}', {det.Cantidad}, {det.PrecioCordoba}, {det.SubTotalCordoba}, {det.ImpuestoCordoba}, {det.DescuentoCordoba + det.DescuentoAdicionalCordoba}, '{_v.CodCliente}'," +
+                            $"{Math.Round(det.PorcDescuento * 100M, 2, MidpointRounding.ToEven)}, '{Letas}', {det.SubTotalNetoCordoba}, {_v.TasaCambio}, {det.SubTotalCordoba}, {det.ImpuestoCordoba}, {det.DescuentoCordoba + det.DescuentoAdicionalCordoba}, '{_v.Fecha.ToShortDateString()}', {_v.TasaCambio}, 0)");
+
+                    }
+
+
+                    _Conexion.SaveChanges();
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
 
 
 
