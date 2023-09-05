@@ -1387,6 +1387,17 @@ namespace GV_api.Controllers.FACT
                     _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.Kardex SET Documento = '{_v.NoFactura}' WHERE Documento = 'FAC_{_v.ID}'");
 
 
+                    if(_v.TipoVenta == "Credito")
+                    {
+
+                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].tbCartera(CodCliente, Concepto, Debe, Haber, DocA, DocD, Fecha," +
+                            $"FechaFactura, ValorFactura, Plazo, FechaProceso, Bodega, Cerrado, Vendedor, Referencia," +
+                            $"ROC, DebeD, HaberD, Moneda)" +
+                            $"VALUES('{_v.CodCliente}', 'Factura Credito', {_v.TotalCordoba}, 0, '{_v.NoFactura}', '{_v.NoFactura}', '{_v.Fecha.ToShortDateString()}'," +
+                            $"'{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba}, {_v.Plazo}, '{_v.Fecha.ToShortDateString()}', '{_v.CodBodega}', 0, '{_v.CodVendedor}', '0'," +
+                            $"NULL, 0, 0, '{_v.Moneda}')");
+                    }
+
 
 
                     _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].MovFacturacion(Referencia, Fecha, Valor, CodigoVend, CodCliente, DesCliente, TipoCambio, Iva, Descuento, Lp," +
