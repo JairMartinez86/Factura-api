@@ -1317,7 +1317,7 @@ namespace GV_api.Controllers.FACT
                         if (json != string.Empty) return json;
 
                         Cls_Datos datos = new Cls_Datos();
-                        datos.Nombre = "FACTURA";
+                        datos.Nombre = string.Concat("Factura No", _v.NoFactura);
 
                         MemoryStream stream = new MemoryStream();
 
@@ -1364,7 +1364,7 @@ namespace GV_api.Controllers.FACT
 
 
                         datos = new Cls_Datos();
-                        datos.Nombre = "MANIFIESTO";
+                        datos.Nombre = string.Concat( "Manifiesto No ", _v.NoFactura);
                        
 
 
