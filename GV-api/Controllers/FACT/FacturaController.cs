@@ -1,14 +1,19 @@
-﻿using GV_api.Class;
+﻿using DevExpress.DataProcessing;
+using DevExpress.Xpo.DB.Helpers;
+using GV_api.Class;
 using GV_api.Class.FACT;
 using GV_api.Class.SIS;
 using GV_api.Models;
+using GV_api.Reporte.FAC;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.Entity.Core.Objects;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
@@ -1311,19 +1316,71 @@ namespace GV_api.Controllers.FACT
 
                         if (json != string.Empty) return json;
 
-
-
                         Cls_Datos datos = new Cls_Datos();
                         datos.Nombre = "FACTURA";
-                        datos.d = "";
+
+                        MemoryStream stream = new MemoryStream();
+
+
+                        DsetReporte Dset = new DsetReporte();
+                    
+                        List<SP_FacturaImpresa_Result>   Query = (from _q in _Conexion.SP_FacturaImpresa(_v.IdVenta).AsEnumerable()
+                                     select  _q).ToList();
+
+                        DataTable tbl = Cls_ListToDataTableConverter.ToDataTable(Query);
+                        tbl.Select().CopyToDataTable(Dset.SP_FacturaImpresa, LoadOption.PreserveChanges);
+
+
+                        if (_v.TipoVenta == "Contado")
+                        {
+                            xrpFacturaContado xrpContado = new xrpFacturaContado();
+                            xrpContado.Parameters["P_Letra"].Value = Cls_Letras.NumeroALetras(_v.TotalCordoba);
+                            xrpContado.DataSource = Dset;
+                            xrpContado.ShowPrintMarginsWarning = false;
+
+                            xrpContado.ExportToPdf(stream, null);
+                            stream.Seek(0, SeekOrigin.Begin);
+
+                            datos.d = stream.ToArray();
+
+                        }
+                        else
+                        {
+                            xrpFacturaCredito xrpCredito = new xrpFacturaCredito();
+                            xrpCredito.Parameters["P_Letra"].Value = Cls_Letras.NumeroALetras(_v.TotalCordoba);
+                            xrpCredito.DataSource = Dset;
+                            xrpCredito.ShowPrintMarginsWarning = false;
+
+                            xrpCredito.ExportToPdf(stream, null);
+                            stream.Seek(0, SeekOrigin.Begin);
+
+                            datos.d = stream.ToArray();
+                        }
+
+
                         lstDatos.Add(datos);
+
 
 
 
                         datos = new Cls_Datos();
                         datos.Nombre = "MANIFIESTO";
-                        datos.d = "";
+                       
+
+
+                        MemoryStream stream2 = new MemoryStream();
+                        xrpManifiesto xrpManifiesto = new xrpManifiesto();
+                        xrpManifiesto.DataSource = Dset;
+                        xrpManifiesto.ShowPrintMarginsWarning = false;
+
+                        xrpManifiesto.ExportToPdf(stream2, null);
+                        stream2.Seek(0, SeekOrigin.Begin);
+
+                        datos.d = stream2.ToArray();
                         lstDatos.Add(datos);
+
+
+
 
 
 
@@ -1348,6 +1405,7 @@ namespace GV_api.Controllers.FACT
             return json;
         }
 
+        
 
         private string AsignarConsecutivoFactura(Venta _v , INVESCASANEntities _Conexion)
         {

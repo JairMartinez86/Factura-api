@@ -73,5 +73,14 @@ namespace GV_api.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RetornaSaldoVencidoAmbasMonedas", numCuentaParameter, fechaParameter, ddiasParameter, dResultado);
         }
+    
+        public virtual ObjectResult<SP_FacturaImpresa_Result> SP_FacturaImpresa(Nullable<System.Guid> p_IdVenta)
+        {
+            var p_IdVentaParameter = p_IdVenta.HasValue ?
+                new ObjectParameter("P_IdVenta", p_IdVenta) :
+                new ObjectParameter("P_IdVenta", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_FacturaImpresa_Result>("SP_FacturaImpresa", p_IdVentaParameter);
+        }
     }
 }
