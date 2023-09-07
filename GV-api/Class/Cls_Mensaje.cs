@@ -20,7 +20,7 @@ namespace GV_api.Class
                 json = string.Concat("{ \"d\": ", json, ",  \"msj\": ", "{\"Codigo\":\"", CodError, "\",\"Mensaje\":\"", Mensaje, "\"}", ", \"count\":", Length, ", \"esError\":", 0, "}");
             }
             else
-                json = string.Concat("{ \"d\":  [{ }],  \"msj\": ", "{\"Codigo\":\"", CodError, "\",\"Mensaje\":\"", Mensaje, "\"}", ", \"count\":", Length, ", \"esError\":", esError, "}");
+                json = string.Concat("{ \"d\":  [{ }],  \"msj\": ", "{\"Codigo\":\"", CodError, "\",\"Mensaje\":\"", Mensaje.Replace("\r\n", " "), "\"}", ", \"count\":", Length, ", \"esError\":", esError, "}");
 
 
 

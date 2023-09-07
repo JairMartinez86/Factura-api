@@ -1463,7 +1463,7 @@ namespace GV_api.Controllers.FACT
                        $"Bodega, Serie, Anulada, Cancelada, Observaciones, Refe, Cedula, FechaProceso, EsPlan, Usuario, Dpto, Cod, Hora)" +
                        $"VALUES('{_v.NoFactura}', '{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba}, '{_v.CodVendedor}', '{_v.CodCliente}', '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}', {_v.TasaCambio} , {_v.Impuesto}, {Descuento}, {(_v.TipoExoneracion == "Exonerado" ? "1" : "0")}," +
                        $"'{_v.Moneda}', '{(_v.TipoVenta == "Contado" ? "C" : "R")}', {_v.Plazo}, '{Letas}', 0, 0, '{_v.Vence.ToShortDateString()}',  {_v.TotalCordoba}," +
-                       $"'{_v.CodBodega}', '{_v.Serie}', '', 0, '{_v.Observaciones}', '', '{_v.RucCedula}', '{_v.Fecha.ToShortDateString()}', '{(_v.Observaciones.Contains("CONTINUACION PLAN") ? "P" : "C")}', '{_v.UsuarioRegistra}', '{cl.DPTO}', '{cl.Municipio}', NULL)");
+                       $"'{_v.CodBodega}', '{_v.Serie}', '', 0, '{_v.Observaciones}', '', '', '{_v.Fecha.ToShortDateString()}', '{(_v.Observaciones.Contains("CONTINUACION PLAN") ? "P" : "C")}', '{_v.UsuarioRegistra}', '{cl.DPTO}', '{cl.Municipio}', NULL)");
 
 
                     _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].Transacciones(Documento, Fecha, Cordobas, Dolares, Cheques, Tarjetas1, Tarjetas2," +
