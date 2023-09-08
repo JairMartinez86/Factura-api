@@ -13,6 +13,8 @@ using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -568,7 +570,7 @@ namespace GV_api.Controllers.FACT
                             if (iPrecio != null) iPrecio.EsPrincipal = true;
                         }
 
-                        if (iPrecio.EsPrincipal) iPrecio.Liberado = false; //LiberadoPrecio;
+                        if (iPrecio.EsPrincipal) iPrecio.Liberado = LiberadoPrecio;
 
                     }
 
@@ -952,8 +954,11 @@ namespace GV_api.Controllers.FACT
 
                        
                         bool esNuevo = false;
+                        bool MandarCorreo = false;
+                        string ProductosMail = string.Empty;
           
                         Venta _v = _Conexion.Venta.Find(d.IdVenta);
+                        
 
                         if (_v == null)
                         {
@@ -994,6 +999,14 @@ namespace GV_api.Controllers.FACT
                             json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No se permite modificacion al documento.</>", 1);
                             return json;
 
+                        }
+
+                        if(!esNuevo)
+                        {
+                            if(_v.PedirAutorizacion && !d.PedirAutorizacion && _v.Estado == "Solicitado")
+                            {
+                                MandarCorreo = true;
+                            }
                         }
 
                         _v.IdVenta = d.IdVenta;
@@ -1054,7 +1067,7 @@ namespace GV_api.Controllers.FACT
 
                         _Conexion.SaveChanges();
 
-
+                      
                         foreach (VentaDetalle det in d.VentaDetalle)
                         {
                             VentaDetalle _vDet = new VentaDetalle();
@@ -1104,6 +1117,86 @@ namespace GV_api.Controllers.FACT
 
                             _v.VentaDetalle.Add(_vDet);
 
+                            if (MandarCorreo && _v.TipoDocumento == "Pedido")
+                            {
+                                if (_vDet.Autorizado)
+                                {
+
+                                    ProductosMail += $"<br><p>Producto: <b>{_vDet.Codigo} {_vDet.Producto}</b>";
+                                    ProductosMail += $"<br>Facturado:  <b>{string.Format("{0:###,###,###.00}", _vDet.Cantidad)}</b>";
+
+
+                                    if (_vDet.PrecioLiberado && !_vDet.PedirAutorizado)
+                                    {
+                                       
+
+                                        Listadeprecios iPrecio = _Conexion.Listadeprecios.FirstOrDefault(f => f.CodiProd == _vDet.Codigo && f.Tipo == "Distribuid");
+
+                                        ProductosMail += $"<br>Precio Liberado: <b>{string.Format("{0:###,###,###.00}", _vDet.Precio)}</b>";
+
+
+
+                                        if (iPrecio == null)
+                                        {
+                                            iPrecio = _Conexion.Listadeprecios.FirstOrDefault(f => f.CodiProd == _vDet.Codigo && f.Tipo == "Publico");
+
+                                            ProductosMail += $"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                        }
+                                        else
+                                        {
+                                            if(_vDet.PrecioCordoba > iPrecio.Precio)
+                                            {
+                                                Listadeprecios iPrecioPublico = _Conexion.Listadeprecios.FirstOrDefault(f => f.CodiProd == _vDet.Codigo && f.Tipo == "Publico");
+
+                                                if (iPrecioPublico != null)
+                                                {
+                                                    if(iPrecioPublico.Precio != 0)
+                                                    {
+                                                        ProductosMail += $"<br>Precio Publico: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                                    }
+                                                    else
+                                                    {
+                                                        ProductosMail +=$"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                                    }
+                                                   
+
+                                                }
+                                                else
+                                                {
+                                                    ProductosMail +=$"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                                }
+
+
+                                               
+                                            }
+                                            else
+                                            {
+                                                ProductosMail +=$"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                            }
+                                        }
+
+                                       
+                                       
+                                    }
+                                    else
+                                    {
+                                        VentaDetalle _vDetBonificado = d.VentaDetalle.FirstOrDefault(f => f.IndexUnion == _vDet.Index && f.EsBonif);
+
+                                        if(_vDetBonificado != null) ProductosMail+=$"<br>Bonificacion:  <b>{string.Format("{0:###,###,###.00}", _vDetBonificado.Cantidad)}</b>";
+                                        ProductosMail +=$"<br>Margen: <b>{string.Format("{0:###,###,###.00}", _vDet.Margen)}<b>";
+
+                                    }
+
+
+                                    ProductosMail += "</p>";
+
+                                }
+
+                            }
+
+
+
+
 
 
                             _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].Kardex ( CodiProd, Fecha, Tipo, Documento, Entrada, Salidas, Costo, Bodega, BodegaDestino, Cerrada, Nolote, Vence)" +
@@ -1116,12 +1209,47 @@ namespace GV_api.Controllers.FACT
                         _Conexion.SaveChanges();
 
 
+                        
+                        if (MandarCorreo)
+                        {
+                            MailMessage mail = new MailMessage();
+                            mail.From = new MailAddress("info@escasan.com.ni");
+                            mail.To.Add("jmartinezg86@gmail.com");
+
+
+                            SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
+                            NetworkCredential nameAndPassword = new NetworkCredential("info@escasan.com.ni", "Inf0Escasan2018!.");
+
+
+                            mail.Subject = $"Margen Autorizado";
+                            mail.Body = $"<p>Pedido No. <b>{_v.NoPedido}</b>";
+                            mail.Body += $"<br>CLIENTE: <b>{_v.CodCliente} { (_v.Nombre.TrimStart().TrimEnd() == string.Empty ? _v.NomCliente : _v.NomCliente) }</b>";
+                            mail.Body += $"<br>Usuario Autoriza: <b>{d.UsuarioRegistra}</b>";
+                            mail.Body += "<br><br><b>PRODUCTOS AUTORIZADOS</b>";
+                            mail.Body += ProductosMail;
+                            mail.IsBodyHtml = true;
+                            mail.BodyEncoding = System.Text.Encoding.UTF8;
+   
+
+                            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                            smtpClient.Port = 587;
+                            smtpClient.Credentials = nameAndPassword;
+                            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                            smtpClient.EnableSsl = true;
+                            smtpClient.Send(mail);
+
+                        }
+
+
+
                         if (_v.TipoDocumento == "Factura")
                         {
                             json = AsignarConsecutivoFactura(_v, _Conexion);
 
                             if (json != string.Empty) return json;
                         }
+
+
 
 
 
@@ -1570,6 +1698,7 @@ namespace GV_api.Controllers.FACT
 
                     var qDetalle = (from _q in _Conexion.VentaDetalle
                                     where _q.IdVenta == IdVenta
+                                    orderby _q.Index ascending
                                     select new
                                     {
                                         _q.IdVentaDetalle,
