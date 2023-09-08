@@ -570,7 +570,7 @@ namespace GV_api.Controllers.FACT
                             if (iPrecio != null) iPrecio.EsPrincipal = true;
                         }
 
-                        if (iPrecio.EsPrincipal) iPrecio.Liberado = LiberadoPrecio;
+                        if (iPrecio.EsPrincipal) iPrecio.Liberado = false;//LiberadoPrecio;
 
                     }
 
@@ -1129,16 +1129,13 @@ namespace GV_api.Controllers.FACT
                                     if (_vDet.PrecioLiberado && !_vDet.PedirAutorizado)
                                     {
 
-
-
+                        
                                         var lstPrecio = (from _q in _Conexion.Listadeprecios
-                                                                     where _q.CodiProd.TrimStart().TrimEnd() == _vDet.Codigo
-                                                                      orderby _q.Tipo
                                                                      select new
                                                                      {
-                                                                         CodiProd = _q.CodiProd.TrimStart().TrimEnd(),
-                                                                         Tipo = _q.Tipo.TrimStart().TrimEnd(),
-                                                                         Precio = _q.Precio
+                                                                         _q.CodiProd,
+                                                                         _q.Tipo,
+                                                                         _q.Precio
                                                                      }).ToList();
 
                                         var  iPrecio = lstPrecio.FirstOrDefault(f => f.Tipo == "Distribuid");
