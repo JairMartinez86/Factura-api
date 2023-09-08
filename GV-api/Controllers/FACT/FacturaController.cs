@@ -1128,9 +1128,20 @@ namespace GV_api.Controllers.FACT
 
                                     if (_vDet.PrecioLiberado && !_vDet.PedirAutorizado)
                                     {
-                                       
 
-                                        Listadeprecios iPrecio = _Conexion.Listadeprecios.FirstOrDefault(f => f.CodiProd == _vDet.Codigo && f.Tipo == "Distribuid");
+
+
+                                        var lstPrecio = (from _q in _Conexion.Listadeprecios
+                                                                     where _q.CodiProd.TrimStart().TrimEnd() == _vDet.Codigo
+                                                                      orderby _q.Tipo
+                                                                     select new
+                                                                     {
+                                                                         CodiProd = _q.CodiProd.TrimStart().TrimEnd(),
+                                                                         Tipo = _q.Tipo.TrimStart().TrimEnd(),
+                                                                         Precio = _q.Precio
+                                                                     }).ToList();
+
+                                        var  iPrecio = lstPrecio.FirstOrDefault(f => f.Tipo == "Distribuid");
 
                                         ProductosMail += $"<br>Precio Liberado: <b>{string.Format("{0:###,###,###.00}", _vDet.Precio)}</b>";
 
@@ -1138,7 +1149,7 @@ namespace GV_api.Controllers.FACT
 
                                         if (iPrecio == null)
                                         {
-                                            iPrecio = _Conexion.Listadeprecios.FirstOrDefault(f => f.CodiProd == _vDet.Codigo && f.Tipo == "Publico");
+                                            iPrecio = lstPrecio.FirstOrDefault(f => f.Tipo == "Publico");
 
                                             ProductosMail += $"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
                                         }
@@ -1146,13 +1157,14 @@ namespace GV_api.Controllers.FACT
                                         {
                                             if(_vDet.PrecioCordoba > iPrecio.Precio)
                                             {
-                                                Listadeprecios iPrecioPublico = _Conexion.Listadeprecios.FirstOrDefault(f => f.CodiProd == _vDet.Codigo && f.Tipo == "Publico");
+                                
+                                                var iPrecioPublico = lstPrecio.FirstOrDefault(f =>  f.Tipo == "Publico");
 
                                                 if (iPrecioPublico != null)
                                                 {
                                                     if(iPrecioPublico.Precio != 0)
                                                     {
-                                                        ProductosMail += $"<br>Precio Publico: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                                        ProductosMail += $"<br>Precio Publico: <b>{string.Format("{0:###,###,###.00}", iPrecioPublico.Precio)}</b>";
                                                     }
                                                     else
                                                     {

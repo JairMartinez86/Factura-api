@@ -477,7 +477,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
             <End Role="VentaDetalle" EntitySet="VentaDetalle" />
           </AssociationSet>
           <FunctionImport Name="SP_FacturaImpresa" ReturnType="Collection(INVESCASANModel.SP_FacturaImpresa_Result)">
-            <Parameter Name="P_IdVenta" Mode="In" Type="Guid" />
+          <Parameter Name="P_IdVenta" Mode="In" Type="Guid" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="TbBodega">
