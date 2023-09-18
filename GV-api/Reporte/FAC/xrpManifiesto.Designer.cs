@@ -511,7 +511,7 @@
             this.XrLabel41.CanGrow = false;
             this.XrLabel41.Dpi = 254F;
             this.XrLabel41.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
-            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "Concat(sumCount([Cantidad]), \' Und\') ")});
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "Concat(sumSum([Cantidad]), \' Und\') ")});
             this.XrLabel41.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold);
             this.XrLabel41.LocationFloat = new DevExpress.Utils.PointFloat(308.6F, 254.3942F);
             this.XrLabel41.Name = "XrLabel41";
