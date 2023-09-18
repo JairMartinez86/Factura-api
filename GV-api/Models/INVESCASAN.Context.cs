@@ -39,6 +39,7 @@ namespace GV_api.Models
         public virtual DbSet<ControlInventario> ControlInventario { get; set; }
         public virtual DbSet<Venta> Venta { get; set; }
         public virtual DbSet<VentaDetalle> VentaDetalle { get; set; }
+        public virtual DbSet<PermisoFactura> PermisoFactura { get; set; }
     
         public virtual ObjectResult<Nullable<decimal>> spu_ObtenerSaldoCuenta(string numCuenta, Nullable<System.DateTime> fecha, string dMoneda)
         {

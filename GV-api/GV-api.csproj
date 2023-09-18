@@ -381,6 +381,9 @@
     <Compile Include="Models\Perfiles1.cs">
       <DependentUpon>AUDESCASAN.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PermisoFactura.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SP_FacturaImpresa_Result.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>

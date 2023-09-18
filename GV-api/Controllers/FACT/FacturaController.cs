@@ -1221,6 +1221,16 @@ namespace GV_api.Controllers.FACT
                         
                         if (MandarCorreo)
                         {
+
+                            PermisoFactura per = _Conexion.PermisoFactura.FirstOrDefault(f => f.Usuario == d.UsuarioRegistra);
+
+                            if(per == null)
+                            {
+                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No tiene permiso para autorizar.</>", 1);
+                                return json;
+                            }
+
+
                             MailMessage mail = new MailMessage();
                             mail.From = new MailAddress("info@escasan.com.ni");
                             mail.To.Add("jmartinezg86@gmail.com");

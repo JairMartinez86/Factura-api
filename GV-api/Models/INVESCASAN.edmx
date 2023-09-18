@@ -204,6 +204,13 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="Cido" Type="nvarchar" MaxLength="255" />
           <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="PermisoFactura">
+          <Key>
+            <PropertyRef Name="IdPermiso" />
+          </Key>
+          <Property Name="IdPermiso" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Usuario" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Venta">
           <Key>
             <PropertyRef Name="IdVenta" />
@@ -333,6 +340,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <EntitySet Name="TbBodega" EntityType="Self.TbBodega" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TbDepartamento" EntityType="Self.TbDepartamento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbVendedores" EntityType="Self.tbVendedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PermisoFactura" EntityType="Self.PermisoFactura" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="Venta" EntityType="Self.Venta" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="VentaDetalle" EntityType="Self.VentaDetalle" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="Bonificados" EntityType="Self.Bonificados" store:Type="Tables" store:Schema="dbo">
@@ -479,6 +487,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <FunctionImport Name="SP_FacturaImpresa" ReturnType="Collection(INVESCASANModel.SP_FacturaImpresa_Result)">
           <Parameter Name="P_IdVenta" Mode="In" Type="Guid" />
           </FunctionImport>
+          <EntitySet Name="PermisoFactura" EntityType="INVESCASANModel.PermisoFactura" />
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -763,6 +772,13 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Type="Decimal" Name="SubTotalNeto" Nullable="false" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="Impuesto" Nullable="false" Precision="18" Scale="2" />
         </ComplexType>
+        <EntityType Name="PermisoFactura">
+          <Key>
+            <PropertyRef Name="IdPermiso" />
+          </Key>
+          <Property Name="IdPermiso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1090,6 +1106,14 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="PermisoFactura">
+            <EntityTypeMapping TypeName="INVESCASANModel.PermisoFactura">
+              <MappingFragment StoreEntitySet="PermisoFactura">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="IdPermiso" ColumnName="IdPermiso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
