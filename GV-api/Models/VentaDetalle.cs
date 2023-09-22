@@ -50,6 +50,7 @@ namespace GV_api.Models
         public bool EsBonif { get; set; }
         public bool EsBonifLibre { get; set; }
         public bool EsExonerado { get; set; }
+        public bool EsExento { get; set; }
         public bool PrecioLiberado { get; set; }
         public decimal Margen { get; set; }
         public bool PedirAutorizado { get; set; }

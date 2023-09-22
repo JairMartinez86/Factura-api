@@ -15,10 +15,10 @@
         <EntityTypeShape EntityType="INVESCASANModel.ConfiguraFacturacion" Width="1.5" PointX="9.375" PointY="0.75" />
         <EntityTypeShape EntityType="INVESCASANModel.TbDepartamento" Width="1.5" PointX="0.75" PointY="9.75" />
         <EntityTypeShape EntityType="INVESCASANModel.ControlInventario" Width="1.5" PointX="5.375" PointY="9.75" />
-        <EntityTypeShape EntityType="INVESCASANModel.Venta" Width="1.5" PointX="9.375" PointY="5.375" />
-        <EntityTypeShape EntityType="INVESCASANModel.VentaDetalle" Width="1.5" PointX="11.625" PointY="5.625" />
-        <AssociationConnector Association="INVESCASANModel.FK_VentaDetalle_Venta" />
         <EntityTypeShape EntityType="INVESCASANModel.PermisoFactura" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="INVESCASANModel.Venta" Width="1.5" PointX="9.375" PointY="5.375" />
+        <EntityTypeShape EntityType="INVESCASANModel.VentaDetalle" Width="1.5" PointX="11.625" PointY="5.5" />
+        <AssociationConnector Association="INVESCASANModel.FK_VentaDetalle_Venta" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
