@@ -204,6 +204,13 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="Cido" Type="nvarchar" MaxLength="255" />
           <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="CorreoAutorizaFactura">
+          <Key>
+            <PropertyRef Name="IdCorreoAutoriza" />
+          </Key>
+          <Property Name="IdCorreoAutoriza" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Correo" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
         <EntityType Name="PermisoFactura">
           <Key>
             <PropertyRef Name="IdPermiso" />
@@ -341,6 +348,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <EntitySet Name="TbBodega" EntityType="Self.TbBodega" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TbDepartamento" EntityType="Self.TbDepartamento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbVendedores" EntityType="Self.tbVendedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CorreoAutorizaFactura" EntityType="Self.CorreoAutorizaFactura" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="PermisoFactura" EntityType="Self.PermisoFactura" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="Venta" EntityType="Self.Venta" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="VentaDetalle" EntityType="Self.VentaDetalle" Schema="VTA" store:Type="Tables" />
@@ -489,6 +497,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
             <End Role="Venta" EntitySet="Venta" />
             <End Role="VentaDetalle" EntitySet="VentaDetalle" />
           </AssociationSet>
+          <EntitySet Name="CorreoAutorizaFactura" EntityType="INVESCASANModel.CorreoAutorizaFactura" />
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -781,6 +790,13 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CorreoAutorizaFactura">
+          <Key>
+            <PropertyRef Name="IdCorreoAutoriza" />
+          </Key>
+          <Property Name="IdCorreoAutoriza" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Correo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1114,6 +1130,14 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
                 <ScalarProperty Name="Index" ColumnName="Index" />
                 <ScalarProperty Name="IdVenta" ColumnName="IdVenta" />
                 <ScalarProperty Name="IdVentaDetalle" ColumnName="IdVentaDetalle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CorreoAutorizaFactura">
+            <EntityTypeMapping TypeName="INVESCASANModel.CorreoAutorizaFactura">
+              <MappingFragment StoreEntitySet="CorreoAutorizaFactura">
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="IdCorreoAutoriza" ColumnName="IdCorreoAutoriza" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -357,6 +357,9 @@
     <Compile Include="Models\ControlInventario.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CorreoAutorizaFactura.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\INVESCASAN.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

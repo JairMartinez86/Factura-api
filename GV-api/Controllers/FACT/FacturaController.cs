@@ -1234,7 +1234,12 @@ namespace GV_api.Controllers.FACT
 
                             MailMessage mail = new MailMessage();
                             mail.From = new MailAddress("info@escasan.com.ni");
-                            mail.To.Add("jmartinezg86@gmail.com");
+
+                           foreach(CorreoAutorizaFactura c in   _Conexion.CorreoAutorizaFactura.ToList())
+                            {
+                                mail.To.Add(c.Correo);
+
+                            }
 
 
                             SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
