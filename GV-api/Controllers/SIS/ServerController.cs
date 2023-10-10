@@ -193,7 +193,7 @@ namespace GV_api.Class.SIS
             datos.Nombre = "FECHA SERVIDOR";
             datos.d = string.Format("{0:yyy-MM-dd hh:mm:ss}", DateTime.Now);
 
-
+          
             Cls_Datos datos2 = new Cls_Datos();
             datos2.Nombre = "DESCONECCION";
             datos2.d = Desconectar ? "-1" : "7200";

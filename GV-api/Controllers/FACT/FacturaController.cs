@@ -1700,13 +1700,13 @@ namespace GV_api.Controllers.FACT
 
         [Route("api/Factura/GetDetalle")]
         [HttpGet]
-        public string GetDetalle(Guid IdVenta)
+        public string GetDetalle(Guid IdVenta, string User)
         {
-            return v_GetDetalle(IdVenta);
+            return v_GetDetalle(IdVenta, User);
         }
 
 
-        private string v_GetDetalle(Guid IdVenta)
+        private string v_GetDetalle(Guid IdVenta, string User)
         {
             string json = string.Empty;
 
@@ -1772,8 +1772,14 @@ namespace GV_api.Controllers.FACT
                     datos.d = qDetalle;
                     lstDatos.Add(datos);
 
+                    PermisoFactura per = _Conexion.PermisoFactura.FirstOrDefault(f => f.Usuario == User);
 
+                    datos = new Cls_Datos();
+                    datos.Nombre = "PERMISO MARGEN";
+                    datos.d = string.Empty;
+                    if (per == null) datos.d = "<b>No tiene permiso para autorizar.</>";
 
+                    lstDatos.Add(datos);
 
                     json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
                 }
