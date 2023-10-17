@@ -16,5 +16,7 @@ namespace GV_api.Models
     {
         public int IdPermiso { get; set; }
         public string Usuario { get; set; }
+        public bool AutorizaPedido { get; set; }
+        public bool PaseFactura { get; set; }
     }
 }

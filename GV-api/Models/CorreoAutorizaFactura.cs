@@ -16,5 +16,7 @@ namespace GV_api.Models
     {
         public int IdCorreoAutoriza { get; set; }
         public string Correo { get; set; }
+        public bool AntAutorizar { get; set; }
+        public bool DespAutorizar { get; set; }
     }
 }

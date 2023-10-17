@@ -570,7 +570,7 @@ namespace GV_api.Controllers.FACT
                             if (iPrecio != null) iPrecio.EsPrincipal = true;
                         }
 
-                        if (iPrecio.EsPrincipal) iPrecio.Liberado = false;//LiberadoPrecio;
+                        if (iPrecio.EsPrincipal) iPrecio.Liberado = LiberadoPrecio;
 
                     }
 
@@ -972,8 +972,8 @@ namespace GV_api.Controllers.FACT
                                 Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ControlInventario WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
 
                             }
+               
 
-                   
 
 
                             _v = new Venta();
@@ -996,14 +996,21 @@ namespace GV_api.Controllers.FACT
 
                         if( _v.NoFactura != string.Empty || _v.Estado != "Solicitado")
                         {
-                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No se permite modificacion al documento.</>", 1);
+                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No se permite modificacion del documento.</>", 1);
                             return json;
 
                         }
 
-                        if(!esNuevo)
+                        if(esNuevo && d.TipoDocumento == "Pedido")
                         {
-                            if(_v.PedirAutorizacion && !d.PedirAutorizacion && _v.Estado == "Solicitado")
+                            if(d.PedirAutorizacion)
+                            {
+                                MandarCorreo = true;
+                            }
+                        }
+                        else
+                        {
+                            if (_v.PedirAutorizacion && !d.PedirAutorizacion && _v.Estado == "Solicitado")
                             {
                                 MandarCorreo = true;
                             }
@@ -1118,9 +1125,9 @@ namespace GV_api.Controllers.FACT
 
                             _v.VentaDetalle.Add(_vDet);
 
-                            if (MandarCorreo && _v.TipoDocumento == "Pedido")
+                            if (MandarCorreo)
                             {
-                                if (_vDet.Autorizado)
+                                if (_vDet.Autorizado || (_vDet.PedirAutorizado || _vDet.PrecioLiberado))
                                 {
 
                                     ProductosMail += $"<br><p>Producto: <b>{_vDet.Codigo} {_vDet.Producto}</b>";
@@ -1132,7 +1139,8 @@ namespace GV_api.Controllers.FACT
 
                         
                                         var lstPrecio = (from _q in _Conexion.Listadeprecios
-                                                                     select new
+                                                         where _q.CodiProd == _vDet.Codigo
+                                                         select new
                                                                      {
                                                                          _q.CodiProd,
                                                                          _q.Tipo,
@@ -1150,30 +1158,37 @@ namespace GV_api.Controllers.FACT
                                             iPrecio = lstPrecio.FirstOrDefault(f => f.Tipo == "Publico");
 
                                             ProductosMail += $"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                            ProductosMail += $"<br>Precio Público: <b>0.00</b>";
+                                            ProductosMail += $"<br>Precio Minimo: <b>0.00</b>";
                                         }
                                         else
                                         {
-                                            if(_vDet.PrecioCordoba > iPrecio.Precio)
+                                            var iPrecioPublico = lstPrecio.FirstOrDefault(f => f.Tipo == "Publico");
+                                            var iPrecioDistribuid = lstPrecio.FirstOrDefault(f => f.Tipo == "Distribuid");
+
+                                            if (_vDet.PrecioCordoba > iPrecio.Precio)
                                             {
                                 
-                                                var iPrecioPublico = lstPrecio.FirstOrDefault(f =>  f.Tipo == "Publico");
-
+                            
                                                 if (iPrecioPublico != null)
                                                 {
                                                     if(iPrecioPublico.Precio != 0)
                                                     {
                                                         ProductosMail += $"<br>Precio Publico: <b>{string.Format("{0:###,###,###.00}", iPrecioPublico.Precio)}</b>";
+                                                        ProductosMail += $"<br>Precio Distribuidor: <b>{string.Format("{0:###,###,###.00}", iPrecioDistribuid.Precio)}</b>";
                                                     }
                                                     else
                                                     {
-                                                        ProductosMail +=$"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                                        ProductosMail +=$"<br>Precio Publico: <b>{string.Format("{0:###,###,###.00}", iPrecioPublico.Precio)}</b>";
+                                                        ProductosMail += $"<br>Precio Distribuidor: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
                                                     }
                                                    
 
                                                 }
                                                 else
                                                 {
-                                                    ProductosMail +=$"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                                    ProductosMail += $"<br>Precio Publico: <b>{string.Format("{0:###,###,###.00}", iPrecioPublico.Precio)}</b>";
+                                                    ProductosMail +=$"<br>Precio Distribuidor: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
                                                 }
 
 
@@ -1181,7 +1196,8 @@ namespace GV_api.Controllers.FACT
                                             }
                                             else
                                             {
-                                                ProductosMail +=$"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
+                                                ProductosMail += $"<br>Precio Publico: <b>{string.Format("{0:###,###,###.00}", iPrecioPublico.Precio)}</b>";
+                                                ProductosMail +=$"<br>Precio Distribuidor: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
                                             }
                                         }
 
@@ -1220,10 +1236,10 @@ namespace GV_api.Controllers.FACT
 
 
                         
-                        if (MandarCorreo)
+                        if (MandarCorreo && _v.TipoDocumento == "Pedido")
                         {
 
-                            PermisoFactura per = _Conexion.PermisoFactura.FirstOrDefault(f => f.Usuario == d.UsuarioRegistra);
+                            PermisoFactura per = _Conexion.PermisoFactura.FirstOrDefault(f => f.Usuario == d.UsuarioRegistra && f.AutorizaPedido);
 
                             if(per == null)
                             {
@@ -1235,7 +1251,7 @@ namespace GV_api.Controllers.FACT
                             MailMessage mail = new MailMessage();
                             mail.From = new MailAddress("info@escasan.com.ni");
 
-                           foreach(CorreoAutorizaFactura c in   _Conexion.CorreoAutorizaFactura.ToList())
+                           foreach(CorreoAutorizaFactura c in   _Conexion.CorreoAutorizaFactura.Where(w => (esNuevo ? w.AntAutorizar : w.DespAutorizar) ).ToList())
                             {
                                 mail.To.Add(c.Correo);
 
@@ -1245,8 +1261,11 @@ namespace GV_api.Controllers.FACT
                             SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
                             NetworkCredential nameAndPassword = new NetworkCredential("info@escasan.com.ni", "Inf0Escasan2018!.");
 
+                            //SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
+                            //NetworkCredential nameAndPassword = new NetworkCredential("notificaciones@globalvet.com.ni", "Mam02771");
 
-                            mail.Subject = $"Margen Autorizado";
+
+                            mail.Subject = esNuevo ?  $"Pendiente Autorizar ({_v.NoPedido})" : "Margen Autorizado";
                             mail.Body = $"<p>Pedido No. <b>{_v.NoPedido}</b>";
                             mail.Body += $"<br>CLIENTE: <b>{_v.CodCliente} { (_v.Nombre.TrimStart().TrimEnd() == string.Empty ? _v.NomCliente : _v.NomCliente) }</b>";
                             mail.Body += $"<br>Usuario Autoriza: <b>{d.UsuarioRegistra}</b>";
@@ -1570,10 +1589,27 @@ namespace GV_api.Controllers.FACT
                 {
 
 
-                    if(_v.PedirAutorizacion)
+                    if (_v.PedirAutorizacion)
                     {
-                        json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>Se requiere autorización, por favor genere un pedido.</b>", 1);
-                        return json;
+
+
+
+                        PermisoFactura per = _Conexion.PermisoFactura.FirstOrDefault(f => f.Usuario == _v.UsuarioRegistra && f.PaseFactura);
+
+                        if (per == null)
+                        {
+                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>Se requiere autorización, por favor genere un pedido.</b>", 1);
+                            return json;
+                        }
+
+                        foreach (VentaDetalle det in _v.VentaDetalle)
+                        {
+                            _v.PedirAutorizacion = false;
+                        }
+
+                        _v.PedirAutorizacion = false;
+                        _Conexion.SaveChanges();
+
                     }
 
 
@@ -1777,7 +1813,7 @@ namespace GV_api.Controllers.FACT
                     datos.d = qDetalle;
                     lstDatos.Add(datos);
 
-                    PermisoFactura per = _Conexion.PermisoFactura.FirstOrDefault(f => f.Usuario == User);
+                    PermisoFactura per = _Conexion.PermisoFactura.FirstOrDefault(f => f.Usuario == User && f.AutorizaPedido);
 
                     datos = new Cls_Datos();
                     datos.Nombre = "PERMISO MARGEN";

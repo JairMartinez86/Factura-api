@@ -210,6 +210,8 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           </Key>
           <Property Name="IdCorreoAutoriza" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Correo" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="AntAutorizar" Type="bit" Nullable="false" />
+          <Property Name="DespAutorizar" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PermisoFactura">
           <Key>
@@ -217,6 +219,8 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           </Key>
           <Property Name="IdPermiso" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Usuario" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AutorizaPedido" Type="bit" Nullable="false" />
+          <Property Name="PaseFactura" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Venta">
           <Key>
@@ -490,13 +494,13 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <FunctionImport Name="SP_FacturaImpresa" ReturnType="Collection(INVESCASANModel.SP_FacturaImpresa_Result)">
           <Parameter Name="P_IdVenta" Mode="In" Type="Guid" />
           </FunctionImport>
-          <EntitySet Name="PermisoFactura" EntityType="INVESCASANModel.PermisoFactura" />
           <EntitySet Name="Venta" EntityType="INVESCASANModel.Venta" />
           <EntitySet Name="VentaDetalle" EntityType="INVESCASANModel.VentaDetalle" />
           <AssociationSet Name="FK_VentaDetalle_Venta" Association="INVESCASANModel.FK_VentaDetalle_Venta">
             <End Role="Venta" EntitySet="Venta" />
             <End Role="VentaDetalle" EntitySet="VentaDetalle" />
           </AssociationSet>
+          <EntitySet Name="PermisoFactura" EntityType="INVESCASANModel.PermisoFactura" />
           <EntitySet Name="CorreoAutorizaFactura" EntityType="INVESCASANModel.CorreoAutorizaFactura" />
         </EntityContainer>
         <EntityType Name="TbBodega">
@@ -671,13 +675,6 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Type="Decimal" Name="SubTotalNeto" Nullable="false" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="Impuesto" Nullable="false" Precision="18" Scale="2" />
         </ComplexType>
-        <EntityType Name="PermisoFactura">
-          <Key>
-            <PropertyRef Name="IdPermiso" />
-          </Key>
-          <Property Name="IdPermiso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Venta">
           <Key>
             <PropertyRef Name="IdVenta" />
@@ -790,12 +787,23 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PermisoFactura">
+          <Key>
+            <PropertyRef Name="IdPermiso" />
+          </Key>
+          <Property Name="IdPermiso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AutorizaPedido" Type="Boolean" Nullable="false" />
+          <Property Name="PaseFactura" Type="Boolean" Nullable="false" />
+        </EntityType>
         <EntityType Name="CorreoAutorizaFactura">
           <Key>
             <PropertyRef Name="IdCorreoAutoriza" />
           </Key>
           <Property Name="IdCorreoAutoriza" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Correo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AntAutorizar" Type="Boolean" Nullable="false" />
+          <Property Name="DespAutorizar" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1025,14 +1033,6 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="PermisoFactura">
-            <EntityTypeMapping TypeName="INVESCASANModel.PermisoFactura">
-              <MappingFragment StoreEntitySet="PermisoFactura">
-                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
-                <ScalarProperty Name="IdPermiso" ColumnName="IdPermiso" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Venta">
             <EntityTypeMapping TypeName="INVESCASANModel.Venta">
               <MappingFragment StoreEntitySet="Venta">
@@ -1133,9 +1133,21 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PermisoFactura">
+            <EntityTypeMapping TypeName="INVESCASANModel.PermisoFactura">
+              <MappingFragment StoreEntitySet="PermisoFactura">
+                <ScalarProperty Name="PaseFactura" ColumnName="PaseFactura" />
+                <ScalarProperty Name="AutorizaPedido" ColumnName="AutorizaPedido" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="IdPermiso" ColumnName="IdPermiso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CorreoAutorizaFactura">
             <EntityTypeMapping TypeName="INVESCASANModel.CorreoAutorizaFactura">
               <MappingFragment StoreEntitySet="CorreoAutorizaFactura">
+                <ScalarProperty Name="DespAutorizar" ColumnName="DespAutorizar" />
+                <ScalarProperty Name="AntAutorizar" ColumnName="AntAutorizar" />
                 <ScalarProperty Name="Correo" ColumnName="Correo" />
                 <ScalarProperty Name="IdCorreoAutoriza" ColumnName="IdCorreoAutoriza" />
               </MappingFragment>

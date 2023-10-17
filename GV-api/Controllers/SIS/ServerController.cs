@@ -45,6 +45,7 @@ namespace GV_api.Class.SIS
                                         Nombre = _q.Nombre,
                                         Pwd = _q.Clave,
                                         Rol = string.Empty,
+                                        Bodega = _q.Bodega.TrimStart().TrimEnd(),
                                         FechaLogin = string.Format("{0:yyyy-MM-dd hh:mm:ss}", DateTime.Now),
                                         Desconectar = false
                                     }).ToList();
