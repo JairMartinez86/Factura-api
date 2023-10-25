@@ -1,4 +1,5 @@
-﻿using DevExpress.DataProcessing;
+﻿using DevExpress.Data;
+using DevExpress.DataProcessing;
 using DevExpress.Xpo.DB.Helpers;
 using GV_api.Class;
 using GV_api.Class.FACT;
@@ -1621,6 +1622,7 @@ namespace GV_api.Controllers.FACT
                     _v.NoFactura = string.Concat(_v.Serie, Consecutivo);
                     _v.TipoDocumento = "Factura";
                     _v.Estado = "Facturada";
+                    _v.Fecha = DateTime.Now;
                     _Conexion.SaveChanges();
 
 

@@ -1242,7 +1242,7 @@
             this.DataSource = this.dsetReporte1;
             this.Dpi = 254F;
             this.Font = new System.Drawing.Font("Arial", 9.75F);
-            this.Margins = new System.Drawing.Printing.Margins(64, 50, 25, 25);
+            this.Margins = new System.Drawing.Printing.Margins(2, 50, 25, 25);
             this.PageHeight = 3276;
             this.PageWidth = 760;
             this.PaperKind = System.Drawing.Printing.PaperKind.Custom;
