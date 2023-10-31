@@ -71,17 +71,21 @@ namespace GV_api.Controllers.FACT
 
                     if(TipoFactura == "Factura")
                     {
-                        ConfiguraFacturacion Consecutivo = _Conexion.ConfiguraFacturacion.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega && f.EmiteFactura.TrimStart().TrimEnd() == "S");
+                        ConfiguraFacturacion cons = _Conexion.ConfiguraFacturacion.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega && f.EmiteFactura.TrimStart().TrimEnd() == "S");
+                        Consecutivo _num = _Conexion.Consecutivo.FirstOrDefault(f => f.Serie == cons.Serie);
+                       
 
-                        NoDoc = Consecutivo == null ? string.Empty : string.Concat(Consecutivo.Serie.TrimStart().TrimEnd(), Consecutivo.Secuencia);
-                        Serie = Consecutivo == null ? string.Empty : Consecutivo.Serie.TrimStart().TrimEnd();
+                        NoDoc = _num == null ? string.Empty : string.Concat(_num.Serie.TrimStart().TrimEnd(), _num.Factura);
+                        Serie = _num == null ? string.Empty : _num.Serie.TrimStart().TrimEnd();
                     }
                     else
                     {
-                        ControlInventario Consecutivo = _Conexion.ControlInventario.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega);
+                        ControlInventario cons = _Conexion.ControlInventario.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega);
+                        Consecutivo _num = _Conexion.Consecutivo.FirstOrDefault(f => f.Serie == cons.Serie);
 
-                        NoDoc = Consecutivo == null ? string.Empty : string.Concat(Consecutivo.Serie.TrimStart().TrimEnd(), Consecutivo.Secuencia);
-                        Serie = Consecutivo == null ? string.Empty : Consecutivo.Serie.TrimStart().TrimEnd();
+
+                        NoDoc = _num == null ? string.Empty : string.Concat(_num.Serie.TrimStart().TrimEnd(), _num.Pedido + 1);
+                        Serie = _num == null ? string.Empty : _num.Serie.TrimStart().TrimEnd();
                     }
 
 
@@ -967,13 +971,33 @@ namespace GV_api.Controllers.FACT
 
                             if (d.TipoDocumento == "Pedido")
                             {
-                                _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.ControlInventario SET Secuencia += 1    WHERE  Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'");
+
+                                //_Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.ControlInventario SET Secuencia += 1    WHERE  Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'");
+                                //_Conexion.SaveChanges();
+
+                                //Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ControlInventario WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
+
+
+
+                                _Conexion.Database.ExecuteSqlCommand($"UPDATE VTA.Consecutivo SET Pedido += 1    WHERE  Serie = '{d.Serie}'");
                                 _Conexion.SaveChanges();
 
-                                Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ControlInventario WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
+
+                                Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Consecutivo  FROM DBO.ControlInventario WHERE Serie = '{d.Serie}'").First();
+
+                                Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoPedido == string.Concat(d.Serie, Consecutivo));
+
+                                if (vta == null)
+                                {
+                                    json = Cls_Mensaje.Tojson(null, 0, "1", "<b>El pedido genera duplicado.</>", 1);
+                                    return json;
+
+                                }
+
 
                             }
-               
+                     
+
 
 
 
@@ -1614,10 +1638,36 @@ namespace GV_api.Controllers.FACT
                     }
 
 
+              
+
+                    _Conexion.Database.ExecuteSqlCommand($"UPDATE VTA.Consecutivo SET Factura += 1    WHERE  Serie = '{_v.Serie}'");
+                    _Conexion.SaveChanges();
+
                     _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.ConfiguraFacturacion SET Secuencia += 1    WHERE  Serie = '{_v.Serie}' AND Bodegas = '{_v.CodBodega}'");
                     _Conexion.SaveChanges();
 
-                    int Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ConfiguraFacturacion WHERE Serie = '{_v.Serie}' AND Bodegas = '{_v.CodBodega}'").First();
+                    int Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Factura  FROM VTA.Consecutivo WHERE Serie = '{_v.Serie}'").First();
+                    int Consecutivo2 = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ConfiguraFacturacion WHERE Serie = '{_v.Serie}' AND Bodegas = '{_v.CodBodega}'").First();
+
+
+                    if (Consecutivo != Consecutivo2)
+                    {
+                        json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>Error al comprar los consecutivos (INVESCASAN VS WEB).</b>", 1);
+                        return json;
+                    }
+
+
+                    Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoFactura == string.Concat(_v.Serie, Consecutivo));
+
+                    if (vta == null)
+                    {
+                        json = Cls_Mensaje.Tojson(null, 0, "1", "<b>La factura genera duplicado.</>", 1);
+                        return json;
+
+                    }
+
+
+
 
                     _v.NoFactura = string.Concat(_v.Serie, Consecutivo);
                     _v.TipoDocumento = "Factura";

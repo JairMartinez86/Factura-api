@@ -20,6 +20,7 @@
         <AssociationConnector Association="INVESCASANModel.FK_VentaDetalle_Venta" />
         <EntityTypeShape EntityType="INVESCASANModel.PermisoFactura" Width="1.5" PointX="11.375" PointY="0.75" />
         <EntityTypeShape EntityType="INVESCASANModel.CorreoAutorizaFactura" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="INVESCASANModel.Consecutivo" Width="1.5" PointX="3.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

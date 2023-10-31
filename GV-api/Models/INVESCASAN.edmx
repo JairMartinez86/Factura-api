@@ -204,6 +204,15 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="Cido" Type="nvarchar" MaxLength="255" />
           <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Consecutivo">
+          <Key>
+            <PropertyRef Name="IdConsecutivo" />
+          </Key>
+          <Property Name="IdConsecutivo" Type="int" Nullable="false" />
+          <Property Name="Serie" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Pedido" Type="int" Nullable="false" />
+          <Property Name="Factura" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="CorreoAutorizaFactura">
           <Key>
             <PropertyRef Name="IdCorreoAutoriza" />
@@ -352,6 +361,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <EntitySet Name="TbBodega" EntityType="Self.TbBodega" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TbDepartamento" EntityType="Self.TbDepartamento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbVendedores" EntityType="Self.tbVendedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Consecutivo" EntityType="Self.Consecutivo" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="CorreoAutorizaFactura" EntityType="Self.CorreoAutorizaFactura" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="PermisoFactura" EntityType="Self.PermisoFactura" Schema="VTA" store:Type="Tables" />
           <EntitySet Name="Venta" EntityType="Self.Venta" Schema="VTA" store:Type="Tables" />
@@ -502,6 +512,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           </AssociationSet>
           <EntitySet Name="PermisoFactura" EntityType="INVESCASANModel.PermisoFactura" />
           <EntitySet Name="CorreoAutorizaFactura" EntityType="INVESCASANModel.CorreoAutorizaFactura" />
+          <EntitySet Name="Consecutivo" EntityType="INVESCASANModel.Consecutivo" />
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -804,6 +815,15 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="Correo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AntAutorizar" Type="Boolean" Nullable="false" />
           <Property Name="DespAutorizar" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Consecutivo">
+          <Key>
+            <PropertyRef Name="IdConsecutivo" />
+          </Key>
+          <Property Name="IdConsecutivo" Type="Int32" Nullable="false" />
+          <Property Name="Serie" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pedido" Type="Int32" Nullable="false" />
+          <Property Name="Factura" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1150,6 +1170,16 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
                 <ScalarProperty Name="AntAutorizar" ColumnName="AntAutorizar" />
                 <ScalarProperty Name="Correo" ColumnName="Correo" />
                 <ScalarProperty Name="IdCorreoAutoriza" ColumnName="IdCorreoAutoriza" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Consecutivo">
+            <EntityTypeMapping TypeName="INVESCASANModel.Consecutivo">
+              <MappingFragment StoreEntitySet="Consecutivo">
+                <ScalarProperty Name="Factura" ColumnName="Factura" />
+                <ScalarProperty Name="Pedido" ColumnName="Pedido" />
+                <ScalarProperty Name="Serie" ColumnName="Serie" />
+                <ScalarProperty Name="IdConsecutivo" ColumnName="IdConsecutivo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

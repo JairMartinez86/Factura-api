@@ -354,6 +354,9 @@
     <Compile Include="Models\ConfiguraFacturacion.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Consecutivo.cs">
+      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ControlInventario.cs">
       <DependentUpon>INVESCASAN.tt</DependentUpon>
     </Compile>
