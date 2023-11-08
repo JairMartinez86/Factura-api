@@ -36,5 +36,6 @@ namespace GV_api.Models
         public Nullable<decimal> Descuento { get; set; }
         public decimal SubTotalNeto { get; set; }
         public decimal Impuesto { get; set; }
+        public decimal Total { get; set; }
     }
 }
