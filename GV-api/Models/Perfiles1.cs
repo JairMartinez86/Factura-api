@@ -155,6 +155,7 @@ namespace GV_api.Models
         public bool CorrigeCheques { get; set; }
         public bool UserAgenda { get; set; }
         public bool Agenda { get; set; }
-        public bool SeguimientoVisitas { get; set; }
+        public bool SSV { get; set; }
+        public bool TodasPestMovil { get; set; }
     }
 }

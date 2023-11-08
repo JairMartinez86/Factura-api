@@ -118,7 +118,7 @@ namespace GV_api.Controllers.FACT
 
         private decimal f_TasaCambio( INVESCASANEntities _Conexion, DateTime fecha)
         {           
-            List<decimal> lst = _Conexion.Database.SqlQuery<decimal>($"SELECT DESCTA FROM AUDESCASANGV.dbo.TIPCAMB WHERE CODCTA = CAST('{string.Format("{0:yyyy-MM-dd}", fecha)}' AS DATE)").ToList();
+            List<decimal> lst = _Conexion.Database.SqlQuery<decimal>($"SELECT DESCTA FROM AUDESCASAN.dbo.TIPCAMB WHERE CODCTA = CAST('{string.Format("{0:yyyy-MM-dd}", fecha)}' AS DATE)").ToList();
 
             decimal tc = 1;
             if (lst.Count > 0) tc = lst.First();
@@ -1287,11 +1287,11 @@ namespace GV_api.Controllers.FACT
                             }
 
 
-                            SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
-                            NetworkCredential nameAndPassword = new NetworkCredential("info@escasan.com.ni", "Inf0Escasan2018!.");
-
                             //SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
-                            //NetworkCredential nameAndPassword = new NetworkCredential("notificaciones@globalvet.com.ni", "Mam02771");
+                            //NetworkCredential nameAndPassword = new NetworkCredential("info@escasan.com.ni", "Inf0Escasan2018!.");
+
+                            SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
+                            NetworkCredential nameAndPassword = new NetworkCredential("notificaciones@globalvet.com.ni", "Mam02771");
 
 
                             mail.Subject = esNuevo ?  $"Pendiente Autorizar ({_v.NoPedido})" : "Margen Autorizado";

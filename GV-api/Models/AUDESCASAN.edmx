@@ -4,9 +4,9 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AUDESCASANGVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AUDESCASANGVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'AUDESCASANGV.dbo.Perfiles1' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'AUDESCASAN.dbo.Perfiles1' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="Perfiles1">
           <Key>
             <PropertyRef Name="Bodega" />
@@ -143,7 +143,8 @@ advertencia 6002: La tabla o vista 'AUDESCASANGV.dbo.Perfiles1' no tiene definid
             <PropertyRef Name="CorrigeCheques" />
             <PropertyRef Name="UserAgenda" />
             <PropertyRef Name="Agenda" />
-            <PropertyRef Name="SeguimientoVisitas" />
+            <PropertyRef Name="SSV" />
+            <PropertyRef Name="TodasPestMovil" />
           </Key>
           <Property Name="Nombre" Type="nvarchar" MaxLength="50" />
           <Property Name="Usuario" Type="nvarchar" MaxLength="50" />
@@ -286,7 +287,8 @@ advertencia 6002: La tabla o vista 'AUDESCASANGV.dbo.Perfiles1' no tiene definid
           <Property Name="CorrigeCheques" Type="bit" Nullable="false" />
           <Property Name="UserAgenda" Type="bit" Nullable="false" />
           <Property Name="Agenda" Type="bit" Nullable="false" />
-          <Property Name="SeguimientoVisitas" Type="bit" Nullable="false" />
+          <Property Name="SSV" Type="bit" Nullable="false" />
+          <Property Name="TodasPestMovil" Type="bit" Nullable="false" />
         </EntityType>
         <EntityContainer Name="AUDESCASANGVModelStoreContainer">
           <EntitySet Name="Perfiles1" EntityType="Self.Perfiles1" store:Type="Tables" store:Schema="dbo">
@@ -432,15 +434,18 @@ advertencia 6002: La tabla o vista 'AUDESCASANGV.dbo.Perfiles1' no tiene definid
     [Perfiles1].[CorrigeCheques] AS [CorrigeCheques], 
     [Perfiles1].[UserAgenda] AS [UserAgenda], 
     [Perfiles1].[Agenda] AS [Agenda], 
-    [Perfiles1].[SeguimientoVisitas] AS [SeguimientoVisitas]
+    [Perfiles1].[SSV] AS [SSV], 
+    [Perfiles1].[TodasPestMovil] AS [TodasPestMovil]
     FROM [dbo].[Perfiles1] AS [Perfiles1]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AUDESCASANGVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="AUDESCASANGVEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Perfiles1" EntityType="AUDESCASANGVModel.Perfiles1" />
+        </EntityContainer>
         <EntityType Name="Perfiles1">
           <Key>
             <PropertyRef Name="Bodega" />
@@ -577,14 +582,15 @@ advertencia 6002: La tabla o vista 'AUDESCASANGV.dbo.Perfiles1' no tiene definid
             <PropertyRef Name="CorrigeCheques" />
             <PropertyRef Name="UserAgenda" />
             <PropertyRef Name="Agenda" />
-            <PropertyRef Name="SeguimientoVisitas" />
+            <PropertyRef Name="SSV" />
+            <PropertyRef Name="TodasPestMovil" />
           </Key>
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Clave" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Cargo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Ubicacion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Bodega" Type="String" MaxLength="4" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Bodega" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="true" />
           <Property Name="Facturacion" Type="Boolean" Nullable="false" />
           <Property Name="Caja" Type="Boolean" Nullable="false" />
           <Property Name="CuentasxCobrar" Type="Boolean" Nullable="false" />
@@ -720,11 +726,9 @@ advertencia 6002: La tabla o vista 'AUDESCASANGV.dbo.Perfiles1' no tiene definid
           <Property Name="CorrigeCheques" Type="Boolean" Nullable="false" />
           <Property Name="UserAgenda" Type="Boolean" Nullable="false" />
           <Property Name="Agenda" Type="Boolean" Nullable="false" />
-          <Property Name="SeguimientoVisitas" Type="Boolean" Nullable="false" />
+          <Property Name="SSV" Type="Boolean" Nullable="false" />
+          <Property Name="TodasPestMovil" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="AUDESCASANGVEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Perfiles1" EntityType="Self.Perfiles1" />
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -734,148 +738,149 @@ advertencia 6002: La tabla o vista 'AUDESCASANGV.dbo.Perfiles1' no tiene definid
           <EntitySetMapping Name="Perfiles1">
             <EntityTypeMapping TypeName="AUDESCASANGVModel.Perfiles1">
               <MappingFragment StoreEntitySet="Perfiles1">
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
-                <ScalarProperty Name="Clave" ColumnName="Clave" />
-                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
-                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
-                <ScalarProperty Name="Bodega" ColumnName="Bodega" />
-                <ScalarProperty Name="Facturacion" ColumnName="Facturacion" />
-                <ScalarProperty Name="Caja" ColumnName="Caja" />
-                <ScalarProperty Name="CuentasxCobrar" ColumnName="CuentasxCobrar" />
-                <ScalarProperty Name="ReportesdeVenta" ColumnName="ReportesdeVenta" />
-                <ScalarProperty Name="Inventarios" ColumnName="Inventarios" />
-                <ScalarProperty Name="Importaciones" ColumnName="Importaciones" />
-                <ScalarProperty Name="Utiles" ColumnName="Utiles" />
-                <ScalarProperty Name="Presupuesto" ColumnName="Presupuesto" />
-                <ScalarProperty Name="Contabilidad" ColumnName="Contabilidad" />
-                <ScalarProperty Name="ReportesdeVentas" ColumnName="ReportesdeVentas" />
-                <ScalarProperty Name="Graba" ColumnName="Graba" />
-                <ScalarProperty Name="Modifica" ColumnName="Modifica" />
-                <ScalarProperty Name="Anula" ColumnName="Anula" />
-                <ScalarProperty Name="Consulta" ColumnName="Consulta" />
-                <ScalarProperty Name="Facturas" ColumnName="Facturas" />
-                <ScalarProperty Name="ModificaFacturas" ColumnName="ModificaFacturas" />
-                <ScalarProperty Name="AnulaFacturas" ColumnName="AnulaFacturas" />
-                <ScalarProperty Name="ReporesFactura" ColumnName="ReporesFactura" />
-                <ScalarProperty Name="ReimprimeFacturas" ColumnName="ReimprimeFacturas" />
-                <ScalarProperty Name="Tablas" ColumnName="Tablas" />
-                <ScalarProperty Name="ParametrosFacturacion" ColumnName="ParametrosFacturacion" />
-                <ScalarProperty Name="InterfazContable" ColumnName="InterfazContable" />
-                <ScalarProperty Name="TransferenciaInformacion" ColumnName="TransferenciaInformacion" />
-                <ScalarProperty Name="Auditoria" ColumnName="Auditoria" />
-                <ScalarProperty Name="Usuarios" ColumnName="Usuarios" />
-                <ScalarProperty Name="CatalogoProductos" ColumnName="CatalogoProductos" />
-                <ScalarProperty Name="Proveedores" ColumnName="Proveedores" />
-                <ScalarProperty Name="Compras" ColumnName="Compras" />
-                <ScalarProperty Name="Traslados" ColumnName="Traslados" />
-                <ScalarProperty Name="Ajustes" ColumnName="Ajustes" />
-                <ScalarProperty Name="Devoluciones" ColumnName="Devoluciones" />
-                <ScalarProperty Name="Armados" ColumnName="Armados" />
-                <ScalarProperty Name="Consignaciones" ColumnName="Consignaciones" />
-                <ScalarProperty Name="ReportesInventario" ColumnName="ReportesInventario" />
-                <ScalarProperty Name="TarjetasKardex" ColumnName="TarjetasKardex" />
-                <ScalarProperty Name="InsertaInventario" ColumnName="InsertaInventario" />
-                <ScalarProperty Name="ActualizaInventario" ColumnName="ActualizaInventario" />
-                <ScalarProperty Name="ReportesCosto" ColumnName="ReportesCosto" />
-                <ScalarProperty Name="CerrarInv" ColumnName="CerrarInv" />
-                <ScalarProperty Name="ConsultaInventario" ColumnName="ConsultaInventario" />
-                <ScalarProperty Name="AnulaInventario" ColumnName="AnulaInventario" />
-                <ScalarProperty Name="InsertaFacturacion" ColumnName="InsertaFacturacion" />
-                <ScalarProperty Name="ConsultaFacturacion" ColumnName="ConsultaFacturacion" />
-                <ScalarProperty Name="AnulaFacturacion" ColumnName="AnulaFacturacion" />
-                <ScalarProperty Name="ActualizaFacturacion" ColumnName="ActualizaFacturacion" />
-                <ScalarProperty Name="InsertaCxC" ColumnName="InsertaCxC" />
-                <ScalarProperty Name="ActualizaCxC" ColumnName="ActualizaCxC" />
-                <ScalarProperty Name="ConsultaCxC" ColumnName="ConsultaCxC" />
-                <ScalarProperty Name="AnulaCxC" ColumnName="AnulaCxC" />
-                <ScalarProperty Name="ModificaPreciosVenta" ColumnName="ModificaPreciosVenta" />
-                <ScalarProperty Name="Clientes" ColumnName="Clientes" />
-                <ScalarProperty Name="NotasCredito" ColumnName="NotasCredito" />
-                <ScalarProperty Name="Proceso" ColumnName="Proceso" />
-                <ScalarProperty Name="PorIva" ColumnName="PorIva" />
-                <ScalarProperty Name="ACTIVO" ColumnName="ACTIVO" />
-                <ScalarProperty Name="Fisico" ColumnName="Fisico" />
-                <ScalarProperty Name="CatalogoCuentas" ColumnName="CatalogoCuentas" />
-                <ScalarProperty Name="Diarios" ColumnName="Diarios" />
-                <ScalarProperty Name="Cheque" ColumnName="Cheque" />
-                <ScalarProperty Name="EstadosFinancieros" ColumnName="EstadosFinancieros" />
-                <ScalarProperty Name="ActualizarSaldosLibro" ColumnName="ActualizarSaldosLibro" />
-                <ScalarProperty Name="ReportesC" ColumnName="ReportesC" />
-                <ScalarProperty Name="CierreCuentas" ColumnName="CierreCuentas" />
-                <ScalarProperty Name="Nomina" ColumnName="Nomina" />
-                <ScalarProperty Name="Gestion" ColumnName="Gestion" />
-                <ScalarProperty Name="ProcesosNomina" ColumnName="ProcesosNomina" />
-                <ScalarProperty Name="Prefarmaco" ColumnName="Prefarmaco" />
-                <ScalarProperty Name="PreEquipos" ColumnName="PreEquipos" />
-                <ScalarProperty Name="Preconsumo" ColumnName="Preconsumo" />
-                <ScalarProperty Name="Pedidos" ColumnName="Pedidos" />
-                <ScalarProperty Name="ProcesoNomina" ColumnName="ProcesoNomina" />
-                <ScalarProperty Name="EditaClientes" ColumnName="EditaClientes" />
-                <ScalarProperty Name="CuentaporPagar" ColumnName="CuentaporPagar" />
-                <ScalarProperty Name="PresupuestoGastos" ColumnName="PresupuestoGastos" />
-                <ScalarProperty Name="InformacionCrediticia" ColumnName="InformacionCrediticia" />
-                <ScalarProperty Name="FichaCliente" ColumnName="FichaCliente" />
-                <ScalarProperty Name="AbonoSuper" ColumnName="AbonoSuper" />
-                <ScalarProperty Name="AutorizaCr" ColumnName="AutorizaCr" />
-                <ScalarProperty Name="InformacionCredicticia" ColumnName="InformacionCredicticia" />
-                <ScalarProperty Name="EstadoCuenta" ColumnName="EstadoCuenta" />
-                <ScalarProperty Name="InformesRecupera" ColumnName="InformesRecupera" />
-                <ScalarProperty Name="InformesCartera" ColumnName="InformesCartera" />
-                <ScalarProperty Name="ModificaPunto" ColumnName="ModificaPunto" />
-                <ScalarProperty Name="EscFacturacion" ColumnName="EscFacturacion" />
-                <ScalarProperty Name="EscCaja" ColumnName="EscCaja" />
-                <ScalarProperty Name="EscCartera" ColumnName="EscCartera" />
-                <ScalarProperty Name="EscInventario" ColumnName="EscInventario" />
-                <ScalarProperty Name="EscReporteria" ColumnName="EscReporteria" />
-                <ScalarProperty Name="EscCorrecciones" ColumnName="EscCorrecciones" />
-                <ScalarProperty Name="EscFacturas" ColumnName="EscFacturas" />
-                <ScalarProperty Name="EscReporteVentas" ColumnName="EscReporteVentas" />
-                <ScalarProperty Name="EscReimprime" ColumnName="EscReimprime" />
-                <ScalarProperty Name="EscAnula" ColumnName="EscAnula" />
-                <ScalarProperty Name="EscPedidos" ColumnName="EscPedidos" />
-                <ScalarProperty Name="EscFacturaRuta" ColumnName="EscFacturaRuta" />
-                <ScalarProperty Name="EscProforma" ColumnName="EscProforma" />
-                <ScalarProperty Name="EscCertificado" ColumnName="EscCertificado" />
-                <ScalarProperty Name="EscExistenciasBodega" ColumnName="EscExistenciasBodega" />
-                <ScalarProperty Name="EscTransInventario" ColumnName="EscTransInventario" />
-                <ScalarProperty Name="EscReporteInventario" ColumnName="EscReporteInventario" />
-                <ScalarProperty Name="ValidaInventarios" ColumnName="ValidaInventarios" />
-                <ScalarProperty Name="AplicarDeslizamiento" ColumnName="AplicarDeslizamiento" />
-                <ScalarProperty Name="Certificados" ColumnName="Certificados" />
-                <ScalarProperty Name="Lista" ColumnName="Lista" />
-                <ScalarProperty Name="OtrasUtilidades" ColumnName="OtrasUtilidades" />
-                <ScalarProperty Name="ProformaProveedores" ColumnName="ProformaProveedores" />
-                <ScalarProperty Name="IngresosPolizas" ColumnName="IngresosPolizas" />
-                <ScalarProperty Name="Liquidaciones" ColumnName="Liquidaciones" />
-                <ScalarProperty Name="CxP" ColumnName="CxP" />
-                <ScalarProperty Name="Syscompras" ColumnName="Syscompras" />
-                <ScalarProperty Name="SysRequisa" ColumnName="SysRequisa" />
-                <ScalarProperty Name="SysReempaque" ColumnName="SysReempaque" />
-                <ScalarProperty Name="SysMovimientos" ColumnName="SysMovimientos" />
-                <ScalarProperty Name="SysDevoluciones" ColumnName="SysDevoluciones" />
-                <ScalarProperty Name="Syskardex" ColumnName="Syskardex" />
-                <ScalarProperty Name="SysreImprimir" ColumnName="SysreImprimir" />
-                <ScalarProperty Name="Sysimprimirpedido" ColumnName="Sysimprimirpedido" />
-                <ScalarProperty Name="Syscancelarpedido" ColumnName="Syscancelarpedido" />
-                <ScalarProperty Name="Syscertificado" ColumnName="Syscertificado" />
-                <ScalarProperty Name="EscReporteVenta" ColumnName="EscReporteVenta" />
-                <ScalarProperty Name="EscPresupuesto" ColumnName="EscPresupuesto" />
-                <ScalarProperty Name="Web" ColumnName="Web" />
-                <ScalarProperty Name="Correo" ColumnName="Correo" />
-                <ScalarProperty Name="Nivel" ColumnName="Nivel" />
-                <ScalarProperty Name="LE" ColumnName="LE" />
-                <ScalarProperty Name="LF" ColumnName="LF" />
-                <ScalarProperty Name="LC" ColumnName="LC" />
-                <ScalarProperty Name="LP" ColumnName="LP" />
-                <ScalarProperty Name="Margenes" ColumnName="Margenes" />
-                <ScalarProperty Name="CuentasPorPagar" ColumnName="CuentasPorPagar" />
-                <ScalarProperty Name="Expica" ColumnName="Expica" />
-                <ScalarProperty Name="Proforma" ColumnName="Proforma" />
-                <ScalarProperty Name="CorrigeCheques" ColumnName="CorrigeCheques" />
-                <ScalarProperty Name="UserAgenda" ColumnName="UserAgenda" />
+                <ScalarProperty Name="TodasPestMovil" ColumnName="TodasPestMovil" />
+                <ScalarProperty Name="SSV" ColumnName="SSV" />
                 <ScalarProperty Name="Agenda" ColumnName="Agenda" />
-                <ScalarProperty Name="SeguimientoVisitas" ColumnName="SeguimientoVisitas" />
+                <ScalarProperty Name="UserAgenda" ColumnName="UserAgenda" />
+                <ScalarProperty Name="CorrigeCheques" ColumnName="CorrigeCheques" />
+                <ScalarProperty Name="Proforma" ColumnName="Proforma" />
+                <ScalarProperty Name="Expica" ColumnName="Expica" />
+                <ScalarProperty Name="CuentasPorPagar" ColumnName="CuentasPorPagar" />
+                <ScalarProperty Name="Margenes" ColumnName="Margenes" />
+                <ScalarProperty Name="LP" ColumnName="LP" />
+                <ScalarProperty Name="LC" ColumnName="LC" />
+                <ScalarProperty Name="LF" ColumnName="LF" />
+                <ScalarProperty Name="LE" ColumnName="LE" />
+                <ScalarProperty Name="Nivel" ColumnName="Nivel" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Web" ColumnName="Web" />
+                <ScalarProperty Name="EscPresupuesto" ColumnName="EscPresupuesto" />
+                <ScalarProperty Name="EscReporteVenta" ColumnName="EscReporteVenta" />
+                <ScalarProperty Name="Syscertificado" ColumnName="Syscertificado" />
+                <ScalarProperty Name="Syscancelarpedido" ColumnName="Syscancelarpedido" />
+                <ScalarProperty Name="Sysimprimirpedido" ColumnName="Sysimprimirpedido" />
+                <ScalarProperty Name="SysreImprimir" ColumnName="SysreImprimir" />
+                <ScalarProperty Name="Syskardex" ColumnName="Syskardex" />
+                <ScalarProperty Name="SysDevoluciones" ColumnName="SysDevoluciones" />
+                <ScalarProperty Name="SysMovimientos" ColumnName="SysMovimientos" />
+                <ScalarProperty Name="SysReempaque" ColumnName="SysReempaque" />
+                <ScalarProperty Name="SysRequisa" ColumnName="SysRequisa" />
+                <ScalarProperty Name="Syscompras" ColumnName="Syscompras" />
+                <ScalarProperty Name="CxP" ColumnName="CxP" />
+                <ScalarProperty Name="Liquidaciones" ColumnName="Liquidaciones" />
+                <ScalarProperty Name="IngresosPolizas" ColumnName="IngresosPolizas" />
+                <ScalarProperty Name="ProformaProveedores" ColumnName="ProformaProveedores" />
+                <ScalarProperty Name="OtrasUtilidades" ColumnName="OtrasUtilidades" />
+                <ScalarProperty Name="Lista" ColumnName="Lista" />
+                <ScalarProperty Name="Certificados" ColumnName="Certificados" />
+                <ScalarProperty Name="AplicarDeslizamiento" ColumnName="AplicarDeslizamiento" />
+                <ScalarProperty Name="ValidaInventarios" ColumnName="ValidaInventarios" />
+                <ScalarProperty Name="EscReporteInventario" ColumnName="EscReporteInventario" />
+                <ScalarProperty Name="EscTransInventario" ColumnName="EscTransInventario" />
+                <ScalarProperty Name="EscExistenciasBodega" ColumnName="EscExistenciasBodega" />
+                <ScalarProperty Name="EscCertificado" ColumnName="EscCertificado" />
+                <ScalarProperty Name="EscProforma" ColumnName="EscProforma" />
+                <ScalarProperty Name="EscFacturaRuta" ColumnName="EscFacturaRuta" />
+                <ScalarProperty Name="EscPedidos" ColumnName="EscPedidos" />
+                <ScalarProperty Name="EscAnula" ColumnName="EscAnula" />
+                <ScalarProperty Name="EscReimprime" ColumnName="EscReimprime" />
+                <ScalarProperty Name="EscReporteVentas" ColumnName="EscReporteVentas" />
+                <ScalarProperty Name="EscFacturas" ColumnName="EscFacturas" />
+                <ScalarProperty Name="EscCorrecciones" ColumnName="EscCorrecciones" />
+                <ScalarProperty Name="EscReporteria" ColumnName="EscReporteria" />
+                <ScalarProperty Name="EscInventario" ColumnName="EscInventario" />
+                <ScalarProperty Name="EscCartera" ColumnName="EscCartera" />
+                <ScalarProperty Name="EscCaja" ColumnName="EscCaja" />
+                <ScalarProperty Name="EscFacturacion" ColumnName="EscFacturacion" />
+                <ScalarProperty Name="ModificaPunto" ColumnName="ModificaPunto" />
+                <ScalarProperty Name="InformesCartera" ColumnName="InformesCartera" />
+                <ScalarProperty Name="InformesRecupera" ColumnName="InformesRecupera" />
+                <ScalarProperty Name="EstadoCuenta" ColumnName="EstadoCuenta" />
+                <ScalarProperty Name="InformacionCredicticia" ColumnName="InformacionCredicticia" />
+                <ScalarProperty Name="AutorizaCr" ColumnName="AutorizaCr" />
+                <ScalarProperty Name="AbonoSuper" ColumnName="AbonoSuper" />
+                <ScalarProperty Name="FichaCliente" ColumnName="FichaCliente" />
+                <ScalarProperty Name="InformacionCrediticia" ColumnName="InformacionCrediticia" />
+                <ScalarProperty Name="PresupuestoGastos" ColumnName="PresupuestoGastos" />
+                <ScalarProperty Name="CuentaporPagar" ColumnName="CuentaporPagar" />
+                <ScalarProperty Name="EditaClientes" ColumnName="EditaClientes" />
+                <ScalarProperty Name="ProcesoNomina" ColumnName="ProcesoNomina" />
+                <ScalarProperty Name="Pedidos" ColumnName="Pedidos" />
+                <ScalarProperty Name="Preconsumo" ColumnName="Preconsumo" />
+                <ScalarProperty Name="PreEquipos" ColumnName="PreEquipos" />
+                <ScalarProperty Name="Prefarmaco" ColumnName="Prefarmaco" />
+                <ScalarProperty Name="ProcesosNomina" ColumnName="ProcesosNomina" />
+                <ScalarProperty Name="Gestion" ColumnName="Gestion" />
+                <ScalarProperty Name="Nomina" ColumnName="Nomina" />
+                <ScalarProperty Name="CierreCuentas" ColumnName="CierreCuentas" />
+                <ScalarProperty Name="ReportesC" ColumnName="ReportesC" />
+                <ScalarProperty Name="ActualizarSaldosLibro" ColumnName="ActualizarSaldosLibro" />
+                <ScalarProperty Name="EstadosFinancieros" ColumnName="EstadosFinancieros" />
+                <ScalarProperty Name="Cheque" ColumnName="Cheque" />
+                <ScalarProperty Name="Diarios" ColumnName="Diarios" />
+                <ScalarProperty Name="CatalogoCuentas" ColumnName="CatalogoCuentas" />
+                <ScalarProperty Name="Fisico" ColumnName="Fisico" />
+                <ScalarProperty Name="ACTIVO" ColumnName="ACTIVO" />
+                <ScalarProperty Name="PorIva" ColumnName="PorIva" />
+                <ScalarProperty Name="Proceso" ColumnName="Proceso" />
+                <ScalarProperty Name="NotasCredito" ColumnName="NotasCredito" />
+                <ScalarProperty Name="Clientes" ColumnName="Clientes" />
+                <ScalarProperty Name="ModificaPreciosVenta" ColumnName="ModificaPreciosVenta" />
+                <ScalarProperty Name="AnulaCxC" ColumnName="AnulaCxC" />
+                <ScalarProperty Name="ConsultaCxC" ColumnName="ConsultaCxC" />
+                <ScalarProperty Name="ActualizaCxC" ColumnName="ActualizaCxC" />
+                <ScalarProperty Name="InsertaCxC" ColumnName="InsertaCxC" />
+                <ScalarProperty Name="ActualizaFacturacion" ColumnName="ActualizaFacturacion" />
+                <ScalarProperty Name="AnulaFacturacion" ColumnName="AnulaFacturacion" />
+                <ScalarProperty Name="ConsultaFacturacion" ColumnName="ConsultaFacturacion" />
+                <ScalarProperty Name="InsertaFacturacion" ColumnName="InsertaFacturacion" />
+                <ScalarProperty Name="AnulaInventario" ColumnName="AnulaInventario" />
+                <ScalarProperty Name="ConsultaInventario" ColumnName="ConsultaInventario" />
+                <ScalarProperty Name="CerrarInv" ColumnName="CerrarInv" />
+                <ScalarProperty Name="ReportesCosto" ColumnName="ReportesCosto" />
+                <ScalarProperty Name="ActualizaInventario" ColumnName="ActualizaInventario" />
+                <ScalarProperty Name="InsertaInventario" ColumnName="InsertaInventario" />
+                <ScalarProperty Name="TarjetasKardex" ColumnName="TarjetasKardex" />
+                <ScalarProperty Name="ReportesInventario" ColumnName="ReportesInventario" />
+                <ScalarProperty Name="Consignaciones" ColumnName="Consignaciones" />
+                <ScalarProperty Name="Armados" ColumnName="Armados" />
+                <ScalarProperty Name="Devoluciones" ColumnName="Devoluciones" />
+                <ScalarProperty Name="Ajustes" ColumnName="Ajustes" />
+                <ScalarProperty Name="Traslados" ColumnName="Traslados" />
+                <ScalarProperty Name="Compras" ColumnName="Compras" />
+                <ScalarProperty Name="Proveedores" ColumnName="Proveedores" />
+                <ScalarProperty Name="CatalogoProductos" ColumnName="CatalogoProductos" />
+                <ScalarProperty Name="Usuarios" ColumnName="Usuarios" />
+                <ScalarProperty Name="Auditoria" ColumnName="Auditoria" />
+                <ScalarProperty Name="TransferenciaInformacion" ColumnName="TransferenciaInformacion" />
+                <ScalarProperty Name="InterfazContable" ColumnName="InterfazContable" />
+                <ScalarProperty Name="ParametrosFacturacion" ColumnName="ParametrosFacturacion" />
+                <ScalarProperty Name="Tablas" ColumnName="Tablas" />
+                <ScalarProperty Name="ReimprimeFacturas" ColumnName="ReimprimeFacturas" />
+                <ScalarProperty Name="ReporesFactura" ColumnName="ReporesFactura" />
+                <ScalarProperty Name="AnulaFacturas" ColumnName="AnulaFacturas" />
+                <ScalarProperty Name="ModificaFacturas" ColumnName="ModificaFacturas" />
+                <ScalarProperty Name="Facturas" ColumnName="Facturas" />
+                <ScalarProperty Name="Consulta" ColumnName="Consulta" />
+                <ScalarProperty Name="Anula" ColumnName="Anula" />
+                <ScalarProperty Name="Modifica" ColumnName="Modifica" />
+                <ScalarProperty Name="Graba" ColumnName="Graba" />
+                <ScalarProperty Name="ReportesdeVentas" ColumnName="ReportesdeVentas" />
+                <ScalarProperty Name="Contabilidad" ColumnName="Contabilidad" />
+                <ScalarProperty Name="Presupuesto" ColumnName="Presupuesto" />
+                <ScalarProperty Name="Utiles" ColumnName="Utiles" />
+                <ScalarProperty Name="Importaciones" ColumnName="Importaciones" />
+                <ScalarProperty Name="Inventarios" ColumnName="Inventarios" />
+                <ScalarProperty Name="ReportesdeVenta" ColumnName="ReportesdeVenta" />
+                <ScalarProperty Name="CuentasxCobrar" ColumnName="CuentasxCobrar" />
+                <ScalarProperty Name="Caja" ColumnName="Caja" />
+                <ScalarProperty Name="Facturacion" ColumnName="Facturacion" />
+                <ScalarProperty Name="Bodega" ColumnName="Bodega" />
+                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
+                <ScalarProperty Name="Cargo" ColumnName="Cargo" />
+                <ScalarProperty Name="Clave" ColumnName="Clave" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
