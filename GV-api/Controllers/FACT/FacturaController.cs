@@ -1550,7 +1550,7 @@ namespace GV_api.Controllers.FACT
                             xrpContado.CreateDocument(false);
                             foreach(string Impresora in PrinterSettings.InstalledPrinters)
                             {
-                                if(Impresora.Contains("HP MFP M127-M128 INF"))
+                                if(Impresora.Contains("SRP-275"))
                                 {
                                     xrpContado.Print(Impresora);
                                     break;
@@ -1576,7 +1576,7 @@ namespace GV_api.Controllers.FACT
 
                             foreach (string Impresora in PrinterSettings.InstalledPrinters)
                             {
-                                if (Impresora.Contains("HP MFP M127-M128 INF"))
+                                if (Impresora.Contains("SRP-275"))
                                 {
                                     xrpCredito.Print(Impresora);
                                     break;
@@ -1609,7 +1609,7 @@ namespace GV_api.Controllers.FACT
                         xrpManifiesto.CreateDocument(false);
                         foreach (string Impresora in PrinterSettings.InstalledPrinters)
                         {
-                            if (Impresora.Contains("HP MFP M127-M128 INF"))
+                            if (Impresora.Contains("tm-u220"))
                             {
                                 xrpManifiesto.Print(Impresora);
                                 break;
