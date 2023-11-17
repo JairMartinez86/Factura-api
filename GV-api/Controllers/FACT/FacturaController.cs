@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.Entity.Core.Objects;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -27,6 +28,7 @@ using System.Web.Mvc;
 using System.Web.Razor.Parser.SyntaxTree;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
+using static Azure.Core.HttpHeader;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using IsolationLevel = System.Transactions.IsolationLevel;
 using RouteAttribute = System.Web.Http.RouteAttribute;
@@ -1320,6 +1322,8 @@ namespace GV_api.Controllers.FACT
                             json = AsignarConsecutivoFactura(_v, _Conexion);
 
                             if (json != string.Empty) return json;
+
+                            Imprimir(_v.IdVenta);
                         }
 
 
@@ -1539,6 +1543,23 @@ namespace GV_api.Controllers.FACT
                             xrpContado.DataSource = Dset;
                             xrpContado.ShowPrintMarginsWarning = false;
 
+
+                            //
+
+
+                            xrpContado.CreateDocument(false);
+                            foreach(string Impresora in PrinterSettings.InstalledPrinters)
+                            {
+                                if(Impresora.Contains("HP MFP M127-M128 INF"))
+                                {
+                                    xrpContado.Print(Impresora);
+                                    break;
+                                }
+                            }
+      
+                            //
+
+
                             xrpContado.ExportToPdf(stream, null);
                             stream.Seek(0, SeekOrigin.Begin);
 
@@ -1551,6 +1572,17 @@ namespace GV_api.Controllers.FACT
                             xrpCredito.Parameters["P_Letra"].Value = Cls_Letras.NumeroALetras(_v.TotalCordoba);
                             xrpCredito.DataSource = Dset;
                             xrpCredito.ShowPrintMarginsWarning = false;
+
+
+                            foreach (string Impresora in PrinterSettings.InstalledPrinters)
+                            {
+                                if (Impresora.Contains("HP MFP M127-M128 INF"))
+                                {
+                                    xrpCredito.Print(Impresora);
+                                    break;
+                                }
+                            }
+
 
                             xrpCredito.ExportToPdf(stream, null);
                             stream.Seek(0, SeekOrigin.Begin);

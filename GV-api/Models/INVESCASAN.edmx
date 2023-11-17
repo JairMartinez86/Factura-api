@@ -6,7 +6,7 @@
     <edmx:StorageModels>
     <Schema Namespace="INVESCASANModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Bonificados' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'INVESCASANGVN.dbo.Bonificados' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="Bonificados">
           <Key>
             <PropertyRef Name="Desde" />
@@ -98,7 +98,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Bonificados' no tiene defin
           <Property Name="Gracia" Type="int" Nullable="false" />
         </EntityType>
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.ConfiguraFacturacion' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'INVESCASANGVN.dbo.ConfiguraFacturacion' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="ConfiguraFacturacion">
           <Key>
             <PropertyRef Name="Serie" />
@@ -116,7 +116,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.ConfiguraFacturacion' no ti
           <Property Name="EsdeRuta" Type="nchar" MaxLength="1" />
         </EntityType>
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.ControlInventario' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'INVESCASANGVN.dbo.ControlInventario' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="ControlInventario">
           <Key>
             <PropertyRef Name="Secuencia" />
@@ -130,7 +130,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.ControlInventario' no tiene
           <Property Name="Compras" Type="int" Nullable="false" />
         </EntityType>
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Kardex' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'INVESCASANGVN.dbo.Kardex' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="Kardex">
           <Key>
             <PropertyRef Name="CodiProd" />
@@ -159,7 +159,7 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Kardex' no tiene definida n
           <Property Name="BodegaDestino" Type="nchar" MaxLength="4" />
         </EntityType>
         <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'INVESCASANGVN.dbo.Listadeprecios' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="Listadeprecios">
           <Key>
             <PropertyRef Name="IVA" />
@@ -501,9 +501,6 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
             <Parameter Name="dResultado" Mode="InOut" Type="Decimal" />
           </FunctionImport>
           <EntitySet Name="ControlInventario" EntityType="INVESCASANModel.ControlInventario" />
-          <FunctionImport Name="SP_FacturaImpresa" ReturnType="Collection(INVESCASANModel.SP_FacturaImpresa_Result)">
-          <Parameter Name="P_IdVenta" Mode="In" Type="Guid" />
-          </FunctionImport>
           <EntitySet Name="Venta" EntityType="INVESCASANModel.Venta" />
           <EntitySet Name="VentaDetalle" EntityType="INVESCASANModel.VentaDetalle" />
           <AssociationSet Name="FK_VentaDetalle_Venta" Association="INVESCASANModel.FK_VentaDetalle_Venta">
@@ -513,6 +510,9 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <EntitySet Name="PermisoFactura" EntityType="INVESCASANModel.PermisoFactura" />
           <EntitySet Name="CorreoAutorizaFactura" EntityType="INVESCASANModel.CorreoAutorizaFactura" />
           <EntitySet Name="Consecutivo" EntityType="INVESCASANModel.Consecutivo" />
+          <FunctionImport Name="SP_FacturaImpresa" ReturnType="Collection(INVESCASANModel.SP_FacturaImpresa_Result)">
+            <Parameter Name="P_IdVenta" Mode="In" Type="Guid" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="TbBodega">
           <Key>
@@ -661,31 +661,6 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="Requisa" Type="Int32" Nullable="false" />
           <Property Name="Compras" Type="Int32" Nullable="false" />
         </EntityType>
-        <ComplexType Name="SP_FacturaImpresa_Result">
-          <Property Type="String" Name="CodBodega" Nullable="false" MaxLength="50" />
-          <Property Type="Boolean" Name="EsDelivery" Nullable="false" />
-          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" />
-          <Property Type="String" Name="Serie" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="NoFactura" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="UsuarioRegistra" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="Fecha" Nullable="false" />
-          <Property Type="DateTime" Name="Vence" Nullable="false" />
-          <Property Type="String" Name="NomVendedor" Nullable="false" MaxLength="1000" />
-          <Property Type="String" Name="CodCliente" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="RucCedula" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="NomCliente" Nullable="false" MaxLength="1000" />
-          <Property Type="String" Name="Direccion" Nullable="false" MaxLength="4000" />
-          <Property Type="String" Name="Codigo" Nullable="false" MaxLength="50" />
-          <Property Type="Int32" Name="Cantidad" Nullable="false" />
-          <Property Type="String" Name="TieneImpuesto" Nullable="false" MaxLength="1" />
-          <Property Type="String" Name="Simbolo" Nullable="false" MaxLength="2" />
-          <Property Type="String" Name="EsBonif" Nullable="false" MaxLength="4" />
-          <Property Type="String" Name="NomProducto" Nullable="true" MaxLength="200" />
-          <Property Type="Decimal" Name="SubTotal" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Descuento" Nullable="true" Precision="19" Scale="2" />
-          <Property Type="Decimal" Name="SubTotalNeto" Nullable="false" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="Impuesto" Nullable="false" Precision="18" Scale="2" />
-        </ComplexType>
         <EntityType Name="Venta">
           <Key>
             <PropertyRef Name="IdVenta" />
@@ -825,6 +800,32 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
           <Property Name="Pedido" Type="Int32" Nullable="false" />
           <Property Name="Factura" Type="Int32" Nullable="false" />
         </EntityType>
+        <ComplexType Name="SP_FacturaImpresa_Result">
+          <Property Type="String" Name="CodBodega" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="EsDelivery" Nullable="false" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" />
+          <Property Type="String" Name="Serie" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="NoFactura" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UsuarioRegistra" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="Fecha" Nullable="false" />
+          <Property Type="DateTime" Name="Vence" Nullable="false" />
+          <Property Type="String" Name="NomVendedor" Nullable="false" MaxLength="1000" />
+          <Property Type="String" Name="CodCliente" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="RucCedula" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NomCliente" Nullable="false" MaxLength="1000" />
+          <Property Type="String" Name="Direccion" Nullable="false" MaxLength="4000" />
+          <Property Type="String" Name="Codigo" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Cantidad" Nullable="false" />
+          <Property Type="String" Name="TieneImpuesto" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="Simbolo" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="EsBonif" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="NomProducto" Nullable="true" MaxLength="200" />
+          <Property Type="Decimal" Name="SubTotal" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Descuento" Nullable="true" Precision="19" Scale="2" />
+          <Property Type="Decimal" Name="SubTotalNeto" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Impuesto" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Total" Nullable="false" Precision="18" Scale="2" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1024,35 +1025,6 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SP_FacturaImpresa" FunctionName="INVESCASANModel.Store.SP_FacturaImpresa">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="INVESCASANModel.SP_FacturaImpresa_Result">
-                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
-                <ScalarProperty Name="EsDelivery" ColumnName="EsDelivery" />
-                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
-                <ScalarProperty Name="Serie" ColumnName="Serie" />
-                <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
-                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="Vence" ColumnName="Vence" />
-                <ScalarProperty Name="NomVendedor" ColumnName="NomVendedor" />
-                <ScalarProperty Name="CodCliente" ColumnName="CodCliente" />
-                <ScalarProperty Name="RucCedula" ColumnName="RucCedula" />
-                <ScalarProperty Name="NomCliente" ColumnName="NomCliente" />
-                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
-                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-                <ScalarProperty Name="TieneImpuesto" ColumnName="TieneImpuesto" />
-                <ScalarProperty Name="Simbolo" ColumnName="Simbolo" />
-                <ScalarProperty Name="EsBonif" ColumnName="EsBonif" />
-                <ScalarProperty Name="NomProducto" ColumnName="NomProducto" />
-                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
-                <ScalarProperty Name="Descuento" ColumnName="Descuento" />
-                <ScalarProperty Name="SubTotalNeto" ColumnName="SubTotalNeto" />
-                <ScalarProperty Name="Impuesto" ColumnName="Impuesto" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="Venta">
             <EntityTypeMapping TypeName="INVESCASANModel.Venta">
               <MappingFragment StoreEntitySet="Venta">
@@ -1183,6 +1155,36 @@ advertencia 6002: La tabla o vista 'INVESCASANGV.dbo.Listadeprecios' no tiene de
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_FacturaImpresa" FunctionName="INVESCASANModel.Store.SP_FacturaImpresa">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="INVESCASANModel.SP_FacturaImpresa_Result">
+                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
+                <ScalarProperty Name="EsDelivery" ColumnName="EsDelivery" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Serie" ColumnName="Serie" />
+                <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
+                <ScalarProperty Name="UsuarioRegistra" ColumnName="UsuarioRegistra" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Vence" ColumnName="Vence" />
+                <ScalarProperty Name="NomVendedor" ColumnName="NomVendedor" />
+                <ScalarProperty Name="CodCliente" ColumnName="CodCliente" />
+                <ScalarProperty Name="RucCedula" ColumnName="RucCedula" />
+                <ScalarProperty Name="NomCliente" ColumnName="NomCliente" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="TieneImpuesto" ColumnName="TieneImpuesto" />
+                <ScalarProperty Name="Simbolo" ColumnName="Simbolo" />
+                <ScalarProperty Name="EsBonif" ColumnName="EsBonif" />
+                <ScalarProperty Name="NomProducto" ColumnName="NomProducto" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="Descuento" ColumnName="Descuento" />
+                <ScalarProperty Name="SubTotalNeto" ColumnName="SubTotalNeto" />
+                <ScalarProperty Name="Impuesto" ColumnName="Impuesto" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
