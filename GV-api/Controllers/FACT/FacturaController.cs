@@ -1544,7 +1544,7 @@ namespace GV_api.Controllers.FACT
                             xrpContado.ShowPrintMarginsWarning = false;
 
 
-                            //
+                     
 
 
                             xrpContado.CreateDocument(false);
@@ -1557,7 +1557,7 @@ namespace GV_api.Controllers.FACT
                                 }
                             }
       
-                            //
+                       
 
 
                             xrpContado.ExportToPdf(stream, null);
@@ -1605,6 +1605,18 @@ namespace GV_api.Controllers.FACT
                         xrpManifiesto xrpManifiesto = new xrpManifiesto();
                         xrpManifiesto.DataSource = Dset;
                         xrpManifiesto.ShowPrintMarginsWarning = false;
+
+                        xrpManifiesto.CreateDocument(false);
+                        foreach (string Impresora in PrinterSettings.InstalledPrinters)
+                        {
+                            if (Impresora.Contains("HP MFP M127-M128 INF"))
+                            {
+                                xrpManifiesto.Print(Impresora);
+                                break;
+                            }
+                        }
+
+
 
                         xrpManifiesto.ExportToPdf(stream2, null);
                         stream2.Seek(0, SeekOrigin.Begin);
