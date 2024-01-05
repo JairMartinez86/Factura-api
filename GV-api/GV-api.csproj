@@ -318,6 +318,7 @@
     <Compile Include="Class\FACT\Cls_Bonificacion.cs" />
     <Compile Include="Class\FACT\Cls_Descuento.cs" />
     <Compile Include="Class\FACT\Cls_Precio.cs" />
+    <Compile Include="Class\INV\ExistenciaUbicacion.cs" />
     <Compile Include="Class\SIS\Cls_Letras.cs" />
     <Compile Include="Class\SIS\Cls_ListToDataTableConverter.cs" />
     <Compile Include="Controllers\SIS\ServerController.cs" />
@@ -327,86 +328,101 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AUDESCASAN.Context.cs">
+    <Compile Include="Models\Balance.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AUDESCASAN.Context.tt</DependentUpon>
+      <DependentUpon>Balance.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AUDESCASAN.cs">
+    <Compile Include="Models\Balance.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AUDESCASAN.tt</DependentUpon>
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AUDESCASAN.Designer.cs">
+    <Compile Include="Models\Balance.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AUDESCASAN.edmx</DependentUpon>
+      <DependentUpon>Balance.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Bonificados.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\BodegaLaboratorioKardex.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Catalogo.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\Bodegas.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Clientes.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\BodegaSerie.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ConfiguraFacturacion.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\Bonificaciones.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Consecutivo.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\Cliente.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ControlInventario.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\ConceptoPrecio.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CorreoAutorizaFactura.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\INVESCASAN.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>INVESCASAN.Context.tt</DependentUpon>
+    <Compile Include="Models\Departamento.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\INVESCASAN.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\Descuentos.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\INVESCASAN.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>INVESCASAN.edmx</DependentUpon>
+    <Compile Include="Models\DireccionCliente.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Estaciones.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Impuestos.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Kardex.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Listadeprecios.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\LiberarBonificacion.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Perfiles1.cs">
-      <DependentUpon>AUDESCASAN.tt</DependentUpon>
+    <Compile Include="Models\LiberarPrecio.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Municipio.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Parametros.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PermisoFactura.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SP_FacturaImpresa_Result.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\PrecioVenta.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TbBodega.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\PrecioVentaEscala.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TbDepartamento.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\Productos.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tbVendedores.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+    <Compile Include="Models\Serie.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Usuarios.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UsuariosBodegas.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vendedor.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Venta.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VentaDetalle.cs">
-      <DependentUpon>INVESCASAN.tt</DependentUpon>
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporte\FAC\DsetReporte.Designer.cs">
@@ -453,25 +469,15 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Models\AUDESCASAN.Context.tt">
+    <Content Include="Models\Balance.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AUDESCASAN.edmx</DependentUpon>
-      <LastGenOutput>AUDESCASAN.Context.cs</LastGenOutput>
+      <DependentUpon>Balance.edmx</DependentUpon>
+      <LastGenOutput>Balance.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\AUDESCASAN.tt">
+    <Content Include="Models\Balance.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AUDESCASAN.edmx</DependentUpon>
-      <LastGenOutput>AUDESCASAN.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\INVESCASAN.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>INVESCASAN.Context.cs</LastGenOutput>
-      <DependentUpon>INVESCASAN.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\INVESCASAN.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>INVESCASAN.edmx</DependentUpon>
-      <LastGenOutput>INVESCASAN.cs</LastGenOutput>
+      <DependentUpon>Balance.edmx</DependentUpon>
+      <LastGenOutput>Balance.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -498,25 +504,18 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <EntityDeploy Include="Models\INVESCASAN.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>INVESCASAN.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\INVESCASAN.edmx.diagram">
-      <DependentUpon>INVESCASAN.edmx</DependentUpon>
-    </Content>
     <Content Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </Content>
-    <EntityDeploy Include="Models\AUDESCASAN.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AUDESCASAN.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\AUDESCASAN.edmx.diagram">
-      <DependentUpon>AUDESCASAN.edmx</DependentUpon>
-    </Content>
     <Content Include="Reporte\FAC\DsetReporte.xsc">
       <DependentUpon>DsetReporte.xsd</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\Balance.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Balance.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Balance.edmx.diagram">
+      <DependentUpon>Balance.edmx</DependentUpon>
     </Content>
     <None Include="Reporte\FAC\DsetReporte.xsd">
       <SubType>Designer</SubType>

@@ -12,11 +12,13 @@ namespace GV_api.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Bonificados
+    public partial class Vendedor
     {
+        public int IdVendedor { get; set; }
         public string Codigo { get; set; }
-        public short Desde { get; set; }
-        public short Hasta { get; set; }
-        public short Bonificacion { get; set; }
+        public string Nombre { get; set; }
+        public Nullable<bool> DistLote { get; set; }
+        public Nullable<bool> EsExportacion { get; set; }
+        public Nullable<bool> Activo { get; set; }
     }
 }

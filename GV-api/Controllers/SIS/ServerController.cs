@@ -1,4 +1,5 @@
-﻿using GV_api.Class;
+﻿using DevExpress.DirectX.Common.Direct2D;
+using GV_api.Class;
 using GV_api.Class.FACT;
 using GV_api.Models;
 using System;
@@ -32,22 +33,24 @@ namespace GV_api.Class.SIS
             string json = string.Empty;
             try
             {
-                using (AUDESCASANGVEntities _Conexion = new AUDESCASANGVEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
               
-                    var qUsuario = (from _q in _Conexion.Perfiles1.ToList()
+                    var qUsuario = (from _q in _Conexion.Usuarios.ToList()
+                                    join _e in _Conexion.Estaciones on _q.IdUsuario equals _e.IdUsuario
+                                    join _b in _Conexion.Bodegas on _e.IdBodega equals _b.IdBodega
                                     where _q.Usuario.TrimStart().TrimEnd() == user
                                     select new
                                     {
                                         User = _q.Usuario,
-                                        Nombre = _q.Nombre,
-                                        Pwd = _q.Clave,
+                                        Nombre = _q.Nombres,
+                                        Pwd = _Conexion.Database.SqlQuery<string>($"SELECT [SIS].[Desencriptar]({"0x" + BitConverter.ToString(_q.Pass).Replace("-", "")})").Single(),
                                         Rol = string.Empty,
-                                        Bodega = _q.Bodega.TrimStart().TrimEnd(),
+                                        Bodega = _b.Codigo,
                                         FechaLogin = string.Format("{0:yyyy-MM-dd hh:mm:ss}", DateTime.Now),
-                                        Desconectar = false
+                                        Desconectar = _q.Desconectar
                                     }).ToList();
 
 
@@ -61,7 +64,7 @@ namespace GV_api.Class.SIS
 
 
 
-                    string Pwd = Desencriptar(qUsuario[0].Pwd, user);
+                    string Pwd = qUsuario[0].Pwd;
 
                     if (!Pwd.Equals(pass))
                     {
@@ -95,59 +98,7 @@ namespace GV_api.Class.SIS
 
 
 
-        private string Desencriptar(string S, string P)
-        {
-
-            int C1 = 0;
-            int C2 = 0;
-            string r = string.Empty;
-
-            if (P.Length > 0)
-            {
-                for (int i = 1; i <= S.Length; i++)
-                {
-              
-                    C1 = charToDigit(Convert.ToChar(Mid(S, i, 1)));
-
-                    if (i > P.Length)
-                    {
-                        C2 = charToDigit(Convert.ToChar(Mid(P, i % P.Length + 1, 1)));
-                    }
-                    else
-                    {
-                        C2 = charToDigit(Convert.ToChar(Mid(P, i , 1)));
-                    }
-
-                    C1 = C1 - C2 - 64;
-
-                    if (Math.Sign(C1) == -1) C1 = 256 + C1;
-
-                    r = r + Convert.ToChar(C1);
-                }
-            }
-            else
-            {
-                r = S;
-            }
-
-            return r;
-        }
-
-        int charToDigit(char character)
-        {
-            return character - 64; //or character-0x40 if you prefer hex
-        }
-
-        public string Mid(string s, int a, int b)
-
-        {
-
-            string temp = s.Substring(a - 1, b);
-
-            return temp;
-
-        }
-
+ 
 
         [Route("api/SIS/FechaServidor")]
         [HttpGet]
@@ -161,13 +112,10 @@ namespace GV_api.Class.SIS
             string json = string.Empty;
             try
             {
-                using (AUDESCASANGVEntities _Conexion = new AUDESCASANGVEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
-                    // Perfiles1 u = _Conexion.Perfiles1.FirstOrDefault(f => f.Usuario.TrimStart().TrimEnd().Equals(user));
-
-
-                    // lstDatos.AddRange(v_FechaServidor(user, (u == null ? true : u.Desconectar)));
+          
                     lstDatos.AddRange(v_FechaServidor(user, false));
 
 

@@ -12,11 +12,12 @@ namespace GV_api.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Listadeprecios
+    public partial class Estaciones
     {
-        public string CodiProd { get; set; }
-        public string Tipo { get; set; }
-        public Nullable<decimal> Precio { get; set; }
-        public bool IVA { get; set; }
+        public int IdPC { get; set; }
+        public int IdUsuario { get; set; }
+        public string IP { get; set; }
+        public int IdBodega { get; set; }
+        public bool Activo { get; set; }
     }
 }

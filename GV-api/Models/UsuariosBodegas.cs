@@ -12,17 +12,13 @@ namespace GV_api.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ConfiguraFacturacion
+    public partial class UsuariosBodegas
     {
-        public string Serie { get; set; }
-        public string Bodegas { get; set; }
-        public Nullable<int> Secuencia { get; set; }
-        public string ClienteContado { get; set; }
-        public string EmiteFactura { get; set; }
-        public Nullable<short> Recibo { get; set; }
-        public Nullable<short> Colector { get; set; }
-        public string Vendedor { get; set; }
-        public string PorDefecto { get; set; }
-        public string EsdeRuta { get; set; }
+        public int IdUsuario { get; set; }
+        public int IdBodega { get; set; }
+        public Nullable<bool> Entrada { get; set; }
+        public Nullable<bool> Salida { get; set; }
+        public Nullable<bool> Cierre { get; set; }
+        public Nullable<bool> Reportes { get; set; }
     }
 }

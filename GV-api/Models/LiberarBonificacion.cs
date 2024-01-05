@@ -12,12 +12,18 @@ namespace GV_api.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbVendedores
+    public partial class LiberarBonificacion
     {
-        public string Codigo { get; set; }
-        public string Titulo { get; set; }
-        public string Descrip { get; set; }
-        public string Cido { get; set; }
+        public int IdLiberarBonificacion { get; set; }
+        public Nullable<int> IdBodega { get; set; }
+        public int IdProducto { get; set; }
+        public int IdCliente { get; set; }
+        public int CantMax { get; set; }
+        public int Facturada { get; set; }
         public bool Activo { get; set; }
+        public System.DateTime FechaAsignacion { get; set; }
+        public int IdUsuarioCrea { get; set; }
+        public Nullable<System.DateTime> FechaInactiva { get; set; }
+        public Nullable<int> IdUsuarioInactiva { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace GV_api.Class.FACT
         public int Index = 0;
         public string Descripcion = string.Empty;
         public decimal PorcDescuento = 0m;
+        public int IdDescuentoDet = 0;
     }
 }

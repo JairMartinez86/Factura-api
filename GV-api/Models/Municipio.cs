@@ -12,12 +12,10 @@ namespace GV_api.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ControlInventario
+    public partial class Municipio
     {
-        public string Serie { get; set; }
-        public string Bodegas { get; set; }
-        public int Secuencia { get; set; }
-        public int Requisa { get; set; }
-        public int Compras { get; set; }
+        public int IdMunicipio { get; set; }
+        public string Municipio1 { get; set; }
+        public int IdDepartamento { get; set; }
     }
 }

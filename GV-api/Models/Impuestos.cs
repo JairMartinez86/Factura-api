@@ -12,11 +12,10 @@ namespace GV_api.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TbDepartamento
+    public partial class Impuestos
     {
-        public string CODCTA { get; set; }
-        public string DESCTA { get; set; }
-        public string ZONA { get; set; }
-        public string CodigoDptoSinRiesgo { get; set; }
+        public int IdImpuesto { get; set; }
+        public string Impuesto { get; set; }
+        public decimal Porcentaje { get; set; }
     }
 }

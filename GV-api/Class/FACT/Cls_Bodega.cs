@@ -11,6 +11,8 @@ namespace GV_api.Class.FACT
         public string Bodega;
         public string ClienteContado;
         public string Vendedor;
+        public bool EsContraEntrega;
+        public bool EsExportacion;
         public string Key;
         public bool Facturar;
     }

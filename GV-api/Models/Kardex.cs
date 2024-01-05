@@ -14,24 +14,28 @@ namespace GV_api.Models
     
     public partial class Kardex
     {
-        public string CodiProd { get; set; }
-        public System.DateTime Fecha { get; set; }
-        public string Tipo { get; set; }
-        public string Documento { get; set; }
-        public decimal Entrada { get; set; }
-        public decimal Salidas { get; set; }
-        public Nullable<decimal> Saldo { get; set; }
-        public Nullable<decimal> Costo { get; set; }
-        public Nullable<decimal> PrecioVenta { get; set; }
-        public string tipofactura { get; set; }
-        public Nullable<decimal> Valorentrada { get; set; }
-        public Nullable<decimal> Valorsalida { get; set; }
-        public Nullable<decimal> SaldoValor { get; set; }
-        public Nullable<decimal> Orden { get; set; }
-        public string Bodega { get; set; }
-        public Nullable<bool> Cerrada { get; set; }
+        public System.Guid IdKardex { get; set; }
+        public int Index { get; set; }
+        public string CodProducto { get; set; }
+        public decimal Cantidad { get; set; }
+        public bool EsBonificado { get; set; }
+        public string NoLote { get; set; }
         public Nullable<System.DateTime> Vence { get; set; }
-        public string Nolote { get; set; }
-        public string BodegaDestino { get; set; }
+        public string Ubicacion { get; set; }
+        public string NoDocumento { get; set; }
+        public string TipoDocumento { get; set; }
+        public string Serie { get; set; }
+        public System.DateTime Fecha { get; set; }
+        public string Bodega { get; set; }
+        public decimal Costo { get; set; }
+        public decimal CostoTotal { get; set; }
+        public int IdUsuario { get; set; }
+        public System.DateTime FechaRegistro { get; set; }
+        public Nullable<int> IdUsuarioAnula { get; set; }
+        public Nullable<System.DateTime> FechaAnulacion { get; set; }
+        public bool Cerrado { get; set; }
+        public bool Anulado { get; set; }
+        public string BodegaSolicita { get; set; }
+        public string OT { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace GV_api.Class.FACT
         public int Hasta = 0;
         public int Bonifica = 0;
         public string Descripcion = string.Empty;
+        public int IdEscala;
     }
 }

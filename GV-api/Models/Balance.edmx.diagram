@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="694c96e779da4761b4d8c704723b9159" Name="Diagram1">
+        <EntityTypeShape EntityType="BalancesModel.Bodegas" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BalancesModel.Estaciones" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BalancesModel.Serie" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BalancesModel.Usuarios" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BalancesModel.UsuariosBodegas" Width="1.5" PointX="4.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BalancesModel.BodegaSerie" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BalancesModel.Cliente" Width="1.5" PointX="7.375" PointY="5.75" />
+        <EntityTypeShape EntityType="BalancesModel.Vendedor" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="BalancesModel.Productos" Width="1.5" PointX="3.375" PointY="8.75" />
+        <EntityTypeShape EntityType="BalancesModel.Impuestos" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BalancesModel.LiberarPrecio" Width="1.5" PointX="9.375" PointY="3.75" />
+        <EntityTypeShape EntityType="BalancesModel.ConceptoPrecio" Width="1.5" PointX="9.375" PointY="8.75" />
+        <EntityTypeShape EntityType="BalancesModel.BodegaLaboratorioKardex" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BalancesModel.Kardex" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="BalancesModel.Bonificaciones" Width="1.5" PointX="5.625" PointY="16.125" />
+        <AssociationConnector Association="BalancesModel.FK_Bonificaciones_Productos" />
+        <EntityTypeShape EntityType="BalancesModel.PrecioVenta" Width="1.5" PointX="11.625" PointY="8.25" />
+        <AssociationConnector Association="BalancesModel.FK_PrecioVenta_ConceptoPrecio" />
+        <EntityTypeShape EntityType="BalancesModel.PrecioVentaEscala" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="BalancesModel.Parametros" Width="1.5" PointX="9.375" PointY="12.75" />
+        <EntityTypeShape EntityType="BalancesModel.Descuentos" Width="1.5" PointX="5.625" PointY="22.5" />
+        <AssociationConnector Association="BalancesModel.FK_Descuentos_Productos" />
+        <EntityTypeShape EntityType="BalancesModel.DireccionCliente" Width="1.5" PointX="9.625" PointY="20.625" />
+        <AssociationConnector Association="BalancesModel.FK_DireccionCliente_Cliente" />
+        <EntityTypeShape EntityType="BalancesModel.Departamento" Width="1.5" PointX="11.375" PointY="12.75" />
+        <EntityTypeShape EntityType="BalancesModel.Municipio" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BalancesModel.CorreoAutorizaFactura" Width="1.5" PointX="13.375" PointY="3.75" />
+        <EntityTypeShape EntityType="BalancesModel.PermisoFactura" Width="1.5" PointX="14.375" PointY="6.75" />
+        <EntityTypeShape EntityType="BalancesModel.Venta" Width="1.5" PointX="13.375" PointY="13.375" />
+        <EntityTypeShape EntityType="BalancesModel.VentaDetalle" Width="1.5" PointX="15.625" PointY="13.5" />
+        <AssociationConnector Association="BalancesModel.FK_VentaDetalle_Venta" />
+        <EntityTypeShape EntityType="BalancesModel.LiberarBonificacion" Width="1.5" PointX="15.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

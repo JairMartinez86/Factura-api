@@ -1,8 +1,11 @@
 ﻿using DevExpress.Data;
 using DevExpress.DataProcessing;
+using DevExpress.DirectX.Common.Direct2D;
 using DevExpress.Xpo.DB.Helpers;
+using DevExpress.XtraCharts.Native;
 using GV_api.Class;
 using GV_api.Class.FACT;
+using GV_api.Class.INV;
 using GV_api.Class.SIS;
 using GV_api.Models;
 using GV_api.Reporte.FAC;
@@ -29,6 +32,7 @@ using System.Web.Razor.Parser.SyntaxTree;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
 using static Azure.Core.HttpHeader;
+using static DevExpress.DataProcessing.InMemoryDataProcessor.AddSurrogateOperationAlgorithm;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using IsolationLevel = System.Transactions.IsolationLevel;
 using RouteAttribute = System.Web.Http.RouteAttribute;
@@ -53,7 +57,7 @@ namespace GV_api.Controllers.FACT
             if (CodBodega == null) CodBodega = string.Empty;
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
@@ -75,21 +79,21 @@ namespace GV_api.Controllers.FACT
                     {
                         if (TipoFactura == "Factura")
                         {
-                            ConfiguraFacturacion cons = _Conexion.ConfiguraFacturacion.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega && f.EmiteFactura.TrimStart().TrimEnd() == "S");
-                            Consecutivo _num = _Conexion.Consecutivo.FirstOrDefault(f => f.Serie == cons.Serie);
+                            BodegaSerie cons = _Conexion.BodegaSerie.FirstOrDefault(f => f.CodBodega == CodBodega && f.EsFact);
+                            Serie _num = _Conexion.Serie.FirstOrDefault(f => f.IdSerie == cons.Serie);
 
 
-                            NoDoc = _num == null ? string.Empty : string.Concat(_num.Serie.TrimStart().TrimEnd(), _num.Factura);
-                            Serie = _num == null ? string.Empty : _num.Serie.TrimStart().TrimEnd();
+                            NoDoc = _num == null ? string.Empty : string.Concat(_num.IdSerie, _num.Factura + 1);
+                            Serie = _num == null ? string.Empty : _num.IdSerie;
                         }
                         else
                         {
-                            ControlInventario cons = _Conexion.ControlInventario.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == CodBodega);
-                            Consecutivo _num = _Conexion.Consecutivo.FirstOrDefault(f => f.Serie == cons.Serie);
+                            BodegaSerie cons = _Conexion.BodegaSerie.FirstOrDefault(f => f.CodBodega == CodBodega);
+                            Serie _num = _Conexion.Serie.FirstOrDefault(f => f.IdSerie == cons.Serie);
 
 
-                            NoDoc = _num == null ? string.Empty : string.Concat(_num.Serie.TrimStart().TrimEnd(), _num.Pedido + 1);
-                            Serie = _num == null ? string.Empty : _num.Serie.TrimStart().TrimEnd();
+                            NoDoc = _num == null ? string.Empty : string.Concat(_num.IdSerie, _num.Proforma + 1);
+                            Serie = _num == null ? string.Empty : _num.IdSerie.TrimStart().TrimEnd();
                         }
                     }
                     
@@ -118,9 +122,9 @@ namespace GV_api.Controllers.FACT
 
 
 
-        private decimal f_TasaCambio( INVESCASANEntities _Conexion, DateTime fecha)
+        private decimal f_TasaCambio(BalancesEntities _Conexion, DateTime fecha)
         {           
-            List<decimal> lst = _Conexion.Database.SqlQuery<decimal>($"SELECT DESCTA FROM AUDESCASAN.dbo.TIPCAMB WHERE CODCTA = CAST('{string.Format("{0:yyyy-MM-dd}", fecha)}' AS DATE)").ToList();
+            List<decimal> lst = _Conexion.Database.SqlQuery<decimal>($"SELECT TasaCambio FROM CON.TasaCambio WHERE Fecha = CAST('{string.Format("{0:yyyy-MM-dd}", fecha)}' AS DATE)").ToList();
 
             decimal tc = 1;
             if (lst.Count > 0) tc = lst.First();
@@ -129,38 +133,39 @@ namespace GV_api.Controllers.FACT
 
         [Route("api/Factura/Datos")]
         [HttpGet]
-        public string Datos()
+        public string Datos(string user)
         {
-            return v_Datos();
+            return v_Datos(user);
         }
 
 
-        private string v_Datos()
+        private string v_Datos(string user)
         {
             string json = string.Empty;
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
+                    Usuarios U = _Conexion.Usuarios.FirstOrDefault( f=> f.Usuario == user);
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
                     Cls_Datos datos = new Cls_Datos();
 
           
-                    var qClientes = (from _q in _Conexion.Clientes
+                    var qClientes = (from _q in _Conexion.Cliente
                                  select new
                                  {
-                                     Codigo = _q.CODCTA.TrimStart().TrimEnd(),
-                                     Cliente = _q.DESCTA.TrimStart().TrimEnd(),
-                                     Ruc = _q.RazonSocial.TrimStart().TrimEnd(),
-                                     Cedula = _q.Cedula.TrimStart().TrimEnd(),
-                                     Contacto = string.Concat(_q.Celular.TrimStart().TrimEnd(),"/",_q.TELEFO.TrimStart().TrimEnd(), "/", _q.TELEFONO1.TrimStart().TrimEnd()),
-                                     Limite = _q.Techo,
-                                     Moneda = _q.Moneda.TrimStart().TrimEnd(),
-                                     CodVendedor = _q.Vendedor.TrimStart().TrimEnd(),
-                                     EsClave = _q.Clave,
-                                     Filtro = string.Concat(_q.CODCTA.TrimStart().TrimEnd(), _q.DESCTA.TrimStart().TrimEnd(), _q.Cedula.TrimStart().TrimEnd(), _q.TELEFO.TrimStart().TrimEnd(), _q.TELEFONO1.TrimStart().TrimEnd(), _q.Celular.TrimStart().TrimEnd()),
-                                     Key = string.Concat(_q.CODCTA.TrimStart().TrimEnd(), " ", _q.DESCTA.TrimStart().TrimEnd())
+                                     Codigo = _q.Codigo,
+                                     Cliente = _q.Nombre.TrimStart().TrimEnd(),
+                                     Ruc = string.Empty,
+                                     Cedula = _q.NoCedula.TrimStart().TrimEnd(),
+                                     Contacto = string.Concat(_q.Celular.TrimStart().TrimEnd(),"/",_q.Telefono1.TrimStart().TrimEnd(), "/", _q.Telefono2.TrimStart().TrimEnd(), "/", _q.Telefono3.TrimStart().TrimEnd()),
+                                     Limite = _q.Limite,
+                                     Moneda = _q.IdMoneda,
+                                     CodVendedor = (_q.Vendedor == null ? string.Empty : _q.Vendedor.TrimStart().TrimEnd()),
+                                     EsClave = _q.ClienteClave,
+                                     Filtro = string.Concat(_q.Codigo, _q.Nombre.TrimStart().TrimEnd(), _q.NoCedula.TrimStart().TrimEnd(), _q.Telefono1.TrimStart().TrimEnd(), _q.Telefono2.TrimStart().TrimEnd(), _q.Telefono3.TrimStart().TrimEnd(), _q.Celular.TrimStart().TrimEnd()),
+                                     Key = string.Concat(_q.Codigo, " ", _q.Nombre.TrimStart().TrimEnd())
                                  }).ToList();
 
                     datos.Nombre = "CLIENTES";
@@ -168,31 +173,34 @@ namespace GV_api.Controllers.FACT
                     lstDatos.Add(datos);
 
 
-        
 
-                     var qBodegas = (from _q in _Conexion.TbBodega
+                    List<string> ub = (from _q in _Conexion.UsuariosBodegas
+                                       join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
+                                       where _q.IdUsuario == U.IdUsuario
+                                       select _b.Codigo).ToList();
 
-                                     select new Cls_Bodega()
+
+
+                    var qBodegas = (from _q in _Conexion.Bodegas
+                                    where ub.Contains(_q.Codigo)
+                                    select new Cls_Bodega()
                                      {
-                                        Codigo = _q.Codigo.TrimStart().TrimEnd(),
-                                        Bodega = _q.titulo.TrimStart().TrimEnd(),
-                                        ClienteContado = string.Empty,
-                                        Vendedor = string.Empty,
-                                        Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.titulo.TrimStart().TrimEnd())
+                                        Codigo = _q.Codigo,
+                                        Bodega = _q.Bodega.TrimStart().TrimEnd(),
+                                        ClienteContado = _q.CodCliente,
+                                        Vendedor = _q.CodVendedor,
+                                        EsContraEntrega = _q.BodegaContraEntrega,
+                                        EsExportacion = _q.BodegaExportacion == null ? false : (bool)_q.BodegaExportacion,
+                                        Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.Bodega.TrimStart().TrimEnd())
                                     }).ToList();
 
 
                     foreach(Cls_Bodega b in qBodegas)
                     {
-                        ConfiguraFacturacion c = _Conexion.ConfiguraFacturacion.FirstOrDefault(f => f.Bodegas.TrimStart().TrimEnd() == b.Codigo && f.EmiteFactura.TrimStart().TrimEnd() == "S");
+                        BodegaSerie c = _Conexion.BodegaSerie.FirstOrDefault(f => f.CodBodega.TrimStart().TrimEnd() == b.Codigo && f.EsFact);
 
                         b.Facturar = false;
-                        if(c != null)
-                        {
-                            b.ClienteContado = c.ClienteContado.TrimStart().TrimEnd();
-                            b.Vendedor = c.Vendedor.TrimStart().TrimEnd();
-                            b.Facturar = true;
-                        }
+                        if(c != null) b.Facturar = true;
 
                     }
                     Cls_Bodega[] bEliminar = qBodegas.FindAll(f => !f.Facturar).ToArray();
@@ -211,12 +219,12 @@ namespace GV_api.Controllers.FACT
                     lstDatos.Add(datos);
 
 
-                    var qVendedores = (from _q in _Conexion.tbVendedores
+                    var qVendedores = (from _q in _Conexion.Vendedor
                                     select new
                                     {
-                                        Codigo = _q.Codigo.TrimStart().TrimEnd(),
-                                        Vendedor = _q.Titulo.TrimStart().TrimEnd(),
-                                        Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.Titulo.TrimStart().TrimEnd())
+                                        Codigo = _q.Codigo,
+                                        Vendedor = _q.Nombre.TrimStart().TrimEnd(),
+                                        Key = string.Concat(_q.Codigo, " ", _q.Nombre.TrimStart().TrimEnd())
                                     }).ToList();
 
 
@@ -256,74 +264,44 @@ namespace GV_api.Controllers.FACT
             if (CodCliente == null) CodCliente = string.Empty;
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
                     Cls_Datos datos = new Cls_Datos();
 
-                    Clientes cl = _Conexion.Clientes.FirstOrDefault(f => f.CODCTA.TrimStart().TrimEnd() == CodCliente);
-                    decimal saldoCor = 0m;
-                    decimal saldoDol = 0m;
+                    Cliente cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == CodCliente);
                     decimal Tc = f_TasaCambio(_Conexion, DateTime.Now);
-                    decimal Techo = cl.Techo;
+                    decimal Techo = cl.Limite;
                     decimal Disponible = 0m;
-                    decimal SaldoVencido = 0m;
+                    decimal Saldo = 0m;
                     ObjectParameter output = new ObjectParameter("dResultado", typeof(decimal));
-         
 
-                    var qSaldoCor = (from _q in _Conexion.spu_ObtenerSaldoCuenta(CodCliente, DateTime.Now.Date, "C")
-                                 select new
-                                 {
-                                     Sald = _q,
-                                 }).ToList();
 
-                    var qSaldoDol = (from _q in _Conexion.spu_ObtenerSaldoCuenta(CodCliente, DateTime.Now.Date, "D")
+
+                    string Sql = $"DECLARE @SaldoVencido DECIMAL(18,2),\r\n\t\t@Saldo DECIMAL(18,2)\r\n\t\t,@P_Fecha AS DATETIME = GETDATE()\r\n\t\t, @dResultado MONEY\r\n\r\n\r\n\r\n\t\tEXEC INVESCASAN.[dbo].[RetornaSaldoVencidoAmbasMonedas] {CodCliente}, @P_Fecha, 15, @dResultado OUT\r\n\r\n\t\tSET @dResultado = ISNULL(@dResultado, 0)\r\n\r\n\t\tIF @dResultado < 5 \r\n\t\tBEGIN\r\n\t\t\tSET @dResultado = 0\r\n\t\tEND\r\n\r\n\r\n\r\n\t\tEXEC [INVESCASAN].dbo.[RetornaSaldoAmbasMonedas] {CodCliente},  @P_Fecha, 30, @Saldo OUT\r\n\r\n\t\tSET @Saldo = ISNULL(@Saldo, 0)\r\n\r\n\t\tSELECT @Saldo";
+
+
+
+                    Saldo =  _Conexion.Database.SqlQuery<decimal>(Sql).Single();
+
+
+                    Disponible =  Math.Round(Techo - Saldo, 2, MidpointRounding.ToEven);
+
+
+
+                    var qCredito = (from _q in _Conexion.Cliente
+                                     where _q.Codigo == CodCliente
                                      select new
                                      {
-                                         Sald = _q,
-                                     }).ToList();
-
-
-                    _Conexion.RetornaSaldoVencidoAmbasMonedas(CodCliente, DateTime.Now.Date, 15, output);
-                    SaldoVencido = (decimal)output.Value;
-
-
-
-                    if (qSaldoCor != null)
-                    {
-                       if(qSaldoCor.First().Sald != null) saldoCor = qSaldoCor.First().Sald.Value;
-                    }
-
-                    if (qSaldoDol != null)
-                    {
-                        if (qSaldoDol.First().Sald != null) saldoDol = qSaldoDol.First().Sald.Value;
-                    }
-
-
-                    if(cl.Moneda == "C")
-                    {
-                        Disponible = (Techo - saldoCor) - Math.Round(saldoDol * Tc, 2, MidpointRounding.ToEven);
-                    }
-                    else
-                    {
-                        Disponible = (Techo - saldoDol) - Math.Round(saldoCor / Tc, 2, MidpointRounding.ToEven);
-                    }
-              
-
-
-                    var qCredito = (from _q in _Conexion.Clientes
-                                     where _q.CODCTA.TrimStart().TrimEnd() == CodCliente
-                                     select new
-                                     {
-                                         CodCliente = _q.CODCTA.TrimStart().TrimEnd(),
-                                         Limite = _q.Techo,
+                                         CodCliente = _q.Codigo,
+                                         Limite = _q.Limite,
                                          Plazo = _q.Plazo,
-                                         Gracia = _q.Gracia,
-                                         Moneda = _q.Moneda.TrimStart().TrimEnd(),
+                                         Gracia = _q.DiasG,
+                                         Moneda = _q.IdMoneda,
                                          Disponible = Disponible,
                                          FacturarVencido = _q.FacturarVencido,
-                                         SaldoVencido = SaldoVencido
+                                         SaldoVencido = Saldo
                                      }).ToList();
 
                     datos.Nombre = "CREDITO";
@@ -358,20 +336,21 @@ namespace GV_api.Controllers.FACT
             if (CodCliente == null) CodCliente = string.Empty;
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
                     Cls_Datos datos = new Cls_Datos();
 
-                    var qClienteClave = (from _q in _Conexion.Clientes
-                                         join _v in _Conexion.tbVendedores on _q.Vendedor equals _v.Codigo
-                                         where _q.CODCTA.TrimStart().TrimEnd() == CodCliente
+                    var qClienteClave = (from _q in _Conexion.Cliente
+                                         join _v in _Conexion.Vendedor on _q.Vendedor equals _v.Codigo into _q_v
+                                         from _c in _q_v.DefaultIfEmpty()
+                                         where _q.Codigo == CodCliente
                                          select new
                                          {
-                                             CodVendedor = _v.Codigo.TrimStart().TrimEnd(),
-                                             Vendedor = string.Concat(_v.Codigo.TrimStart().TrimEnd(), " ", _v.Titulo.TrimStart().TrimEnd()),
-                                             EsClave = _q.Clave
+                                             CodVendedor = (_c == null ? string.Empty : _c.Codigo),
+                                             Vendedor = (_c == null? string.Empty : string.Concat(_c.Codigo, " ", _c.Nombre.TrimStart().TrimEnd())),
+                                             EsClave = (_c == null ? false : true)
                                          }).ToList();
 
 
@@ -397,34 +376,37 @@ namespace GV_api.Controllers.FACT
 
         [Route("api/Factura/CargarProductos")]
         [HttpGet]
-        public string CargarProductos()
+        public string CargarProductos(string CodBodega)
         {
-            return v_CargarProductos();
+            return v_CargarProductos(CodBodega);
         }
 
-        private string v_CargarProductos()
+        private string v_CargarProductos(string CodBodega)
         {
             string json = string.Empty;
             
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
                     Cls_Datos datos = new Cls_Datos();
-             
+                    Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == CodBodega);
 
 
 
-                    var qProductos = (from _q in _Conexion.Catalogo
-                                         where _q.FUERADELINEA == false
-                                         select new
+                    var qProductos = (from _q in _Conexion.Productos
+                                      join _i in _Conexion.Impuestos on _q.IdImpuesto equals _i.IdImpuesto into _q_i
+                                      from _T in _q_i.DefaultIfEmpty()
+                                      where _q.Activo == true
+                                      select new
                                          {
-                                             Codigo = _q.SSSCTA.TrimStart().TrimEnd(),
-                                             Producto = _q.DESCTA.TrimStart().TrimEnd(),
-                                             ConImpuesto = _q.COBIVA,
-                                             Key = string.Concat(_q.SSSCTA.TrimStart().TrimEnd(), " ", _q.DESCTA.TrimStart().TrimEnd()),
-                                             Bonificable = _q.Bonificable
+                                             Codigo = _q.Codigo,
+                                             Producto = _q.Producto,
+                                             ConImpuesto = (_T == null ? true :  _T.Impuesto == "NO IVA"? false : true),
+                                             Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
+                                             Bonificable = _q.AplicarBonificacion,
+                                             FacturaNegativo = (_q.Servicios == null ? (_q.FacturaNegativo == null ? false : _q.FacturaNegativo ) : ((bool)!_q.Servicios ? (_q.FacturaNegativo == null ? false : _q.FacturaNegativo) : false ) )
                                          }).ToList();
 
 
@@ -458,72 +440,183 @@ namespace GV_api.Controllers.FACT
 
         [Route("api/Factura/DatosProducto")]
         [HttpGet]
-        public string DatosProducto(string CodProducto, string CodBodega, string CodCliente)
+        public string DatosProducto(string CodProducto, string CodBodega, string CodCliente, string User)
         {
-            return v_DatosProducto(CodProducto, CodBodega, CodCliente);
+            return v_DatosProducto(CodProducto, CodBodega, CodCliente, User);
         }
 
 
-        private string v_DatosProducto(string CodProducto, string CodBodega, string CodCliente)
+        private string v_DatosProducto(string CodProducto, string CodBodega, string CodCliente,  string User)
         {
             string json = string.Empty;
             if (CodCliente == null) CodCliente = string.Empty;
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
-                    Clientes cl = _Conexion.Clientes.FirstOrDefault(f => f.CODCTA == CodCliente);
+                    Cliente cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == CodCliente);
+                    Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == CodBodega);
+                    ConceptoPrecio cp = _Conexion.ConceptoPrecio.FirstOrDefault(f => f.IdConceptoPrecio == cl.IdConceptoPrecio);
+                    List<Parametros> lstParametro = _Conexion.Parametros.ToList();
+                    Usuarios U = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == User);
+                    string str_MonedaLocal = lstParametro[0].MonedaLocal;
+          
 
                     Cls_Datos datos = new Cls_Datos();
                     int x = 0;
-                    string strTipo = "Publico";
-                    bool EsDolar = false;
-                    decimal Tc = f_TasaCambio(_Conexion, DateTime.Now);
+                    string strTipo = cp.Descripcion.TrimStart().TrimEnd();
+                
+                    decimal Tc = f_TasaCambio(_Conexion, bo.FechaFacturacion.Value);
                     bool LiberadoPrecio = false;
+                    int IdLiberacion = 0;
 
-                    Catalogo ct = _Conexion.Catalogo.FirstOrDefault(f => f.SSSCTA.TrimStart().TrimEnd() == CodProducto);
-                    if (ct != null) LiberadoPrecio = ct.LIBERAR == null ? false : (bool)ct.LIBERAR;
 
-                    if (cl != null)
+                    List<LiberarPrecio> lip  = (from _q in _Conexion.LiberarPrecio
+                                               join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
+                                               where _p.Codigo == CodProducto
+                                               select _q).ToList();
+
+                    LiberadoPrecio = false;
+
+                    if (lip.Count > 0)
                     {
-                        if (cl.Distribuidor) strTipo = "Distribuid";
-                        if (cl.Especial) strTipo = "Especial";
+                        if (lip.FirstOrDefault(w => w.IdBodega == bo.IdBodega) != null)
+                        {
+                            LiberadoPrecio = true;
+                            IdLiberacion = lip.FirstOrDefault(w => w.IdBodega == bo.IdBodega).IdLiberarPrecio;
+                        }
+                        if (lip.FirstOrDefault(w => w.IdCliente == cl.IdCliente) != null && !LiberadoPrecio)
+                        {
+                            LiberadoPrecio = true;
+                            IdLiberacion = lip.FirstOrDefault(w => w.IdCliente == cl.IdCliente).IdLiberarPrecio;
+                        }
                     }
 
 
-                    var qExistencia = (from _q in _Conexion.Kardex
-                                     where _q.CodiProd.TrimStart().TrimEnd() == CodProducto
-                                       group _q by  _q.Bodega.TrimStart().TrimEnd() into g
-                                       orderby g.Key
-                                     select new
-                                     { 
-                                         CodProducto = CodProducto,
-                                         Bodega = g.Key,
-                                         Existencia = g.Sum( s=> s.Entrada - s.Salidas),
-                                         EsPrincipal = (g.FirstOrDefault().Bodega == CodBodega ? true  : false)
-                                     }).ToList();
+                    List<ExistenciaUbicacion> qUbicacion;
+
+                   List<string> ub = (from _q in _Conexion.UsuariosBodegas
+                                              join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
+                                              where  _q.IdUsuario == U.IdUsuario
+                                              select _b.Codigo).ToList();
+
+                    if (!EsINVESCASAN(CodProducto, CodBodega, _Conexion))
+                    {
+                        qUbicacion = (from _q in _Conexion.Kardex
+                                      where _q.CodProducto == CodProducto  && ub.Contains(_q.Bodega) && _q.Anulado == false
+                                      group _q by new { _q.CodProducto, _q.Bodega} into g
+                                      select new ExistenciaUbicacion
+                                      {
+                                          Key = string.Concat(g.Key.CodProducto, g.Key.Bodega),
+                                          CodProducto = g.Key.CodProducto,
+                                          Bodega = g.Key.Bodega,
+                                          Ubicacion = string.Empty,
+                                          Existencia = g.Sum(s => s.Cantidad),
+                                          NoLote = string.Empty,
+                                          Vence = null,
+                                          EsPrincipal = g.Key.Bodega == CodBodega? true : false,
+                                      }).ToList();
+
+
+                            qUbicacion = qUbicacion.Where(w => w.Existencia > 0).ToList();
+
+                 
+                    }
+                    else
+                    {
+
+                        string where_bodega = string.Empty;
+
+
+                        foreach( string _bodega in ub)
+                        {
+                            where_bodega +=  $"'{_bodega}',";
+                        }
+
+                        where_bodega = where_bodega.Substring(0, where_bodega.Length - 1);
+
+
+                        List<ExistenciaUbicacion> qExistencia = _Conexion.Database.SqlQuery<ExistenciaUbicacion>($"SELECT CONCAT(CAST(LTRIM(RTRIM(T.CodiProd)) AS NVARCHAR(12)), RTRIM(LTRIM(T.Bodega))) AS [Key], T.CodiProd AS CodProducto, RTRIM(LTRIM(T.Bodega)) AS Bodega, '' AS Ubicacion,  SUM(T.Entrada - T.Salidas)  AS Existencia,  '' AS NoLote, NULL AS Vence, CAST(IIF(RTRIM(LTRIM(T.Bodega)) = '{CodBodega}', 1, 0) AS BIT) AS EsPrincipal \r\nFROM INVESCASAN.DBO.Kardex AS T\r\nWHERE T.CodiProd = '{CodProducto}' AND T.Bodega IN( {where_bodega}) \r\nGROUP BY T.CodiProd, T.Bodega").ToList();
+
+                        foreach (ExistenciaUbicacion neg in qExistencia.Where(w => w.Existencia < 0))
+                        {
+
+                            
+
+                            foreach (ExistenciaUbicacion ex in qExistencia.Where(w => w.Existencia > 0))
+                            {
+                                if (ex != null)
+                                {
+                                    if (ex.Existencia + neg.Existencia >= 0)
+                                    {
+                                        ex.Existencia += neg.Existencia;
+                                        neg.Existencia = 0;
+                                    }
+                                    else
+                                    {
+                                        neg.Existencia += ex.Existencia;
+                                        ex.Existencia = 0;
+                                    }
+
+
+                                }
+
+
+                            }
+
+
+                        }
+                        qUbicacion = qExistencia.Where(w => w.Existencia > 0).ToList();
+
+                    }
+
+
+                    
+                if (qUbicacion.Count == 0)
+                    {
+                        qUbicacion = new List<ExistenciaUbicacion>();
+                        ExistenciaUbicacion u = new ExistenciaUbicacion();
+                        u.Key = "S/L";
+                        u.CodProducto = CodProducto;
+                        u.Bodega = CodBodega;
+                        u.Ubicacion = "A00-00";
+                        u.NoLote = "S/L";
+                        u.Vence = null;
+                        u.Existencia = 0;
+                        qUbicacion.Add(u);
+                    }
+
+
+
+
+                    qUbicacion = qUbicacion.OrderBy(o => o.Bodega).ThenBy(o => o.Existencia).ToList();
+
+
 
                     datos.Nombre = "EXISTENCIA";
-                    datos.d = qExistencia;
+                    datos.d = qUbicacion;
                     lstDatos.Add(datos);
 
 
 
-                    List<Cls_Bonificacion> qBonificacion = (from _q in _Conexion.Bonificados
-                                         where _q.Codigo.TrimStart().TrimEnd() == CodProducto
-                                         orderby _q.Desde
-                                         select new Cls_Bonificacion()
-                                         {
-                                             CodProducto = _q.Codigo.TrimStart().TrimEnd(),
-                                             Escala = string.Concat(_q.Desde, "+", _q.Bonificacion),
-                                             Desde = _q.Desde,
-                                             Hasta = 0,
-                                             Bonifica = _q.Bonificacion,
-                                             Descripcion = string.Empty
-                                         }).ToList();
+                    List<Cls_Bonificacion> qBonificacion = (from _q in _Conexion.Bonificaciones
+                                                            where _q.CodigoProducto == CodProducto && _q.CodBodega == CodBodega
+                                                            orderby _q.CantMin
+                                                            group _q by new { _q.CodigoProducto, _q.CantMin } into g
+                                                            select new Cls_Bonificacion()
+                                                            {
+                                                                CodProducto = g.Key.CodigoProducto,
+                                                                Escala = string.Concat(g.Key.CantMin, "+", g.FirstOrDefault().Bonificar),
+                                                                Desde = g.Key.CantMin,
+                                                                Hasta = 0,
+                                                                Bonifica = g.FirstOrDefault().Bonificar,
+                                                                Descripcion = string.Empty,
+                                                                IdEscala = 0
+                                                            }).ToList();
 
-                    foreach(var b in qBonificacion.OrderBy(o => o.Desde))
+
+                    foreach (var b in qBonificacion.OrderBy(o => o.Desde))
                     {
                         int max = 9999;
                         Cls_Bonificacion sig = qBonificacion.OrderBy(o => o.Desde).FirstOrDefault(f => f.Desde > b.Desde);
@@ -547,30 +640,73 @@ namespace GV_api.Controllers.FACT
 
 
 
-                    List<Cls_Precio> qPrecios = (from _q in _Conexion.Listadeprecios
-                                                 where _q.CodiProd.TrimStart().TrimEnd() == CodProducto
-                                                 orderby _q.Tipo
+                    List<Cls_Precio> qPrecios = (from _q in _Conexion.PrecioVenta
+                                                 join _c in _Conexion.ConceptoPrecio on _q.IdConceptoPrecio equals _c.IdConceptoPrecio
+                                                 where _q.CodigoProducto == CodProducto && _q.Activo == true
+                                                 orderby _c.Descripcion
                                                  select new Cls_Precio()
                                                  {
-                                                     CodProducto = _q.CodiProd.TrimStart().TrimEnd(),
-                                                     Tipo = _q.Tipo.TrimStart().TrimEnd(),
-                                                     PrecioCordoba = ((decimal)(!EsDolar ? _q.Precio : _q.Precio * Tc)),
-                                                     PrecioDolar = ((decimal)(EsDolar ? _q.Precio : _q.Precio / Tc)),
-                                                     EsPrincipal = (_q.Tipo.TrimStart().TrimEnd() == strTipo ? true : false),
-                                                     Liberado = false
-                                                 }).ToList();
+                                                     Index = -1,
+                                                     CodProducto = _q.CodigoProducto,
+                                                     Tipo = _c.Descripcion.TrimStart().TrimEnd(),
+                                                     PrecioCordoba = ((decimal)(str_MonedaLocal == _q.IdMoneda ? _q.Precio : _q.Precio * Tc)),
+                                                     PrecioDolar = ((decimal)(str_MonedaLocal != _q.IdMoneda ? _q.Precio : _q.Precio / Tc)),
+                                                     EsPrincipal = (_c.Descripcion.TrimStart().TrimEnd() == strTipo ? true : false),
+                                                     Desde = 0,
+                                                     Hasta = 0,
+                                                     EsEscala = false,
+                                                     Liberado = false,
+                                                     IdPrecioFAC = _q.IdPrecioFAC,
+                                                     IdLiberacion = 0
+                                                 }).Union(
+                        from _q in _Conexion.PrecioVentaEscala
+                        where _q.Activo && _q.CodigoProducto == CodProducto && _q.IdConceptoPrecio == cl.IdConceptoPrecio
+                        select new Cls_Precio()
+                        {
+                            Index = 0,
+                            CodProducto = _q.CodigoProducto,
+                            Tipo = "",
+                            PrecioCordoba = ((decimal)(str_MonedaLocal == _q.IdMoneda ? _q.Precio : _q.Precio * Tc)),
+                            PrecioDolar = ((decimal)(str_MonedaLocal != _q.IdMoneda ? _q.Precio : _q.Precio / Tc)),
+                            EsPrincipal = false,
+                            Desde = _q.CantMin,
+                            Hasta = 0,
+                            EsEscala = true,
+                            Liberado = false,
+                            IdPrecioFAC = _q.IdPrecioEscala,
+                            IdLiberacion = 0
+                        }
+                        ).ToList();
 
 
+                    x = 0;
+                    foreach (var b in qPrecios.Where(w => w.EsEscala).OrderBy(o => o.Desde))
+                    {
+                        int max = 9999;
+                        Cls_Precio sig = qPrecios.OrderBy(o => o.Desde).FirstOrDefault(f => f.Desde > b.Desde);
+
+                        if (sig != null) max = sig.Desde - 1;
+
+                        b.Index = x;
+                        b.Hasta = max;
+                        b.Tipo = string.Concat("Desde ", b.Desde, " Hasta ", b.Hasta);
+
+                        x++;
+                    }
+
+
+
+                  
 
                     Cls_Precio iPrecio = qPrecios.FirstOrDefault(f => f.EsPrincipal);
 
                     if(qPrecios != null)
                     {
 
-                        if (iPrecio.PrecioCordoba == 0 && iPrecio.Tipo == "Especial" && cl.Distribuidor)
+                        if (iPrecio.PrecioCordoba == 0)
                         {
                             iPrecio.EsPrincipal = false;
-                            iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Distribuid");
+                            iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Distribuidor");
                             if (iPrecio != null) iPrecio.EsPrincipal = true;
                         }
 
@@ -581,9 +717,15 @@ namespace GV_api.Controllers.FACT
                             if (iPrecio != null) iPrecio.EsPrincipal = true;
                         }
 
-                        if (iPrecio.EsPrincipal) iPrecio.Liberado = LiberadoPrecio;
+                        if (iPrecio.EsPrincipal)
+                        {
+                            iPrecio.Liberado = LiberadoPrecio;
+                            iPrecio.IdLiberacion = IdLiberacion;
+                        }
 
                     }
+
+                    qPrecios = qPrecios.OrderBy(o => o.Index).ToList();
 
                     
 
@@ -596,35 +738,69 @@ namespace GV_api.Controllers.FACT
 
 
 
-                    List<Cls_Descuento> qDescuentoProd = (from _q in _Conexion.Catalogo
-                                          where _q.SSSCTA.TrimStart().TrimEnd() == CodProducto
-                                          select new Cls_Descuento()
-                                          {
-                                              Index = 0,
-                                              Descripcion = "GENERAL",
-                                              PorcDescuento = _q.Descuento == null ? 0m : (decimal)_q.Descuento
-                                          }).Union(
+                    List<Descuentos> lstDes = _Conexion.Descuentos.Where(f => f.CodigoProducto == CodProducto).ToList();
+                    List<Cls_Descuento> C_Descuento = new List<Cls_Descuento>() { new Cls_Descuento()  , new Cls_Descuento() } ;
 
-                        (from _q in _Conexion.Clientes
-                         where _q.CODCTA.TrimStart().TrimEnd() == CodCliente
-                         select new Cls_Descuento()
+                    C_Descuento[0].Index = 0;
+                    C_Descuento[0].Descripcion = "GENERAL";
+                    C_Descuento[0].PorcDescuento = 0;
+                    C_Descuento[0].IdDescuentoDet = 0;
+
+                    C_Descuento[1].Index = 1;
+                    C_Descuento[1].Descripcion = "ADICIONAL";
+                    C_Descuento[1].PorcDescuento = 0;
+                    C_Descuento[0].IdDescuentoDet = 0;
+
+                    if (lstDes.Count > 0)
+                    {
+            
+                        Descuentos des = lstDes.FirstOrDefault(w => w.CodigoCliente == cl.Codigo && ((w.CodBodega == null ? CodBodega : w.CodBodega) == CodBodega) && (w.FechaInicio.Date == null ? bo.FechaFacturacion.Value.Date : w.FechaInicio.Date) >= bo.FechaFacturacion.Value.Date && (w.FechaFinaliza.Value.Date == null ? bo.FechaFacturacion.Value.Date : w.FechaFinaliza.Value.Date) <= bo.FechaFacturacion.Value.Date);
+
+
+                        if (des != null)//DESCUENTO POR CLIENTE
                         {
-                             Index = 1,
-                            Descripcion = "ADICIONAL",
-                            PorcDescuento = _q.Descuento
-                        })
-                        ).ToList();
+                            C_Descuento[0].PorcDescuento = des.PorcDesc;
+                            C_Descuento[1].PorcDescuento = des.PorcDescA;
+                            C_Descuento[0].IdDescuentoDet = des.IdDescuento;
+                            C_Descuento[1].IdDescuentoDet = des.IdDescuento;
+                        }
+                        else
+                        {
+                            des = lstDes.FirstOrDefault(w => ((w.CodBodega == null ? CodBodega : w.CodBodega) == CodBodega) && (w.FechaInicio.Date == null ? bo.FechaFacturacion.Value.Date : w.FechaInicio.Date) >= bo.FechaFacturacion.Value.Date && (w.FechaFinaliza.Value.Date == null ? bo.FechaFacturacion.Value.Date : w.FechaFinaliza.Value.Date) <= bo.FechaFacturacion.Value.Date);
+
+                            if(des == null)
+                            {
+                                des = lstDes.FirstOrDefault(w => ((w.CodBodega == null ? CodBodega : w.CodBodega) == CodBodega) && w.FechaInicio.Date == (new DateTime(1900,1,1).Date) );
+
+                            }
+
+
+                            if (des != null)//DESCUENTO BODEGA NULL (GENERAL)
+                            {
+                                C_Descuento[0].PorcDescuento = des.PorcDesc;
+                                C_Descuento[1].PorcDescuento = des.PorcDescA;
+                                C_Descuento[0].IdDescuentoDet = des.IdDescuento;
+                                C_Descuento[1].IdDescuentoDet = des.IdDescuento;
+                            }
+                           
+                        }
+
+
+                    }
 
 
 
-                    if(qDescuentoProd.FindIndex(f => f.Descripcion == "GENERAL" && f.PorcDescuento == 0m) != -1)
+
+
+
+                    if(C_Descuento.FindIndex(f => f.Descripcion == "GENERAL" && f.PorcDescuento == 0m) != -1)
                     {
 
                         decimal PorcDescMargen = 0;
                         decimal PrecioP = 0m;
                         decimal PrecioD = 0m;
                         Cls_Precio PPublico = qPrecios.FirstOrDefault(f => f.Tipo == "Publico");
-                        Cls_Precio PDist = qPrecios.FirstOrDefault(f => f.Tipo == "Distribuid");
+                        Cls_Precio PDist = qPrecios.FirstOrDefault(f => f.Tipo == "Distribuidor");
 
                         if (PPublico != null) PrecioP = PPublico.PrecioCordoba;
                         if (PDist != null) PrecioD = PDist.PrecioCordoba;
@@ -638,14 +814,14 @@ namespace GV_api.Controllers.FACT
                         Margen.Descripcion = "MARGEN";
                         Margen.PorcDescuento = PorcDescMargen;
 
-                        qDescuentoProd.Add(Margen);
+                        C_Descuento.Add(Margen);
                     }
 
 
 
                     datos = new Cls_Datos();
                     datos.Nombre = "DESCUENTO";
-                    datos.d = qDescuentoProd;
+                    datos.d = C_Descuento;
                     lstDatos.Add(datos);
 
 
@@ -665,6 +841,67 @@ namespace GV_api.Controllers.FACT
             return json;
         }
 
+
+        [Route("api/Factura/BonificacionLibre")]
+        [HttpGet]
+        public string Direcciones(string CodCliente, string CodBodega)
+        {
+            return v_BonificacionLibre(CodCliente, CodBodega);
+        }
+
+
+        private string v_BonificacionLibre(string CodCliente, string CodBodega)
+        {
+            string json = string.Empty;
+            if (CodCliente == null) CodCliente = string.Empty;
+            try
+            {
+                using (BalancesEntities _Conexion = new BalancesEntities())
+                {
+                    Cliente cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == CodCliente);
+
+
+                    var qBonificacionLibre = (from _q in _Conexion.LiberarBonificacion
+                                              join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
+                                              join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
+                                              where _q.Activo && _q.CantMax >= 1 && _b.Codigo == CodBodega && (((_q.IdCliente == 0 ? cl.IdCliente : _q.IdCliente) == cl.IdCliente))
+                                              orderby _p.Codigo
+                                              select new
+                                              {
+                                                  _p.Codigo,
+                                                  Producto = _p.Producto.TrimStart().TrimEnd(),
+                                                  CantidadMax = (_q.IdCliente == 0 && _q.CantMax == 0 ? _q.CantMax : (_q.CantMax == 1 ? 9999 : _q.CantMax)),
+                                                  Filtro = string.Concat(_p.Codigo, _p.Producto.TrimStart().TrimEnd()),
+                                                  IdLiberacionBonif = _q.IdLiberarBonificacion,
+                                                  Seleccionar = false
+
+                                              }).ToList();
+
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "BONIFICACION LIBRE";
+                    datos.d = qBonificacionLibre;
+ 
+
+
+                    json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+
+
         [Route("api/Factura/Direcciones")]
         [HttpGet]
         public string Direcciones(string CodCliente)
@@ -679,20 +916,22 @@ namespace GV_api.Controllers.FACT
             if (CodCliente == null) CodCliente = string.Empty;
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
-                    var qDireccion = (from _q in _Conexion.Clientes
-                                      join _d in _Conexion.TbDepartamento on _q.DPTO.TrimStart().TrimEnd() equals _d.CODCTA.TrimStart().TrimEnd()
-                                      where _q.CODCTA.TrimStart().TrimEnd() == CodCliente
+                    var qDireccion = (from _q in _Conexion.DireccionCliente
+                                      join _d in _Conexion.Departamento on _q.IdDepartamento equals _d.IdDepartamento
+                                      join _m in _Conexion.Municipio on _q.IdMunicipio equals _m.IdMunicipio into _union
+                                      from muni in _union.DefaultIfEmpty()
+                                      where _q.Cliente.Codigo == CodCliente
                                       select new
                                       {
-                                          Departamento = _d.DESCTA.TrimStart().TrimEnd(),
-                                          Municipio = string.Empty,
-                                          Direccion = _q.DIRECC.TrimStart().TrimEnd(),
-                                          Descripcion = "PRINCIPAL",
-                                          Filtro = string.Concat(_d.DESCTA.TrimStart().TrimEnd(), _q.DIRECC.TrimStart().TrimEnd())
+                                          Departamento = _d.Departamento1.TrimStart().TrimEnd(),
+                                          Municipio = (muni == null ? string.Empty : muni.Municipio1),
+                                          Direccion = _q.Direccion.TrimStart().TrimEnd(),
+                                          Descripcion = _q.Descripcion,
+                                          Filtro = string.Concat(_q.Descripcion.TrimStart().TrimEnd(), _q.Direccion.TrimStart().TrimEnd())
                                       }).ToList();
 
 
@@ -737,7 +976,7 @@ namespace GV_api.Controllers.FACT
 
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
@@ -960,7 +1199,7 @@ namespace GV_api.Controllers.FACT
 
                 using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
                 {
-                    using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                    using (BalancesEntities _Conexion = new BalancesEntities())
                     {
 
                        
@@ -978,18 +1217,14 @@ namespace GV_api.Controllers.FACT
                             if (d.TipoDocumento == "Pedido")
                             {
 
-                                //_Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.ControlInventario SET Secuencia += 1    WHERE  Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'");
-                                //_Conexion.SaveChanges();
-
-                                //Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ControlInventario WHERE Serie = '{d.Serie}' AND Bodegas = '{d.CodBodega}'").First();
+                   
 
 
-
-                                _Conexion.Database.ExecuteSqlCommand($"UPDATE VTA.Consecutivo SET Pedido += 1    WHERE  Serie = '{d.Serie}'");
+                                _Conexion.Database.ExecuteSqlCommand($"UPDATE SIS.Serie SET Proforma += 1    WHERE  IdSerie = '{d.Serie}'");
                                 _Conexion.SaveChanges();
 
 
-                                Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Pedido  FROM VTA.Consecutivo WHERE Serie = '{d.Serie}'").First();
+                                Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Proforma  FROM SIS.Serie WHERE IdSerie = '{d.Serie}'").First();
 
                                 Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoPedido == string.Concat(d.Serie, Consecutivo));
 
@@ -1169,16 +1404,18 @@ namespace GV_api.Controllers.FACT
                                     {
 
                         
-                                        var lstPrecio = (from _q in _Conexion.Listadeprecios
-                                                         where _q.CodiProd == _vDet.Codigo
+                                        var lstPrecio = (from _q in _Conexion.LiberarPrecio
+                                                         join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
+                                                         join _c in _Conexion.ConceptoPrecio on _q.IdConceptoPrecio equals _c.IdConceptoPrecio
+                                                         where _p.Codigo == _vDet.Codigo
                                                          select new
                                                                      {
-                                                                         _q.CodiProd,
-                                                                         _q.Tipo,
+                                                                         _p.Codigo,
+                                                                         _c.Descripcion,
                                                                          _q.Precio
                                                                      }).ToList();
 
-                                        var  iPrecio = lstPrecio.FirstOrDefault(f => f.Tipo == "Distribuid");
+                                        var  iPrecio = lstPrecio.FirstOrDefault(f => f.Descripcion == "Distribuidor");
 
                                         ProductosMail += $"<br>Precio Liberado: <b>{string.Format("{0:###,###,###.00}", _vDet.Precio)}</b>";
 
@@ -1186,7 +1423,7 @@ namespace GV_api.Controllers.FACT
 
                                         if (iPrecio == null)
                                         {
-                                            iPrecio = lstPrecio.FirstOrDefault(f => f.Tipo == "Publico");
+                                            iPrecio = lstPrecio.FirstOrDefault(f => f.Descripcion == "Publico");
 
                                             ProductosMail += $"<br>Precio Minimo: <b>{string.Format("{0:###,###,###.00}", iPrecio.Precio)}</b>";
                                             ProductosMail += $"<br>Precio Público: <b>0.00</b>";
@@ -1194,8 +1431,8 @@ namespace GV_api.Controllers.FACT
                                         }
                                         else
                                         {
-                                            var iPrecioPublico = lstPrecio.FirstOrDefault(f => f.Tipo == "Publico");
-                                            var iPrecioDistribuid = lstPrecio.FirstOrDefault(f => f.Tipo == "Distribuid");
+                                            var iPrecioPublico = lstPrecio.FirstOrDefault(f => f.Descripcion == "Publico");
+                                            var iPrecioDistribuid = lstPrecio.FirstOrDefault(f => f.Descripcion == "Distribuidor");
 
                                             if (_vDet.PrecioCordoba > iPrecio.Precio)
                                             {
@@ -1392,7 +1629,7 @@ namespace GV_api.Controllers.FACT
 
                 using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
                 {
-                    using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                    using (BalancesEntities _Conexion = new BalancesEntities())
                     {
 
 
@@ -1418,42 +1655,7 @@ namespace GV_api.Controllers.FACT
                             _v.UsuarioAnula = Usuario;
 
 
-                            _Conexion.Database.ExecuteSqlCommand($"DELETE FROM DBO.Kardex WHERE Documento = '{_v.NoFactura}' OR Documento = 'FAC_{_v.ID}' AND Tipo ='F01'");
-
-                            if(_v.NoFactura != string.Empty)
-                            {
-
-                                _Conexion.Database.ExecuteSqlCommand($"UPDATE [dbo].MovFacturacion  SET Valor = 0, DesCliente = 'Factura Anulada', IVA = 0,Descuento = 0,Lp = 0,Plazo = 0,Retencion = 0,Anulada = 1,ValorVencimiento = 0" +
-                                    $"WHERE Referencia = '{_v.NoFactura}' AND Serie = '{_v.Serie}'");
-
-
-                                _Conexion.Database.ExecuteSqlCommand($"UPDATE [dbo].DetaFacturacion SET Cantidad = 0,PrecioUnitario = 0,ValorTotal = 0,CostoTotal = 0,Iva = 0,PorDescuento = 0,Descuento = 0,Anulada = 1" +
-                                    $"WHERE Referencia = '{_v.NoFactura}' AND Serie = '{_v.Serie}'");
-
-
-
-                                _Conexion.Database.ExecuteSqlCommand($"DELETE FROM DBO.MovInventarios WHERE Documento = '{_v.NoFactura}' OR Documento = 'FAC_{_v.ID}' AND Tipo ='F01'");
-
-
-                                _Conexion.Database.ExecuteSqlCommand($"UPDATE  [dbo].Tb_Facturacion SET Cantidad = 0,PrecioUnitario = 0, ValorTotal = 0, Iva = 0,Descuento = 0,ValorCordobas = 0,IvaCordobas = 0,DescCordobas = 0,equivalente = 0" +
-                                    $"WHERE Referencia = '{_v.NoFactura}'");
-
-
-
-                                _Conexion.Database.ExecuteSqlCommand($"UPDATE [dbo].Transacciones SET Cordobas = 0,Dolares = 0,Tarjetas1 = 0,Tarjetas2 = 0,Total = 0,Cliente = 'ANULADA',TotalCordobas = 0,TotalDolares = 0,Iva = 0,alcaldia = 0" +
-                                    $"WHERE Documento = '{_v.NoFactura}'");
-
-
-                                _Conexion.Database.ExecuteSqlCommand($"UPDATE [dbo].TransaccionesCaja SET ValorEfectivo = 0,ValorDolar = 0,Iva = 0" +
-                                    $"WHERE Documento = '{_v.NoFactura}'");
-
-                                _Conexion.Database.ExecuteSqlCommand($"DELETE FROM [dbo].tbCartera WHERE DocA = '{_v.NoFactura}' AND DocD = '{_v.NoFactura}'");
-
-
-
-                            }
-
-
+                     
                             _Conexion.SaveChanges();
                         }
 
@@ -1506,10 +1708,10 @@ namespace GV_api.Controllers.FACT
             string json = string.Empty;
 
             try
-            {
+            {/*
                 using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
                 {
-                    using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                    using (BalancesEntities _Conexion = new BalancesEntities())
                     {
                         List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
@@ -1640,7 +1842,7 @@ namespace GV_api.Controllers.FACT
 
                 }
 
-
+                */
             }
             catch (Exception ex)
             {
@@ -1652,7 +1854,7 @@ namespace GV_api.Controllers.FACT
 
         
 
-        private string AsignarConsecutivoFactura(Venta _v , INVESCASANEntities _Conexion)
+        private string AsignarConsecutivoFactura(Venta _v , BalancesEntities _Conexion)
         {
             string json = string.Empty;
 
@@ -1723,107 +1925,7 @@ namespace GV_api.Controllers.FACT
                     _v.Fecha = DateTime.Now;
                     _Conexion.SaveChanges();
 
-
-                    decimal Descuento = _v.VentaDetalle.Sum(s => s.DescuentoCordoba + s.DescuentoAdicionalCordoba);
-                    decimal ImpuetoCordoba = _v.VentaDetalle.Sum(s => s.ImpuestoCordoba);
-                    decimal ImpuetoExoCordoba = _v.VentaDetalle.Sum(s => s.ImpuestoExoCordoba);
-                    string Letas = Cls_Letras.NumeroALetras(_v.TotalCordoba);
-                    Clientes cl = _Conexion.Clientes.Find(_v.CodCliente);
-
-
-                    _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.Kardex SET Documento = '{_v.NoFactura}' WHERE Documento = 'FAC_{_v.ID}'");
-
-
-                    if(_v.TipoVenta == "Credito")
-                    {
-
-                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].tbCartera(CodCliente, Concepto, Debe, Haber, DocA, DocD, Fecha," +
-                            $"FechaFactura, ValorFactura, Plazo, FechaProceso, Bodega, Cerrado, Vendedor, Referencia," +
-                            $"ROC, DebeD, HaberD, Moneda)" +
-                            $"VALUES('{_v.CodCliente}', 'Factura Credito', {_v.TotalCordoba}, 0, '{_v.NoFactura}', '{_v.NoFactura}', '{_v.Fecha.ToShortDateString()}'," +
-                            $"'{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba}, {_v.Plazo}, '{_v.Fecha.ToShortDateString()}', '{_v.CodBodega}', 0, '{_v.CodVendedor}', '0'," +
-                            $"NULL, 0, 0, '{_v.Moneda}')");
-                    }
-
-
-
-                    _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].MovFacturacion(Referencia, Fecha, Valor, CodigoVend, CodCliente, DesCliente, TipoCambio, Iva, Descuento, Lp," +
-                    $"Moneda, TipoFactura, Plazo, ValorenLetras, Cerrada, Retencion, FechaVence, ValorVencimiento," +
-                       $"Bodega, Serie, Anulada, Cancelada, Observaciones, Refe, Cedula, FechaProceso, EsPlan, Usuario, Dpto, Cod, Hora)" +
-                       $"VALUES('{_v.NoFactura}', '{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba}, '{_v.CodVendedor}', '{_v.CodCliente}', '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}', {_v.TasaCambio} , {_v.Impuesto}, {Descuento}, {(_v.TipoExoneracion == "Exonerado" ? "1" : "0")}," +
-                       $"'{_v.Moneda}', '{(_v.TipoVenta == "Contado" ? "C" : "R")}', {_v.Plazo}, '{Letas}', 0, 0, '{_v.Vence.ToShortDateString()}',  {_v.TotalCordoba}," +
-                       $"'{_v.CodBodega}', '{_v.Serie}', '', 0, '{_v.Observaciones}', '', '', '{_v.Fecha.ToShortDateString()}', '{(_v.Observaciones.Contains("CONTINUACION PLAN") ? "P" : "C")}', '{_v.UsuarioRegistra}', '{cl.DPTO}', '{cl.Municipio}', NULL)");
-
-
-                    _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].Transacciones(Documento, Fecha, Cordobas, Dolares, Cheques, Tarjetas1, Tarjetas2," +
-                        $"Transferencia, Total, Cliente, NumeroTarjeta1, NumeroTarjeta2, NumeroCheque, Banco, Usuario, Tipo, NotaCredito, MinutasDeposito, Moneda," +
-                        $"TipoCambio, CuentaContable, Observaciones, POS1, POS2, Bodega, Exonerada, Carta, Retencion, Porcentaje, alcaldia, IR, Exoneracion, Iva," +
-                        $"TotalCordobas, TotalDolares, ROC)" +
-                        $"VALUES('{_v.NoFactura}',  '{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba},0, 0, 0, 0," +
-                        $"0, {_v.TotalCordoba}, '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}',  '', '', '', '', '{_v.CodBodega}', '{(_v.TipoVenta == "Contado" ? "C" : "R")}', 0, 0, '{_v.Moneda}'," +
-                        $"{_v.TasaCambio}, '0', '0', '', '', '{_v.CodBodega}', 0, '{_v.CodCliente}', {ImpuetoCordoba}, 0, 0, 0, 0, {ImpuetoCordoba}," +
-                        $"0, 0, '0')");
-
-
-
-                    _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].TransaccionesCaja(Banco, FormaPago, Tipo, Documento, ValorEfectivo, ValorCheque, TipoCambio," +
-                        $"NumeroTarjeta, Observaciones, Fecha, Cliente, Cedula, Referencia, Bodega, ValorDolar, CuentaContable, Iva)" +
-                        $"VALUES('00', 'EF', 'FC', '{_v.NoFactura}', 0, 0, {_v.TasaCambio}," +
-                        $"'', '', '{_v.Fecha.ToShortDateString()}', '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}', '', '', '{_v.CodBodega}', 0, '', {ImpuetoCordoba})");
-
-
-                    if (_v.TipoExoneracion == "Exonerado")
-                    {
-
-                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].Transacciones(Documento, Fecha, Cordobas, Dolares, Cheques, Tarjetas1, Tarjetas2," +
-                       $"Transferencia, Total, Cliente, NumeroTarjeta1, NumeroTarjeta2, NumeroCheque, Banco, Usuario, Tipo, NotaCredito, MinutasDeposito, Moneda," +
-                       $"TipoCambio, CuentaContable, Observaciones, POS1, POS2, Bodega, Exonerada, Carta, Retencion, Porcentaje, alcaldia, IR, Exoneracion, Iva," +
-                       $"TotalCordobas, TotalDolares, ROC)" +
-                       $"VALUES('{_v.NoFactura}',  '{_v.Fecha.ToShortDateString()}', {_v.TotalCordoba},0, 0, 0, 0," +
-                       $"0, {_v.TotalCordoba}, '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}',  '', '', '', '', '{_v.CodBodega}', 'EX', 0, 0, '{_v.Moneda}'," +
-                       $"{_v.TasaCambio}, '0', '0', '', '', '{_v.CodBodega}', 0, '{_v.CodCliente}', {ImpuetoExoCordoba}, 0, 0, 0, 0, {ImpuetoExoCordoba}," +
-                       $"0, 0, '0')");
-
-
-
-                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].TransaccionesCaja(Banco, FormaPago, Tipo, Documento, ValorEfectivo, ValorCheque, TipoCambio," +
-                            $"NumeroTarjeta, Observaciones, Fecha, Cliente, Cedula, Referencia, Bodega, ValorDolar, CuentaContable, Iva)" +
-                            $"VALUES('00', 'EF', 'EX', '{_v.NoFactura}', {ImpuetoExoCordoba}, 0, {_v.TasaCambio}," +
-                            $"'', '', '{_v.Fecha.ToShortDateString()}', '{(_v.Nombre == string.Empty ? _v.NomCliente : _v.Nombre)}', '', '', '{_v.CodBodega}', 0, '', {ImpuetoExoCordoba})");
-
-                    }
-
-
-
-
-
-                    foreach (VentaDetalle det in _v.VentaDetalle)
-                    {
-
-                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO[dbo].MovInventarios(CodiProd, Tipo, Cantidad, Costo, ValorTotal, IVA, Bodega, Documento, Fecha, Serie, Cerrada, Proveedor," +
-                            $"Referencia, BodegaOrigen, FechaProceso, Observaciones, EnProceso, Procesado, BodegaDestino, Nolote, Vence)" +
-                            $"VALUES('{det.Codigo}','F01',{det.Cantidad},0, {det.TotalCordoba}, {det.ImpuestoCordoba}, '{_v.CodBodega}', '{_v.NoFactura}','{_v.Fecha.ToShortDateString()}','{_v.Serie}',0,0," +
-                            $"0,'{_v.CodBodega}','{_v.Fecha.ToShortDateString()}','',0,0, '{_v.CodBodega}', NULL, NULL)");
-
-
-
-
-                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO .[dbo].DetaFacturacion(Serie, Referencia, Fecha, Codigo, Cantidad, PrecioUnitario, ValorTotal," +
-                            $"CostoTotal, Iva, PorDescuento, Descuento, Cerrada, Bonificacion, Anulada, Bodega, Refe)" +
-                            $"VALUES('{_v.Serie}', '{_v.NoFactura}', '{_v.Fecha.ToShortDateString()}', '{det.Codigo}', {det.Cantidad}, {det.PrecioCordoba}, {det.SubTotalCordoba}," +
-                            $"0, {det.ImpuestoCordoba}, {Math.Round(det.PorcDescuento * 100M, 2, MidpointRounding.ToEven)}, {det.DescuentoCordoba + det.DescuentoAdicionalCordoba}, 0, 0, 0, '{_v.CodBodega}', NULL)");
-
-
-                        _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].Tb_Facturacion(Referencia, Codigo, Cantidad, PrecioUnitario, ValorTotal, Iva, Descuento, CodCliente," +
-                            $"PorDescuento, Letras, ValorNeto, TP, ValorCordobas, IvaCordobas, DescCordobas, Fecha, TipoCambio,equivalente)" +
-                            $"VALUES('{_v.NoFactura}', '{det.Codigo}', {det.Cantidad}, {det.PrecioCordoba}, {det.SubTotalCordoba}, {det.ImpuestoCordoba}, {det.DescuentoCordoba + det.DescuentoAdicionalCordoba}, '{_v.CodCliente}'," +
-                            $"{Math.Round(det.PorcDescuento * 100M, 2, MidpointRounding.ToEven)}, '{Letas}', {det.SubTotalNetoCordoba}, {_v.TasaCambio}, {det.SubTotalCordoba}, {det.ImpuestoCordoba}, {det.DescuentoCordoba + det.DescuentoAdicionalCordoba}, '{_v.Fecha.ToShortDateString()}', {_v.TasaCambio}, 0)");
-
-                    }
-
-
-                    _Conexion.SaveChanges();
-
+ 
                 }
 
 
@@ -1853,7 +1955,7 @@ namespace GV_api.Controllers.FACT
 
             try
             {
-                using (INVESCASANEntities _Conexion = new INVESCASANEntities())
+                using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
@@ -1935,6 +2037,45 @@ namespace GV_api.Controllers.FACT
 
             return json;
         }
+
+
+
+
+
+        private bool EsINVESCASAN(string CodProducto, string CodBodega, BalancesEntities _Conexion)
+        {
+
+            Productos Prod = _Conexion.Productos.FirstOrDefault(w => w.Codigo == CodProducto);
+
+            if (Prod == null) return true;
+
+            BodegaLaboratorioKardex b = null;
+
+            if (CodBodega == "COSTO")
+            {
+                b = _Conexion.BodegaLaboratorioKardex.FirstOrDefault(w => w.CodProveedor == Prod.CodProveedorEscasan);
+
+                if (b != null) return false;
+                return true;
+            }
+
+            b = _Conexion.BodegaLaboratorioKardex.FirstOrDefault(w => w.CodBodega == CodBodega && w.CodProveedor == "ALL");
+
+
+            if (b == null)
+            {
+                b = _Conexion.BodegaLaboratorioKardex.FirstOrDefault(w => w.CodBodega == CodBodega && w.CodProveedor == Prod.CodProveedorEscasan);
+                if (b != null) return false;
+            }
+            else
+            {
+                return false;
+            }
+
+
+            return true;
+        }
+
 
     }
 }

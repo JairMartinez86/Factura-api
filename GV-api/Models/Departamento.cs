@@ -12,11 +12,11 @@ namespace GV_api.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Consecutivo
+    public partial class Departamento
     {
-        public int IdConsecutivo { get; set; }
-        public string Serie { get; set; }
-        public int Pedido { get; set; }
-        public int Factura { get; set; }
+        public int IdDepartamento { get; set; }
+        public string Departamento1 { get; set; }
+        public int IdRegion { get; set; }
+        public string Codigo { get; set; }
     }
 }
