@@ -37,6 +37,7 @@
         <EntityTypeShape EntityType="BalancesModel.Venta" Width="1.5" PointX="13.375" PointY="14" />
         <EntityTypeShape EntityType="BalancesModel.VentaDetalle" Width="1.5" PointX="15.625" PointY="13.375" />
         <AssociationConnector Association="BalancesModel.FK_VentaDetalle_Venta" />
+        <EntityTypeShape EntityType="BalancesModel.FacturaVenta" Width="1.5" PointX="17.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

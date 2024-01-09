@@ -1612,6 +1612,16 @@ namespace FAC_api.Controllers.FACT
 
 
 
+                        if (_v.TipoDocumento == "Factura")
+                        {
+                            json = AsignarConsecutivoFactura(_v, _Conexion);
+
+                            if (json != string.Empty) return json;
+
+                            Imprimir(_v.IdVenta);
+                        }
+
+
 
                         List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
@@ -1900,7 +1910,7 @@ namespace FAC_api.Controllers.FACT
 
         
 
-        private string AsignarConsecutivoFactura(Venta _v , BalancesEntities _Conexion)
+        private string AsignarConsecutivoFactura(Venta _v , BalancesEntities _Conexion, bool esNuevo)
         {
             string json = string.Empty;
 
@@ -1933,15 +1943,41 @@ namespace FAC_api.Controllers.FACT
 
                     }
 
+                    Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == _v.CodBodega);
+                    Cliente cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == _v.CodCliente);
+                    Vendedor vend = _Conexion.Vendedor.FirstOrDefault(f => f.Codigo == _v.CodVendedor);
+                    Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == _v.UsuarioRegistra);
+                    DireccionCliente dir = _Conexion.DireccionCliente.FirstOrDefault(f => f.IdCliente == cl.IdCliente && f.Direccion == _v.Direccion);
+                    FacturaVenta Factura = null;
+
+                    if(!esNuevo) Factura = _Conexion.FacturaVenta.FirstOrDefault(f => f.NoFactura == _v.NoFactura);
+
+
+                    var query = (from _q in _Conexion.sp_GrabarFactura_Web((esNuevo ? 0 : Factura.IdFactura), 0, bo.IdBodega, _v.Serie, "", _v.Fecha, _v.CodCliente, _v.NomCliente, _v.Nombre, cl.NoCedula, _v.Contacto, cl.Celular, "correo", vend.IdVendedor, _v.NomVendedor, _v.TipoVenta, _v.Moneda, _v.TasaCambio,
+                        _v.Direccion, _v.Observaciones, _v.EsExportacion, (_v.TipoExoneracion == "Sin Exoneración" ? false : true), _v.NoExoneracion, _v.OrdenCompra, _v.EsContraentrega, _v.EsDelivery, (_v.NoFactura == string.Empty && (_v.Estado == "Solicitado" || _v.Estado == "Autorizado") ? string.Empty : Factura.Estado), "DETALLE", "LOTES", "PAGO", u.IdUsuario, string.Empty, string.Empty, (dir == null ? 0 : dir.IdDireccion))
+                         select new
+                         {
+                             _q.IdFactura,
+                             _q.MENSAJE,
+                            _q.ESTADO
+                         }).ToList();
 
 
 
-                    string Consecutivo = "";
+                    if ((int)query[0].ESTADO == 0)
+                    {
+                        json = Cls_Mensaje.Tojson(null, 0, "1", query[0].MENSAJE, 1);
+                        return json;
+                    }
+
+
+
+                    if (esNuevo) Factura = _Conexion.FacturaVenta.Find((int)query[0].IdFactura);
 
 
 
 
-                    Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoFactura == string.Concat(_v.Serie, Consecutivo));
+                    Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoFactura == Factura.NoFactura);
 
                     if (vta != null)
                     {
@@ -1953,7 +1989,7 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                    _v.NoFactura = string.Concat(_v.Serie, Consecutivo);
+                    _v.NoFactura = Factura.NoFactura;
                     _v.TipoDocumento = "Factura";
                     _v.Estado = "Facturada";
                     _v.Fecha = DateTime.Now;

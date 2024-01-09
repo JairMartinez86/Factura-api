@@ -377,6 +377,9 @@
     <Compile Include="Models\Estaciones.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FacturaVenta.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Impuestos.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
@@ -408,6 +411,9 @@
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Serie.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_GrabarFactura_Web_Result.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Usuarios.cs">
