@@ -89,7 +89,7 @@ namespace FAC_api.Controllers.FACT
                         }
                         else
                         {
-                            BodegaSerie cons = _Conexion.BodegaSerie.FirstOrDefault(f => f.CodBodega == CodBodega);
+                            BodegaSerie cons = _Conexion.BodegaSerie.FirstOrDefault(f => f.CodBodega == CodBodega && f.EsFact);
                             Serie _num = _Conexion.Serie.FirstOrDefault(f => f.IdSerie == cons.Serie);
 
 
@@ -156,7 +156,7 @@ namespace FAC_api.Controllers.FACT
                     var qClientes = (from _q in _Conexion.Cliente
                                  select new
                                  {
-                                     Codigo = _q.Codigo,
+                                     Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                      Cliente = _q.Nombre.TrimStart().TrimEnd(),
                                      Ruc = string.Empty,
                                      Cedula = _q.NoCedula.TrimStart().TrimEnd(),
@@ -186,7 +186,7 @@ namespace FAC_api.Controllers.FACT
                                     where ub.Contains(_q.Codigo)
                                     select new Cls_Bodega()
                                      {
-                                        Codigo = _q.Codigo,
+                                        Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                         Bodega = _q.Bodega.TrimStart().TrimEnd(),
                                         ClienteContado = _q.CodCliente,
                                         Vendedor = _q.CodVendedor,
@@ -223,7 +223,7 @@ namespace FAC_api.Controllers.FACT
                     var qVendedores = (from _q in _Conexion.Vendedor
                                     select new
                                     {
-                                        Codigo = _q.Codigo,
+                                        Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                         Vendedor = _q.Nombre.TrimStart().TrimEnd(),
                                         Key = string.Concat(_q.Codigo, " ", _q.Nombre.TrimStart().TrimEnd())
                                     }).ToList();
@@ -403,7 +403,7 @@ namespace FAC_api.Controllers.FACT
                                       select new
                                          {
                                              Codigo = _q.Codigo.TrimStart().TrimEnd(),
-                                             Producto = _q.Producto,
+                                             Producto = _q.Producto.TrimStart().TrimEnd(),
                                              ConImpuesto = (_T == null ? true :  _T.Impuesto == "NO IVA"? false : true),
                                              Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
                                              Bonificable = _q.AplicarBonificacion,
@@ -456,8 +456,8 @@ namespace FAC_api.Controllers.FACT
                 using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
-                    Cliente cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == CodCliente);
-                    Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == CodBodega);
+                    Cliente cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo.TrimStart().TrimEnd() == CodCliente);
+                    Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo.TrimStart().TrimEnd() == CodBodega);
                     ConceptoPrecio cp = _Conexion.ConceptoPrecio.FirstOrDefault(f => f.IdConceptoPrecio == cl.IdConceptoPrecio);
                     List<Parametros> lstParametro = _Conexion.Parametros.ToList();
                     Usuarios U = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == User);
@@ -475,7 +475,7 @@ namespace FAC_api.Controllers.FACT
 
                     List<LiberarPrecio> lip  = (from _q in _Conexion.LiberarPrecio
                                                join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
-                                               where _p.Codigo == CodProducto
+                                               where _p.Codigo.TrimStart().TrimEnd() == CodProducto
                                                select _q).ToList();
 
                     LiberadoPrecio = false;
@@ -500,23 +500,23 @@ namespace FAC_api.Controllers.FACT
                    List<string> ub = (from _q in _Conexion.UsuariosBodegas
                                               join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
                                               where  _q.IdUsuario == U.IdUsuario
-                                              select _b.Codigo).ToList();
+                                              select _b.Codigo.TrimStart().TrimEnd()).ToList();
 
                     if (!EsINVESCASAN(CodProducto, CodBodega, _Conexion))
                     {
                         qUbicacion = (from _q in _Conexion.Kardex
-                                      where _q.CodProducto == CodProducto  && ub.Contains(_q.Bodega) && _q.Anulado == false
+                                      where _q.CodProducto.TrimStart().TrimEnd() == CodProducto  && ub.Contains(_q.Bodega) && _q.Anulado == false
                                       group _q by new { _q.CodProducto, _q.Bodega} into g
                                       select new ExistenciaUbicacion
                                       {
-                                          Key = string.Concat(g.Key.CodProducto, g.Key.Bodega),
-                                          CodProducto = g.Key.CodProducto,
-                                          Bodega = g.Key.Bodega,
+                                          Key = string.Concat(g.Key.CodProducto.TrimStart().TrimEnd(), g.Key.Bodega),
+                                          CodProducto = g.Key.CodProducto.TrimStart().TrimEnd(),
+                                          Bodega = g.Key.Bodega.TrimStart().TrimEnd(),
                                           Ubicacion = string.Empty,
                                           Existencia = g.Sum(s => s.Cantidad),
                                           NoLote = string.Empty,
                                           Vence = null,
-                                          EsPrincipal = g.Key.Bodega == CodBodega? true : false,
+                                          EsPrincipal = g.Key.Bodega.TrimStart().TrimEnd() == CodBodega? true : false,
                                       }).ToList();
 
 
@@ -602,12 +602,12 @@ namespace FAC_api.Controllers.FACT
 
 
                     List<Cls_Bonificacion> qBonificacion = (from _q in _Conexion.Bonificaciones
-                                                            where _q.CodigoProducto == CodProducto && _q.CodBodega == CodBodega
+                                                            where _q.CodigoProducto.TrimStart().TrimEnd() == CodProducto && _q.CodBodega == CodBodega
                                                             orderby _q.CantMin
                                                             group _q by new { _q.CodigoProducto, _q.CantMin } into g
                                                             select new Cls_Bonificacion()
                                                             {
-                                                                CodProducto = g.Key.CodigoProducto,
+                                                                CodProducto = g.Key.CodigoProducto.TrimStart().TrimEnd(),
                                                                 Escala = string.Concat(g.Key.CantMin, "+", g.FirstOrDefault().Bonificar),
                                                                 Desde = g.Key.CantMin,
                                                                 Hasta = 0,
@@ -643,12 +643,12 @@ namespace FAC_api.Controllers.FACT
 
                     List<Cls_Precio> qPrecios = (from _q in _Conexion.PrecioVenta
                                                  join _c in _Conexion.ConceptoPrecio on _q.IdConceptoPrecio equals _c.IdConceptoPrecio
-                                                 where _q.CodigoProducto == CodProducto && _q.Activo == true
+                                                 where _q.CodigoProducto.TrimStart().TrimEnd() == CodProducto && _q.Activo == true
                                                  orderby _c.Descripcion
                                                  select new Cls_Precio()
                                                  {
                                                      Index = -1,
-                                                     CodProducto = _q.CodigoProducto,
+                                                     CodProducto = _q.CodigoProducto.TrimStart().TrimEnd(),
                                                      Tipo = _c.Descripcion.TrimStart().TrimEnd(),
                                                      PrecioCordoba = ((decimal)(str_MonedaLocal == _q.IdMoneda ? _q.Precio : _q.Precio * Tc)),
                                                      PrecioDolar = ((decimal)(str_MonedaLocal != _q.IdMoneda ? _q.Precio : _q.Precio / Tc)),
@@ -665,7 +665,7 @@ namespace FAC_api.Controllers.FACT
                         select new Cls_Precio()
                         {
                             Index = 0,
-                            CodProducto = _q.CodigoProducto,
+                            CodProducto = _q.CodigoProducto.TrimStart().TrimEnd(),
                             Tipo = "",
                             PrecioCordoba = ((decimal)(str_MonedaLocal == _q.IdMoneda ? _q.Precio : _q.Precio * Tc)),
                             PrecioDolar = ((decimal)(str_MonedaLocal != _q.IdMoneda ? _q.Precio : _q.Precio / Tc)),
@@ -743,19 +743,21 @@ namespace FAC_api.Controllers.FACT
                     List<Cls_Descuento> C_Descuento = new List<Cls_Descuento>() { new Cls_Descuento()  , new Cls_Descuento() } ;
 
                     C_Descuento[0].Index = 0;
+                    C_Descuento[0].CodProducto = CodProducto;
                     C_Descuento[0].Descripcion = "GENERAL";
                     C_Descuento[0].PorcDescuento = 0;
                     C_Descuento[0].IdDescuentoDet = 0;
 
                     C_Descuento[1].Index = 1;
+                    C_Descuento[1].CodProducto = CodProducto;
                     C_Descuento[1].Descripcion = "ADICIONAL";
                     C_Descuento[1].PorcDescuento = 0;
-                    C_Descuento[0].IdDescuentoDet = 0;
+                    C_Descuento[1].IdDescuentoDet = 0;
 
                     if (lstDes.Count > 0)
                     {
             
-                        Descuentos des = lstDes.FirstOrDefault(w => w.CodigoCliente == cl.Codigo && ((w.CodBodega == null ? CodBodega : w.CodBodega) == CodBodega) && (w.FechaInicio.Date == null ? bo.FechaFacturacion.Value.Date : w.FechaInicio.Date) >= bo.FechaFacturacion.Value.Date && (w.FechaFinaliza.Value.Date == null ? bo.FechaFacturacion.Value.Date : w.FechaFinaliza.Value.Date) <= bo.FechaFacturacion.Value.Date);
+                        Descuentos des = lstDes.FirstOrDefault(w => w.CodigoCliente.TrimStart().TrimEnd() == cl.Codigo.TrimStart().TrimEnd() && ((w.CodBodega.TrimStart().TrimEnd() == null ? CodBodega : w.CodBodega.TrimStart().TrimEnd()) == CodBodega) && (w.FechaInicio.Date == null ? bo.FechaFacturacion.Value.Date : w.FechaInicio.Date) >= bo.FechaFacturacion.Value.Date && (w.FechaFinaliza.Value.Date == null ? bo.FechaFacturacion.Value.Date : w.FechaFinaliza.Value.Date) <= bo.FechaFacturacion.Value.Date);
 
 
                         if (des != null)//DESCUENTO POR CLIENTE
@@ -963,6 +965,54 @@ namespace FAC_api.Controllers.FACT
 
 
 
+
+
+        [Route("api/Factura/ProductoLiberadosInvEscasan")]
+        [HttpGet]
+        public string ProductoLiberadosInvEscasan(string CodCliente, string CodBodega)
+        {
+            return v_ProductoLiberadosInvEscasan(CodCliente, CodBodega);
+        }
+
+
+        private string v_ProductoLiberadosInvEscasan(string CodCliente, string CodBodega)
+        {
+            string json = string.Empty;
+            if (CodCliente == null) CodCliente = string.Empty;
+            try
+            {
+                using (BalancesEntities _Conexion = new BalancesEntities())
+                {
+           
+
+                   List<Cls_Productos_Liberados_INVESCASAN> ProductosLiberados = _Conexion.Database.SqlQuery<Cls_Productos_Liberados_INVESCASAN>($"SELECT -T.id AS ID, RTRIM(LTRIM(T.Codigo)) AS Codigo, T.Precio, T.Cantidad, ISNULL(T.Bonificables, 0) AS Bonificado \r\nFROM INVESCASAN.DBO.AutorizadosPrecios AS T\r\nWHERE T.Bodega = '{CodBodega}' AND RTRIM(LTRIM(T.CodCliente))  = '{CodCliente}' AND T.Cancelado = 0").ToList();
+
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "PRODUCTOS LIBERADOS INVESCASAN";
+                    datos.d = ProductosLiberados;
+ 
+
+
+
+
+
+
+                    json = Cls_Mensaje.Tojson(datos, ProductosLiberados.Count, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
         [Route("api/Factura/Get")]
         [HttpGet]
         public string Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola)
@@ -986,7 +1036,7 @@ namespace FAC_api.Controllers.FACT
                         if(esCola)
                         {
                             var qDoc = (from _q in _Conexion.Venta
-                                        where  _q.TipoDocumento == Tipo && _q.Estado == string.Empty
+                                        where  _q.TipoDocumento == Tipo && (_q.Estado == "Solicitado" || (_q.Estado == "Autorizado" && _q.NoFactura == string.Empty))
                                         orderby _q.CodBodega descending, _q.Fecha descending
                                         select new
                                         {
@@ -1215,7 +1265,7 @@ namespace FAC_api.Controllers.FACT
                         {
                             int Consecutivo = 1;
 
-                            if (d.TipoDocumento == "Pedido")
+                            if (d.TipoDocumento == "Proforma")
                             {
 
                    
@@ -1257,7 +1307,7 @@ namespace FAC_api.Controllers.FACT
                             _v.FechaRegistro = DateTime.Now;
                             _v.UsuarioRegistra = d.UsuarioRegistra;
                             if (d.TipoDocumento == "Factura") d.NoFactura = string.Empty;
-                            if (d.TipoDocumento == "Pedido") d.NoPedido = string.Concat(d.Serie, Consecutivo);
+                            if (d.TipoDocumento == "Proforma") d.NoPedido = string.Concat(d.Serie, Consecutivo);
                             esNuevo = true;
                         }
 
@@ -1268,7 +1318,7 @@ namespace FAC_api.Controllers.FACT
 
                         }
 
-                        if(esNuevo && d.TipoDocumento == "Pedido")
+                        if(esNuevo && d.TipoDocumento == "Proforma")
                         {
                             if(d.PedirAutorizacion)
                             {
@@ -1380,14 +1430,23 @@ namespace FAC_api.Controllers.FACT
                             _vDet.TotalDolar = det.TotalDolar;
                             _vDet.EsBonif = det.EsBonif;
                             _vDet.EsBonifLibre = det.EsBonifLibre;
+                            _vDet.EsLibInvEscasan = det.EsLibInvEscasan;
                             _vDet.EsExonerado = det.EsExonerado;
                             _vDet.EsExento = det.EsExento;
                             _vDet.PrecioLiberado = det.PrecioLiberado;
+                            _vDet.Lotificado = det.Lotificado;
                             _vDet.Margen = det.Margen;
                             _vDet.PedirAutorizado = det.PedirAutorizado;
                             _vDet.Autorizado = det.Autorizado;
                             _vDet.UsuarioAutoriza = det.UsuarioAutoriza;
                             _vDet.IndexUnion = det.IndexUnion;
+                            _vDet.IdPrecioFAC = det.IdPrecioFAC;
+                            _vDet.IdEscala = det.IdEscala;
+                            _vDet.IdDescuentoDet = det.IdDescuentoDet;
+                            _vDet.IdLiberacion = det.IdLiberacion;
+                            _vDet.IdLiberacionBonif = det.IdLiberacionBonif;
+                            _vDet.FacturaNegativo = det.FacturaNegativo;
+                            _vDet.Lotificado = det.Lotificado;
 
 
                             _v.VentaDetalle.Add(_vDet);
@@ -1494,9 +1553,7 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                            _Conexion.Database.ExecuteSqlCommand($"INSERT INTO [dbo].Kardex ( CodiProd, Fecha, Tipo, Documento, Entrada, Salidas, Costo, Bodega, BodegaDestino, Cerrada, Nolote, Vence)" +
-                                $"VALUES( '{det.Codigo}' , '{_v.Fecha.ToShortDateString()}','F01', '{string.Concat("FAC_", _v.ID)}' ,0,{det.Cantidad},0,'{_v.CodBodega}', '{_v.CodBodega}', 0, NULL, NULL)");
-
+                       
                             _Conexion.SaveChanges();
                         }
 
@@ -1505,7 +1562,7 @@ namespace FAC_api.Controllers.FACT
 
 
                         
-                        if (MandarCorreo && _v.TipoDocumento == "Pedido")
+                        if (MandarCorreo && _v.TipoDocumento == "Proforma")
                         {
 
                             PermisoFactura per = _Conexion.PermisoFactura.FirstOrDefault(f => f.Usuario == d.UsuarioRegistra && f.AutorizaPedido);
@@ -1552,18 +1609,6 @@ namespace FAC_api.Controllers.FACT
                             smtpClient.Send(mail);
 
                         }
-
-
-
-                        if (_v.TipoDocumento == "Factura")
-                        {
-                            json = AsignarConsecutivoFactura(_v, _Conexion);
-
-                            if (json != string.Empty) return json;
-
-                            Imprimir(_v.IdVenta);
-                        }
-
 
 
 
@@ -1709,7 +1754,7 @@ namespace FAC_api.Controllers.FACT
             string json = string.Empty;
 
             try
-            {/*
+            {
                 using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
                 {
                     using (BalancesEntities _Conexion = new BalancesEntities())
@@ -1729,7 +1774,7 @@ namespace FAC_api.Controllers.FACT
 
                         MemoryStream stream = new MemoryStream();
 
-
+                        /*
                         DsetReporte Dset = new DsetReporte();
                     
                         List<SP_FacturaImpresa_Result>   Query = (from _q in _Conexion.SP_FacturaImpresa(_v.IdVenta).AsEnumerable()
@@ -1830,7 +1875,7 @@ namespace FAC_api.Controllers.FACT
 
 
 
-
+                        */
 
                         _Conexion.SaveChanges();
 
@@ -1843,7 +1888,7 @@ namespace FAC_api.Controllers.FACT
 
                 }
 
-                */
+                
             }
             catch (Exception ex)
             {
@@ -1874,7 +1919,7 @@ namespace FAC_api.Controllers.FACT
 
                         if (per == null)
                         {
-                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>Se requiere autorización, por favor genere un pedido.</b>", 1);
+                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>Se requiere autorización, por favor genere una proforma.</b>", 1);
                             return json;
                         }
 
@@ -1889,23 +1934,11 @@ namespace FAC_api.Controllers.FACT
                     }
 
 
-              
-
-                    _Conexion.Database.ExecuteSqlCommand($"UPDATE VTA.Consecutivo SET Factura += 1    WHERE  Serie = '{_v.Serie}'");
-                    _Conexion.SaveChanges();
-
-                    _Conexion.Database.ExecuteSqlCommand($"UPDATE DBO.ConfiguraFacturacion SET Secuencia += 1    WHERE  Serie = '{_v.Serie}' AND Bodegas = '{_v.CodBodega}'");
-                    _Conexion.SaveChanges();
-
-                    int Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Factura  FROM VTA.Consecutivo WHERE Serie = '{_v.Serie}'").First();
-                    int Consecutivo2 = _Conexion.Database.SqlQuery<int>($"SELECT Secuencia - 1 FROM DBO.ConfiguraFacturacion WHERE Serie = '{_v.Serie}' AND Bodegas = '{_v.CodBodega}'").First();
 
 
-                    if (Consecutivo != Consecutivo2)
-                    {
-                        json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>Error al comprar los consecutivos (INVESCASAN VS WEB).</b>", 1);
-                        return json;
-                    }
+                    string Consecutivo = "";
+
+
 
 
                     Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoFactura == string.Concat(_v.Serie, Consecutivo));
@@ -2007,7 +2040,14 @@ namespace FAC_api.Controllers.FACT
                                         _q.PedirAutorizado,
                                         _q.Autorizado,
                                         _q.UsuarioAutoriza,
-                                        _q.IndexUnion
+                                        _q.IndexUnion,
+                                        _q.IdPrecioFAC,
+                                        _q.IdEscala,
+                                        _q.IdDescuentoDet,
+                                        _q.IdLiberacion,
+                                        _q.IdLiberacionBonif
+                                        ,_q.FacturaNegativo
+                                        ,_q.Lotificado
                                     }).ToList();
 
 

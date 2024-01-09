@@ -596,6 +596,7 @@
           <Property Name="TotalDolar" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="EsBonif" Type="bit" Nullable="false" />
           <Property Name="EsBonifLibre" Type="bit" Nullable="false" />
+          <Property Name="EsLibInvEscasan" Type="bit" Nullable="false" />
           <Property Name="EsExonerado" Type="bit" Nullable="false" />
           <Property Name="EsExento" Type="bit" Nullable="false" />
           <Property Name="PrecioLiberado" Type="bit" Nullable="false" />
@@ -604,6 +605,13 @@
           <Property Name="Autorizado" Type="bit" Nullable="false" />
           <Property Name="UsuarioAutoriza" Type="nvarchar" MaxLength="50" />
           <Property Name="IndexUnion" Type="int" Nullable="false" />
+          <Property Name="IdPrecioFAC" Type="int" Nullable="false" />
+          <Property Name="IdEscala" Type="int" />
+          <Property Name="IdDescuentoDet" Type="int" />
+          <Property Name="IdLiberacion" Type="int" />
+          <Property Name="IdLiberacionBonif" Type="int" />
+          <Property Name="FacturaNegativo" Type="bit" Nullable="false" />
+          <Property Name="Lotificado" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Bonificaciones_Productos">
           <End Role="Productos" Type="Self.Productos" Multiplicity="1" />
@@ -665,6 +673,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="sp_GrabarFactura_Web" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FAC">
+          <Parameter Name="P_IdFactura" Type="int" Mode="In" />
+          <Parameter Name="P_IdProforma" Type="int" Mode="In" />
+          <Parameter Name="P_IdBodega" Type="int" Mode="In" />
+          <Parameter Name="P_IdSerie" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_NoFactura" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Fecha" Type="datetime2" Mode="In" />
+          <Parameter Name="P_CodCliente" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_NomCliente" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Ruc" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Telefono" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Celular" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Correo" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdVendedor" Type="int" Mode="In" />
+          <Parameter Name="P_NomVendedor" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_TipoVenta" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdMoneda" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_TasaCambio" Type="decimal" Mode="In" />
+          <Parameter Name="P_DireccionEntrega" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Observacion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Exportacion" Type="bit" Mode="In" />
+          <Parameter Name="P_Exoneracion" Type="bit" Mode="In" />
+          <Parameter Name="P_NoExoneracion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_OrdenCompra" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_ContraEntrega" Type="bit" Mode="In" />
+          <Parameter Name="P_EsDelivery" Type="bit" Mode="In" />
+          <Parameter Name="P_Estado" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_DatosDetalle" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="P_DatosLote" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="P_DatosPago" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="P_IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="P_Longitud" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Latitud" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdDireccion" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="BalancesModelStoreContainer">
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Departamento" EntityType="Self.Departamento" Schema="CXC" store:Type="Tables" />
@@ -858,13 +902,49 @@
           <EntitySet Name="Municipio" EntityType="BalancesModel.Municipio" />
           <EntitySet Name="CorreoAutorizaFactura" EntityType="BalancesModel.CorreoAutorizaFactura" />
           <EntitySet Name="PermisoFactura" EntityType="BalancesModel.PermisoFactura" />
+          <EntitySet Name="LiberarBonificacion" EntityType="BalancesModel.LiberarBonificacion" />
           <EntitySet Name="Venta" EntityType="BalancesModel.Venta" />
           <EntitySet Name="VentaDetalle" EntityType="BalancesModel.VentaDetalle" />
           <AssociationSet Name="FK_VentaDetalle_Venta" Association="BalancesModel.FK_VentaDetalle_Venta">
             <End Role="Venta" EntitySet="Venta" />
             <End Role="VentaDetalle" EntitySet="VentaDetalle" />
           </AssociationSet>
-          <EntitySet Name="LiberarBonificacion" EntityType="BalancesModel.LiberarBonificacion" />
+          <FunctionImport Name="sp_GrabarFactura_Web" ReturnType="Collection(BalancesModel.sp_GrabarFactura_Web_Result)">
+            <Parameter Name="P_IdFactura" Mode="In" Type="Int32" />
+            <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
+            <Parameter Name="P_IdBodega" Mode="In" Type="Int32" />
+            <Parameter Name="P_IdSerie" Mode="In" Type="String" />
+            <Parameter Name="P_NoFactura" Mode="In" Type="String" />
+            <Parameter Name="P_Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="P_CodCliente" Mode="In" Type="String" />
+            <Parameter Name="P_NomCliente" Mode="In" Type="String" />
+            <Parameter Name="P_Nombre" Mode="In" Type="String" />
+            <Parameter Name="P_Ruc" Mode="In" Type="String" />
+            <Parameter Name="P_Telefono" Mode="In" Type="String" />
+            <Parameter Name="P_Celular" Mode="In" Type="String" />
+            <Parameter Name="P_Correo" Mode="In" Type="String" />
+            <Parameter Name="P_IdVendedor" Mode="In" Type="Int32" />
+            <Parameter Name="P_NomVendedor" Mode="In" Type="String" />
+            <Parameter Name="P_TipoVenta" Mode="In" Type="String" />
+            <Parameter Name="P_IdMoneda" Mode="In" Type="String" />
+            <Parameter Name="P_TasaCambio" Mode="In" Type="Decimal" />
+            <Parameter Name="P_DireccionEntrega" Mode="In" Type="String" />
+            <Parameter Name="P_Observacion" Mode="In" Type="String" />
+            <Parameter Name="P_Exportacion" Mode="In" Type="Boolean" />
+            <Parameter Name="P_Exoneracion" Mode="In" Type="Boolean" />
+            <Parameter Name="P_NoExoneracion" Mode="In" Type="String" />
+            <Parameter Name="P_OrdenCompra" Mode="In" Type="String" />
+            <Parameter Name="P_ContraEntrega" Mode="In" Type="Boolean" />
+            <Parameter Name="P_EsDelivery" Mode="In" Type="Boolean" />
+            <Parameter Name="P_Estado" Mode="In" Type="String" />
+            <Parameter Name="P_DatosDetalle" Mode="In" Type="String" />
+            <Parameter Name="P_DatosLote" Mode="In" Type="String" />
+            <Parameter Name="P_DatosPago" Mode="In" Type="String" />
+            <Parameter Name="P_IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="P_Longitud" Mode="In" Type="String" />
+            <Parameter Name="P_Latitud" Mode="In" Type="String" />
+            <Parameter Name="P_IdDireccion" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -1309,6 +1389,22 @@
           <Property Name="AutorizaPedido" Type="Boolean" Nullable="false" />
           <Property Name="PaseFactura" Type="Boolean" Nullable="false" />
         </EntityType>
+        <EntityType Name="LiberarBonificacion">
+          <Key>
+            <PropertyRef Name="IdLiberarBonificacion" />
+          </Key>
+          <Property Name="IdLiberarBonificacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdBodega" Type="Int32" />
+          <Property Name="IdProducto" Type="Int32" Nullable="false" />
+          <Property Name="IdCliente" Type="Int32" Nullable="false" />
+          <Property Name="CantMax" Type="Int32" Nullable="false" />
+          <Property Name="Facturada" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IdUsuarioCrea" Type="Int32" Nullable="false" />
+          <Property Name="FechaInactiva" Type="DateTime" Precision="7" />
+          <Property Name="IdUsuarioInactiva" Type="Int32" />
+        </EntityType>
         <EntityType Name="Venta">
           <Key>
             <PropertyRef Name="IdVenta" />
@@ -1399,6 +1495,7 @@
           <Property Name="TotalDolar" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="EsBonif" Type="Boolean" Nullable="false" />
           <Property Name="EsBonifLibre" Type="Boolean" Nullable="false" />
+          <Property Name="EsLibInvEscasan" Type="Boolean" Nullable="false" />
           <Property Name="EsExonerado" Type="Boolean" Nullable="false" />
           <Property Name="EsExento" Type="Boolean" Nullable="false" />
           <Property Name="PrecioLiberado" Type="Boolean" Nullable="false" />
@@ -1407,6 +1504,13 @@
           <Property Name="Autorizado" Type="Boolean" Nullable="false" />
           <Property Name="UsuarioAutoriza" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IndexUnion" Type="Int32" Nullable="false" />
+          <Property Name="IdPrecioFAC" Type="Int32" Nullable="false" />
+          <Property Name="IdEscala" Type="Int32" />
+          <Property Name="IdDescuentoDet" Type="Int32" />
+          <Property Name="IdLiberacion" Type="Int32" />
+          <Property Name="IdLiberacionBonif" Type="Int32" />
+          <Property Name="FacturaNegativo" Type="Boolean" Nullable="false" />
+          <Property Name="Lotificado" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Venta" Relationship="BalancesModel.FK_VentaDetalle_Venta" FromRole="VentaDetalle" ToRole="Venta" />
         </EntityType>
         <Association Name="FK_VentaDetalle_Venta">
@@ -1421,22 +1525,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="LiberarBonificacion">
-          <Key>
-            <PropertyRef Name="IdLiberarBonificacion" />
-          </Key>
-          <Property Name="IdLiberarBonificacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdBodega" Type="Int32" />
-          <Property Name="IdProducto" Type="Int32" Nullable="false" />
-          <Property Name="IdCliente" Type="Int32" Nullable="false" />
-          <Property Name="CantMax" Type="Int32" Nullable="false" />
-          <Property Name="Facturada" Type="Int32" Nullable="false" />
-          <Property Name="Activo" Type="Boolean" Nullable="false" />
-          <Property Name="FechaAsignacion" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="IdUsuarioCrea" Type="Int32" Nullable="false" />
-          <Property Name="FechaInactiva" Type="DateTime" Precision="7" />
-          <Property Name="IdUsuarioInactiva" Type="Int32" />
-        </EntityType>
+        <ComplexType Name="sp_GrabarFactura_Web_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" />
+          <Property Type="Int32" Name="IdFactura" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1951,6 +2044,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LiberarBonificacion">
+            <EntityTypeMapping TypeName="BalancesModel.LiberarBonificacion">
+              <MappingFragment StoreEntitySet="LiberarBonificacion">
+                <ScalarProperty Name="IdUsuarioInactiva" ColumnName="IdUsuarioInactiva" />
+                <ScalarProperty Name="FechaInactiva" ColumnName="FechaInactiva" />
+                <ScalarProperty Name="IdUsuarioCrea" ColumnName="IdUsuarioCrea" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Facturada" ColumnName="Facturada" />
+                <ScalarProperty Name="CantMax" ColumnName="CantMax" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
+                <ScalarProperty Name="IdLiberarBonificacion" ColumnName="IdLiberarBonificacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Venta">
             <EntityTypeMapping TypeName="BalancesModel.Venta">
               <MappingFragment StoreEntitySet="Venta">
@@ -2005,6 +2115,13 @@
           <EntitySetMapping Name="VentaDetalle">
             <EntityTypeMapping TypeName="BalancesModel.VentaDetalle">
               <MappingFragment StoreEntitySet="VentaDetalle">
+                <ScalarProperty Name="Lotificado" ColumnName="Lotificado" />
+                <ScalarProperty Name="FacturaNegativo" ColumnName="FacturaNegativo" />
+                <ScalarProperty Name="IdLiberacionBonif" ColumnName="IdLiberacionBonif" />
+                <ScalarProperty Name="IdLiberacion" ColumnName="IdLiberacion" />
+                <ScalarProperty Name="IdDescuentoDet" ColumnName="IdDescuentoDet" />
+                <ScalarProperty Name="IdEscala" ColumnName="IdEscala" />
+                <ScalarProperty Name="IdPrecioFAC" ColumnName="IdPrecioFAC" />
                 <ScalarProperty Name="IndexUnion" ColumnName="IndexUnion" />
                 <ScalarProperty Name="UsuarioAutoriza" ColumnName="UsuarioAutoriza" />
                 <ScalarProperty Name="Autorizado" ColumnName="Autorizado" />
@@ -2013,6 +2130,7 @@
                 <ScalarProperty Name="PrecioLiberado" ColumnName="PrecioLiberado" />
                 <ScalarProperty Name="EsExento" ColumnName="EsExento" />
                 <ScalarProperty Name="EsExonerado" ColumnName="EsExonerado" />
+                <ScalarProperty Name="EsLibInvEscasan" ColumnName="EsLibInvEscasan" />
                 <ScalarProperty Name="EsBonifLibre" ColumnName="EsBonifLibre" />
                 <ScalarProperty Name="EsBonif" ColumnName="EsBonif" />
                 <ScalarProperty Name="TotalDolar" ColumnName="TotalDolar" />
@@ -2051,23 +2169,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LiberarBonificacion">
-            <EntityTypeMapping TypeName="BalancesModel.LiberarBonificacion">
-              <MappingFragment StoreEntitySet="LiberarBonificacion">
-                <ScalarProperty Name="IdUsuarioInactiva" ColumnName="IdUsuarioInactiva" />
-                <ScalarProperty Name="FechaInactiva" ColumnName="FechaInactiva" />
-                <ScalarProperty Name="IdUsuarioCrea" ColumnName="IdUsuarioCrea" />
-                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
-                <ScalarProperty Name="Activo" ColumnName="Activo" />
-                <ScalarProperty Name="Facturada" ColumnName="Facturada" />
-                <ScalarProperty Name="CantMax" ColumnName="CantMax" />
-                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
-                <ScalarProperty Name="IdLiberarBonificacion" ColumnName="IdLiberarBonificacion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_GrabarFactura_Web" FunctionName="BalancesModel.Store.sp_GrabarFactura_Web">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_GrabarFactura_Web_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+                <ScalarProperty Name="IdFactura" ColumnName="IdFactura" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

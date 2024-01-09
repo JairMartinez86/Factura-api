@@ -49,6 +49,7 @@ namespace FAC_api.Models
         public decimal TotalDolar { get; set; }
         public bool EsBonif { get; set; }
         public bool EsBonifLibre { get; set; }
+        public bool EsLibInvEscasan { get; set; }
         public bool EsExonerado { get; set; }
         public bool EsExento { get; set; }
         public bool PrecioLiberado { get; set; }
@@ -57,6 +58,13 @@ namespace FAC_api.Models
         public bool Autorizado { get; set; }
         public string UsuarioAutoriza { get; set; }
         public int IndexUnion { get; set; }
+        public int IdPrecioFAC { get; set; }
+        public Nullable<int> IdEscala { get; set; }
+        public Nullable<int> IdDescuentoDet { get; set; }
+        public Nullable<int> IdLiberacion { get; set; }
+        public Nullable<int> IdLiberacionBonif { get; set; }
+        public bool FacturaNegativo { get; set; }
+        public int Lotificado { get; set; }
     
         public virtual Venta Venta { get; set; }
     }

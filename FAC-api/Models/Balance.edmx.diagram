@@ -33,10 +33,10 @@
         <EntityTypeShape EntityType="BalancesModel.Municipio" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="BalancesModel.CorreoAutorizaFactura" Width="1.5" PointX="13.375" PointY="3.75" />
         <EntityTypeShape EntityType="BalancesModel.PermisoFactura" Width="1.5" PointX="14.375" PointY="6.75" />
-        <EntityTypeShape EntityType="BalancesModel.Venta" Width="1.5" PointX="13.375" PointY="13.375" />
-        <EntityTypeShape EntityType="BalancesModel.VentaDetalle" Width="1.5" PointX="15.625" PointY="13.5" />
-        <AssociationConnector Association="BalancesModel.FK_VentaDetalle_Venta" />
         <EntityTypeShape EntityType="BalancesModel.LiberarBonificacion" Width="1.5" PointX="15.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BalancesModel.Venta" Width="1.5" PointX="13.375" PointY="14" />
+        <EntityTypeShape EntityType="BalancesModel.VentaDetalle" Width="1.5" PointX="15.625" PointY="13.375" />
+        <AssociationConnector Association="BalancesModel.FK_VentaDetalle_Venta" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
