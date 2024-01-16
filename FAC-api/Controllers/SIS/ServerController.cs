@@ -49,8 +49,9 @@ namespace FAC_api.Class.SIS
                                         Pwd = _Conexion.Database.SqlQuery<string>($"SELECT [SIS].[Desencriptar]({"0x" + BitConverter.ToString(_q.Pass).Replace("-", "")})").Single(),
                                         Rol = string.Empty,
                                         Bodega = _b.Codigo,
+                                        _q.Lotificar,
                                         FechaLogin = string.Format("{0:yyyy-MM-dd hh:mm:ss}", DateTime.Now),
-                                        Desconectar = _q.Desconectar
+                                        _q.Desconectar
                                     }).ToList();
 
 
@@ -78,7 +79,7 @@ namespace FAC_api.Class.SIS
                     lstDatos.Add(datos);
 
 
-                    lstDatos.AddRange(v_FechaServidor(user, qUsuario[0].Desconectar));
+                    lstDatos.AddRange(v_FechaServidor(user, qUsuario[0].Desconectar, _Conexion));
 
 
 
@@ -116,7 +117,7 @@ namespace FAC_api.Class.SIS
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
           
-                    lstDatos.AddRange(v_FechaServidor(user, false));
+                    lstDatos.AddRange(v_FechaServidor(user, false, _Conexion));
 
 
 
@@ -135,8 +136,9 @@ namespace FAC_api.Class.SIS
         }
 
 
-        private Cls_Datos[] v_FechaServidor(string user, bool Desconectar)
+        private Cls_Datos[] v_FechaServidor(string user, bool Desconectar,  BalancesEntities _Conexion)
         {
+            Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == user);
 
             Cls_Datos datos = new Cls_Datos();
             datos.Nombre = "FECHA SERVIDOR";
@@ -147,8 +149,12 @@ namespace FAC_api.Class.SIS
             datos2.Nombre = "DESCONECCION";
             datos2.d = Desconectar ? "-1" : "7200";
 
+            Cls_Datos datos3 = new Cls_Datos();
+            datos3.Nombre = "LOTIFICAR";
+            datos3.d = u.Lotificar;
 
-            return new Cls_Datos[] { datos, datos2 };
+
+            return new Cls_Datos[] { datos, datos2, datos3 };
         }
     }
 }

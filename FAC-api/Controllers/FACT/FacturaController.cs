@@ -1,7 +1,10 @@
-﻿using DevExpress.Data;
+﻿using DevExpress.Charts.Native;
+using DevExpress.Data;
 using DevExpress.DataProcessing;
 using DevExpress.DirectX.Common.Direct2D;
+using DevExpress.PivotGrid.OLAP.Mdx;
 using DevExpress.Xpo.DB.Helpers;
+using DevExpress.XtraCharts;
 using DevExpress.XtraCharts.Native;
 using FAC_api.Class;
 using FAC_api.Class.FACT;
@@ -17,6 +20,7 @@ using System.Data.Entity.Core.Objects;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
@@ -33,6 +37,7 @@ using System.Web.Razor.Parser.SyntaxTree;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
 using static Azure.Core.HttpHeader;
+using static DevExpress.Data.Filtering.Helpers.SubExprHelper.ThreadHoppingFiltering;
 using static DevExpress.DataProcessing.InMemoryDataProcessor.AddSurrogateOperationAlgorithm;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using IsolationLevel = System.Transactions.IsolationLevel;
@@ -62,15 +67,17 @@ namespace FAC_api.Controllers.FACT
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
+                    Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == CodBodega);
+
                     Cls_Datos datos = new Cls_Datos();
                     datos.Nombre = "FECHA FACTURA";
-                    datos.d = DateTime.Now;
+                    datos.d = bo.FechaFacturacion;
                     lstDatos.Add(datos);
 
 
                     datos = new Cls_Datos();
                     datos.Nombre = "TASA CAMBIO";
-                    datos.d = f_TasaCambio(_Conexion, DateTime.Now);
+                    datos.d = f_TasaCambio(_Conexion, bo.FechaFacturacion.Value);
                     lstDatos.Add(datos);
 
                     string NoDoc = string.Empty;
@@ -93,7 +100,7 @@ namespace FAC_api.Controllers.FACT
                             Serie _num = _Conexion.Serie.FirstOrDefault(f => f.IdSerie == cons.Serie);
 
 
-                            NoDoc = _num == null ? string.Empty : string.Concat(_num.IdSerie, _num.Proforma + 1);
+                            NoDoc = _num == null ? string.Empty :   (_num.Proforma + 1).ToString().PadLeft(10, '0');
                             Serie = _num == null ? string.Empty : _num.IdSerie.TrimStart().TrimEnd();
                         }
                     }
@@ -158,8 +165,9 @@ namespace FAC_api.Controllers.FACT
                                  {
                                      Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                      Cliente = _q.Nombre.TrimStart().TrimEnd(),
-                                     Ruc = string.Empty,
+                                     Ruc = _q.NoCedula.TrimStart().TrimEnd(),
                                      Cedula = _q.NoCedula.TrimStart().TrimEnd(),
+                                     Correo = (_q.Correo.TrimStart().TrimEnd() != string.Empty ? _q.Correo.TrimStart().TrimEnd() + ";" : string.Empty) + (_q.Correo2.TrimStart().TrimEnd() != string.Empty ? _q.Correo2.TrimStart().TrimEnd() : string.Empty),
                                      Contacto = string.Concat(_q.Celular.TrimStart().TrimEnd(),"/",_q.Telefono1.TrimStart().TrimEnd(), "/", _q.Telefono2.TrimStart().TrimEnd(), "/", _q.Telefono3.TrimStart().TrimEnd()),
                                      Limite = _q.Limite,
                                      Moneda = _q.IdMoneda,
@@ -402,9 +410,12 @@ namespace FAC_api.Controllers.FACT
                                       where _q.Activo == true
                                       select new
                                          {
+                                             _q.IdProducto,
                                              Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                              Producto = _q.Producto.TrimStart().TrimEnd(),
+                                             _q.IdImpuesto,
                                              ConImpuesto = (_T == null ? true :  _T.Impuesto == "NO IVA"? false : true),
+                                             _q.IdUnidad,
                                              Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
                                              Bonificable = _q.AplicarBonificacion,
                                              FacturaNegativo = (_q.Servicios == null ? (_q.FacturaNegativo == null ? false : _q.FacturaNegativo ) : ((bool)!_q.Servicios ? (_q.FacturaNegativo == null ? false : _q.FacturaNegativo) : false ) )
@@ -1036,19 +1047,23 @@ namespace FAC_api.Controllers.FACT
                         if(esCola)
                         {
                             var qDoc = (from _q in _Conexion.Venta
-                                        where  _q.TipoDocumento == Tipo && (_q.Estado == "Solicitado" || (_q.Estado == "Autorizado" && _q.NoFactura == string.Empty))
+                                        where  _q.TipoDocumento == Tipo && (_q.Estado == "Solicitado" || _q.Estado == "Impresa" || (_q.Estado == "Autorizado" && _q.NoFactura == string.Empty))
                                         orderby _q.CodBodega descending, _q.Fecha descending
                                         select new
                                         {
                                             _q.IdVenta,
                                             _q.TipoDocumento,
+                                            _q.IdFactura,
+                                            _q.IdProforma,
                                             _q.Serie,
                                             _q.NoFactura,
                                             _q.NoPedido,
                                             _q.CodCliente,
                                             _q.NomCliente,
                                             _q.Nombre,
-                                            _q.RucCedula,
+                                            _q.Cedula,
+                                            _q.Ruc,
+                                            _q.Correo,
                                             _q.Contacto,
                                             _q.Limite,
                                             _q.Disponible,
@@ -1089,19 +1104,23 @@ namespace FAC_api.Controllers.FACT
                         else
                         {
                             var qDoc = (from _q in _Conexion.Venta
-                                        where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && _q.NoFactura != string.Empty
-                                        orderby _q.FechaRegistro descending
+                                        where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && _q.NoFactura != string.Empty && (_q.Estado == "Anulado" ||  _q.Estado == "Facturada")
+                                        orderby _q.Fecha descending
                                         select new
                                         {
                                             _q.IdVenta,
                                             _q.TipoDocumento,
+                                            _q.IdFactura,
+                                            _q.IdProforma,
                                             _q.Serie,
                                             _q.NoFactura,
                                             _q.NoPedido,
                                             _q.CodCliente,
                                             _q.NomCliente,
                                             _q.Nombre,
-                                            _q.RucCedula,
+                                            _q.Cedula,
+                                            _q.Ruc,
+                                            _q.Correo,
                                             _q.Contacto,
                                             _q.Limite,
                                             _q.Disponible,
@@ -1153,13 +1172,17 @@ namespace FAC_api.Controllers.FACT
                                         _q.IdVenta,
                                         _q.ID,
                                         _q.TipoDocumento,
+                                        _q.IdFactura,
+                                        _q.IdProforma,
                                         _q.Serie,
-                                        _q.NoFactura,
+                                        _q.NoFactura,                
                                         _q.NoPedido,
                                         _q.CodCliente,
                                         _q.NomCliente,
                                         _q.Nombre,
-                                        _q.RucCedula,
+                                        _q.Cedula,
+                                        _q.Ruc,
+                                        _q.Correo,
                                         _q.Contacto,
                                         _q.Limite,
                                         _q.Disponible,
@@ -1257,47 +1280,116 @@ namespace FAC_api.Controllers.FACT
                         bool esNuevo = false;
                         bool MandarCorreo = false;
                         string ProductosMail = string.Empty;
-          
+                        string DetalleProd = string.Empty;
+                        string DetalleLote = string.Empty;
+                        string NoProf = string.Empty;
+                        int IdProforma = 0;
+
                         Venta _v = _Conexion.Venta.Find(d.IdVenta);
-                        
 
-                        if (_v == null)
+
+
+                        if (d.TipoDocumento == "Proforma")
                         {
-                            int Consecutivo = 1;
 
-                            if (d.TipoDocumento == "Proforma")
+
+           
+                            Vendedor vend = _Conexion.Vendedor.FirstOrDefault(f => f.Codigo == d.CodVendedor);
+                            Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == d.UsuarioRegistra);
+                            ProformaVenta prof = null;
+                            
+                            if(_v != null) prof = _Conexion.ProformaVenta.FirstOrDefault(f => f.IdProforma == _v.IdProforma);
+
+
+
+                            foreach (VentaDetalle det in d.VentaDetalle)
                             {
 
-                   
+                                DetalleProd += string.Concat(det.Index, "|0|0|");
 
-
-                                _Conexion.Database.ExecuteSqlCommand($"UPDATE SIS.Serie SET Proforma += 1    WHERE  IdSerie = '{d.Serie}'");
-                                _Conexion.SaveChanges();
-
-
-                                Consecutivo = _Conexion.Database.SqlQuery<int>($"SELECT Proforma  FROM SIS.Serie WHERE IdSerie = '{d.Serie}'").First();
-
-                                Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoPedido == string.Concat(d.Serie, Consecutivo));
-
-                                if (vta != null)
+                                foreach (string col in (new string[] { "Codigo", "IdProducto", "IdUnidad", "Precio", "Existencia", "Cantidad", "EsBonif", "SubTotal", "PorcDescuento", "Descuento", "SubTotalDolar", "IdImpuesto", "PorcImpuesto", "Impuesto", "Total",
+            "TasaCambio", "PrecioDolar", "PrecioCordoba", "SubTotalDolar", "SubTotalCordoba", "DescuentoDolar", "DescuentoCordoba", "SubTotalNetoDolar", "SubTotalNetoCordoba", "ImpuestoDolar", "ImpuestoCordoba"}))
                                 {
-                                    json = Cls_Mensaje.Tojson(null, 0, "1", "<b>El pedido genera duplicado.</>", 1);
-                                    return json;
-
+                                    DetalleProd += string.Concat(GetProperty(det, col) + "|", (col == "IdUnidad" ? "|" : string.Empty));
                                 }
 
 
+                                DetalleProd += $"{(det.EsExonerado || det.EsExento ? det.PorcImpuesto : 0)}|{det.ImpuestoExo}|{det.ImpuestoExoDolar}|{det.ImpuestoExoCordoba}|{det.TotalDolar}|{det.TotalCordoba}|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|{det.IdPrecioFAC}|{det.IdEscala}|{det.IdDescuentoDet}|{det.IdLiberacion}||||{det.IdLiberacionBonif}|{det.FacturaNegativo}|{det.IndexUnion}|{(esNuevo ? "AGREGAR" : "EDITAR")}|@";
+
+
                             }
-                     
+
+
+                            if(prof != null) _Conexion.Database.ExecuteSqlCommand($"DELETE FAC.ProformaVentaDetalle WHERE IdProforma = {_v.IdProforma}");
 
 
 
+                            var query = (from _q in _Conexion.sp_GrabarProforma_Web((_v == null ? 0: d.IdProforma), d.CodBodega, d.Serie, string.Empty, d.CodCliente, d.NomCliente, "ATENCION", d.Nombre, d.TipoVenta, d.Ruc, d.Cedula, d.Contacto, d.Contacto, d.Correo, vend.IdVendedor, d.NomVendedor,
+                                d.Moneda, d.Fecha, 29, d.Plazo, d.TasaCambio, d.Observaciones, (d.TipoExoneracion == "Sin Exoneración" ? false : true), d.NoExoneracion, false, (prof == null ? "Solicitado" : prof.Estado), DetalleProd, u.IdUsuario, d.OrdenCompra, string.Empty, string.Empty
+                                )
+                                         select new
+                                         {
+                                             _q.IdProforma,
+                                             _q.NoProforma,
+                                             _q.MENSAJE,
+                                             _q.ESTADO
+                                         }).ToList();
+
+
+
+                            if ((int)query[0].ESTADO == 0)
+                            {
+                                json = Cls_Mensaje.Tojson(null, 0, "1", query[0].MENSAJE, 1);
+                                return json;
+                            }
+
+                            if(prof == null)
+                            {
+                                NoProf = query[0].NoProforma;
+                                IdProforma = (int)query[0].IdProforma;
+
+
+                            }
+                            else
+                            {
+                                NoProf = prof.NoProforma;
+                                IdProforma = prof.IdProforma;
+
+                            }
+
+
+
+
+                            Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoPedido == NoProf);
+
+                            if (vta != null && prof == null)
+                            {
+                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b>El pedido genera duplicado.</>", 1);
+                                return json;
+
+                            }
+
+
+                        }
+
+
+
+
+
+
+                        if (_v == null)
+                        {
+                           
 
                             _v = new Venta();
                             d.IdVenta = Guid.NewGuid();
                             d.NoFactura = string.Empty;
                             d.NoPedido = string.Empty;
+                            d.IdProforma = IdProforma;
+                            d.IdFactura = 0;
                             d.Estado = "Solicitado";
+                            _v.IdFactura = d.IdFactura;
+                            _v.IdProforma = d.IdProforma;
                             _v.NoPedido = d.NoPedido;
                             _v.NoFactura = d.NoFactura;
                             _v.TipoDocumento = d.TipoDocumento;
@@ -1307,11 +1399,11 @@ namespace FAC_api.Controllers.FACT
                             _v.FechaRegistro = DateTime.Now;
                             _v.UsuarioRegistra = d.UsuarioRegistra;
                             if (d.TipoDocumento == "Factura") d.NoFactura = string.Empty;
-                            if (d.TipoDocumento == "Proforma") d.NoPedido = string.Concat(d.Serie, Consecutivo);
+                            if (d.TipoDocumento == "Proforma") d.NoPedido = NoProf;
                             esNuevo = true;
                         }
 
-                        if( _v.NoFactura != string.Empty || _v.Estado != "Solicitado")
+                        if( (_v.NoFactura != string.Empty || _v.Estado != "Solicitado") && _v.TipoDocumento != "Proforma" && _v.NoFactura != string.Empty)
                         {
                             json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No se permite modificacion del documento.</>", 1);
                             return json;
@@ -1341,7 +1433,9 @@ namespace FAC_api.Controllers.FACT
                         _v.CodCliente = d.CodCliente;
                         _v.NomCliente = d.NomCliente;
                         _v.Nombre = d.Nombre;
-                        _v.RucCedula = d.RucCedula;
+                        _v.Cedula = d.Cedula;
+                        _v.Ruc = d.Ruc;
+                        _v.Correo = d.Correo;
                         _v.Contacto = d.Contacto;
                         _v.Limite = d.Limite;
                         _v.Disponible = d.Disponible;
@@ -1381,12 +1475,13 @@ namespace FAC_api.Controllers.FACT
                         }
                         else
                         {
-                            _Conexion.VentaDetalle.RemoveRange(_v.VentaDetalle);
-                            _Conexion.SaveChanges();
+                            if(_v.TipoDocumento == "Proforma")
+                            {
+                                _Conexion.VentaDetalle.RemoveRange(_v.VentaDetalle);
+                                _Conexion.SaveChanges();
+                            }
+                          
 
-                            _Conexion.Database.ExecuteSqlCommand($"DELETE FROM DBO.Kardex WHERE Documento = 'FAC_{_v.ID}' AND Tipo ='F01'");
-
-                            _Conexion.SaveChanges();
                         }
 
                         _Conexion.SaveChanges();
@@ -1394,12 +1489,27 @@ namespace FAC_api.Controllers.FACT
                       
                         foreach (VentaDetalle det in d.VentaDetalle)
                         {
-                            VentaDetalle _vDet = new VentaDetalle();
+                            VentaDetalle _vDet = _Conexion.VentaDetalle.Find(det.IdVentaDetalle);
+
+                            bool esNuevoDet = false;
+
+                            if (_vDet == null)
+                            {
+                                esNuevoDet = true;
+                                _vDet = new VentaDetalle();
+                            } 
+
+
                             _vDet.IdVentaDetalle = Guid.NewGuid();
                             _vDet.IdVenta = _v.IdVenta;
                             _vDet.Index = det.Index;
+                            _vDet.IdProducto = det.IdProducto;
                             _vDet.Codigo = det.Codigo;
                             _vDet.Producto = det.Producto;
+                            _vDet.IdUnidad = det.IdUnidad;
+                            _vDet.IdImpuesto = det.IdImpuesto;
+                            _vDet.TasaCambio = det.TasaCambio;
+                            _vDet.Existencia = det.Existencia;
                             _vDet.Precio = det.Precio;
                             _vDet.PrecioCordoba = det.PrecioCordoba;
                             _vDet.PrecioDolar = det.PrecioDolar;
@@ -1449,7 +1559,21 @@ namespace FAC_api.Controllers.FACT
                             _vDet.Lotificado = det.Lotificado;
 
 
-                            _v.VentaDetalle.Add(_vDet);
+                            if(esNuevoDet) _v.VentaDetalle.Add(_vDet);
+
+                            DetalleProd += string.Concat(_vDet.Index, "|0|0|");
+
+                            foreach (string col in (new string[] { "Codigo", "IdProducto", "IdUnidad", "Precio", "Existencia", "Cantidad", "EsBonif", "SubTotal", "PorcDescuento", "Descuento", "SubTotalDolar", "IdImpuesto", "PorcImpuesto", "Impuesto", "Total",
+            "TasaCambio", "PrecioDolar", "PrecioCordoba", "SubTotalDolar", "SubTotalCordoba", "DescuentoDolar", "DescuentoCordoba", "SubTotalNetoDolar", "SubTotalNetoCordoba", "ImpuestoDolar", "ImpuestoCordoba"}))
+                            {
+                                DetalleProd += string.Concat(GetProperty(_vDet, col) + "|", (col == "IdUnidad" ? "|" : string.Empty));
+                            }
+
+
+                            DetalleProd += $"{(_vDet.EsExonerado || _vDet.EsExento ? _vDet.PorcImpuesto : 0)}|{_vDet.ImpuestoExo}|{_vDet.ImpuestoExoDolar}|{_vDet.ImpuestoExoCordoba}|{_vDet.TotalDolar}|{_vDet.TotalCordoba}|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|{_vDet.IdPrecioFAC}|{_vDet.IdEscala}|{_vDet.IdDescuentoDet}|{_vDet.IdLiberacion}||||{_vDet.IdLiberacionBonif}|{_vDet.FacturaNegativo}|{_vDet.IndexUnion}|{(esNuevo ? "AGREGAR" : "EDITAR")}|@";
+
+
+
 
                             if (MandarCorreo)
                             {
@@ -1558,10 +1682,68 @@ namespace FAC_api.Controllers.FACT
                         }
 
 
+
+
+
+                        foreach (VentaLote l in d.VentaLote)
+                        {
+                     
+                            VentaLote _vDetLote = _Conexion.VentaLote.Find(l.IdDetLote);
+
+                            bool esNuevoLote = false;
+
+
+                            if (_vDetLote == null)
+                            {
+                                esNuevoLote = true;
+                                _vDetLote = new VentaLote();
+                            }
+
+
+
+                            _vDetLote.IdDetLote = Guid.NewGuid();
+                            _vDetLote.IdVenta = _v.IdVenta;
+                            _vDetLote.Index = l.Index;
+                            _vDetLote.IndexDet = l.IndexDet;
+                            _vDetLote.Key = l.Key;
+                            _vDetLote.Codigo = l.Codigo;
+                            _vDetLote.Ubicacion = l.Ubicacion;
+                            _vDetLote.Cantidad = l.Cantidad;
+                            _vDetLote.NoLote = l.NoLote;
+                            _vDetLote.Vence = l.Vence;
+                            _vDetLote.EsBonificado = l.EsBonificado;
+                            _vDetLote.Existencia = l.Existencia;
+                            _vDetLote.FacturaNegativo = l.FacturaNegativo;
+
+
+                            if(esNuevoLote) _Conexion.VentaLote.Add(_vDetLote);
+
+
+
+
+                            foreach (string col in (new string[] { "Index", "IndexDet", "Codigo", "Ubicacion", "Cantidad", "NoLote", "Vence", "EsBonificado" }))
+                            {
+                                DetalleLote += string.Concat(GetProperty(l, col) + "|");
+                            }
+                            DetalleLote = string.Concat( DetalleLote.Replace("/", "-"), "AGREGAR|");
+                            DetalleLote += "@";
+
+
+                        }
+
+
+
                         _Conexion.SaveChanges();
 
 
-                        
+
+
+
+
+
+
+
+            
                         if (MandarCorreo && _v.TipoDocumento == "Proforma")
                         {
 
@@ -1610,15 +1792,16 @@ namespace FAC_api.Controllers.FACT
 
                         }
 
+                        
 
 
                         if (_v.TipoDocumento == "Factura")
                         {
-                            json = AsignarConsecutivoFactura(_v, _Conexion);
+                            json = AsignarConsecutivoFactura(_v, DetalleProd, DetalleLote, string.Empty, _Conexion, esNuevo);
 
                             if (json != string.Empty) return json;
 
-                            Imprimir(_v.IdVenta);
+  
                         }
 
 
@@ -1691,6 +1874,9 @@ namespace FAC_api.Controllers.FACT
 
                 
                         Venta _v = _Conexion.Venta.Find(IdDoc);
+                        Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == _v.CodBodega);
+                        Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == Usuario);
+                     
 
                         if (_v != null)
                         {
@@ -1715,8 +1901,53 @@ namespace FAC_api.Controllers.FACT
                             _Conexion.SaveChanges();
                         }
 
+                       
 
-       
+
+                        if (_v.IdFactura != 0)
+                        {
+                           
+
+                            var query = (from _q in _Conexion.sp_AnularFacturaVenta_WEB(_v.IdFactura, _v.Serie, _v.NoFactura, bo.IdBodega, Motivo, u.IdUsuario)
+                                         select new
+                                         {
+                                             _q.MENSAJE,
+                                             _q.ESTADO
+                                         }).ToList();
+
+
+                            if ((int)query[0].ESTADO == 0)
+                            {
+                                json = Cls_Mensaje.Tojson(null, 0, "1", query[0].MENSAJE, 1);
+                                return json;
+                            }
+
+                        }
+
+
+                        if (_v.IdProforma != 0)
+                        {
+                            var query = (from _q in _Conexion.sp_AnularProformaVenta_Web(_v.IdProforma, _v.Serie, _v.NoFactura, _v.CodBodega, Motivo, u.IdUsuario)
+                                         select new
+                                         {
+                                             _q.MENSAJE,
+                                             _q.ESTADO
+                                         }).ToList();
+
+
+                            if ((int)query[0].ESTADO == 0)
+                            {
+                                json = Cls_Mensaje.Tojson(null, 0, "1", query[0].MENSAJE, 1);
+                                return json;
+                            }
+
+                        }
+
+
+
+                     
+
+
 
                         List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
@@ -1771,20 +2002,33 @@ namespace FAC_api.Controllers.FACT
                     {
                         List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
-
                         Venta _v = _Conexion.Venta.Find(IdVenta);
 
 
-                        json = AsignarConsecutivoFactura(_v, _Conexion);
+
+
+
+                       if(_v.TipoDocumento == "Factura")
+                        {
+                           string NoFact = _Conexion.Database.SqlQuery<string>($"SELECT NoFactura  FROM FAC.FacturaVenta WHERE IdFactura = {_v.IdFactura}").First();
+
+                            if(NoFact == string.Empty) json = AsignarConsecutivoFactura(_v, string.Empty, string.Empty, string.Empty, _Conexion, false);
+                        }
+
+
 
                         if (json != string.Empty) return json;
+
+
+
+                        /*
 
                         Cls_Datos datos = new Cls_Datos();
                         datos.Nombre = string.Concat("Factura No", _v.NoFactura);
 
                         MemoryStream stream = new MemoryStream();
 
-                        /*
+                       
                         DsetReporte Dset = new DsetReporte();
                     
                         List<SP_FacturaImpresa_Result>   Query = (from _q in _Conexion.SP_FacturaImpresa(_v.IdVenta).AsEnumerable()
@@ -1884,7 +2128,6 @@ namespace FAC_api.Controllers.FACT
 
 
 
-
                         */
 
                         _Conexion.SaveChanges();
@@ -1908,14 +2151,185 @@ namespace FAC_api.Controllers.FACT
             return json;
         }
 
-        
 
-        private string AsignarConsecutivoFactura(Venta _v , BalancesEntities _Conexion, bool esNuevo)
+
+
+
+        [Route("api/Factura/ConvertirFactura")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult ConvertirFactura(Venta d)
         {
+            if (ModelState.IsValid)
+            {
+
+                return Ok(V_ConvertirFactura(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string V_ConvertirFactura(Venta d)
+        {
+
             string json = string.Empty;
 
             try
             {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (BalancesEntities _Conexion = new BalancesEntities())
+                    {
+
+
+
+
+                        Venta _v = _Conexion.Venta.Find(d.IdVenta);
+                        string DetalleProd = string.Empty;
+                        string DetalleLote = string.Empty;
+                        
+
+
+
+                        if (_v.NoFactura != string.Empty)
+                        {
+                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b class='error'>Ya se le ha asignado un número de factura.</b>", 1);
+                            return json;
+
+                        }
+
+                        Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == _v.CodBodega);
+                        _v.Fecha = bo.FechaFacturacion.Value.Add(DateTime.Now.TimeOfDay);
+                        _v.Fecha = DateTime.Now;
+                        _v.TipoDocumento = "Factura";
+                        _Conexion.SaveChanges();
+
+
+
+
+
+                        foreach (VentaDetalle det in d.VentaDetalle)
+                        {
+
+
+                            DetalleProd += string.Concat(det.Index, "|0|0|");
+
+                            foreach (string col in (new string[] { "Codigo", "IdProducto", "IdUnidad", "Precio", "Existencia", "Cantidad", "EsBonif", "SubTotal", "PorcDescuento", "Descuento", "SubTotalDolar", "IdImpuesto", "PorcImpuesto", "Impuesto", "Total",
+            "TasaCambio", "PrecioDolar", "PrecioCordoba", "SubTotalDolar", "SubTotalCordoba", "DescuentoDolar", "DescuentoCordoba", "SubTotalNetoDolar", "SubTotalNetoCordoba", "ImpuestoDolar", "ImpuestoCordoba"}))
+                            {
+                                DetalleProd += string.Concat(GetProperty(det, col) + "|", (col == "IdUnidad" ? "|" : string.Empty));
+                            }
+
+
+                            DetalleProd += $"{(det.EsExonerado || det.EsExento ? det.PorcImpuesto : 0)}|{det.ImpuestoExo}|{det.ImpuestoExoDolar}|{det.ImpuestoExoCordoba}|{det.TotalDolar}|{det.TotalCordoba}|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|{det.IdPrecioFAC}|{det.IdEscala}|{det.IdDescuentoDet}|{det.IdLiberacion}||||{det.IdLiberacionBonif}|{det.FacturaNegativo}|{det.IndexUnion}|AGREGAR|@";
+
+
+
+
+
+                        }
+
+
+
+
+
+
+                        foreach (VentaLote l in d.VentaLote)
+                        {
+
+                            VentaLote _vDetLote = _Conexion.VentaLote.Find(l.IdDetLote);
+
+                            bool esNuevoLote = false;
+
+                            if (_vDetLote == null)
+                            {
+                                esNuevoLote = true;
+                                _vDetLote = new VentaLote();
+                            }
+
+
+
+                            _vDetLote.IdDetLote = Guid.NewGuid();
+                            _vDetLote.IdVenta = _v.IdVenta;
+                            _vDetLote.Index = l.Index;
+                            _vDetLote.IndexDet = l.IndexDet;
+                            _vDetLote.Key = l.Key;
+                            _vDetLote.Codigo = l.Codigo;
+                            _vDetLote.Ubicacion = l.Ubicacion;
+                            _vDetLote.Cantidad = l.Cantidad;
+                            _vDetLote.NoLote = l.NoLote;
+                            _vDetLote.Vence = l.Vence;
+                            _vDetLote.EsBonificado = l.EsBonificado;
+                            _vDetLote.Existencia = l.Existencia;
+                            _vDetLote.FacturaNegativo = l.FacturaNegativo;
+
+
+                            if (esNuevoLote) _Conexion.VentaLote.Add(_vDetLote);
+
+
+
+
+                            foreach (string col in (new string[] { "Index", "IndexDet", "Codigo", "Ubicacion", "Cantidad", "NoLote", "Vence", "EsBonificado" }))
+                            {
+                                DetalleLote += string.Concat(GetProperty(l, col) + "|");
+                            }
+                            DetalleLote = string.Concat(DetalleLote.Replace("/", "-"), "AGREGAR|");
+                            DetalleLote += "@";
+
+
+                        }
+
+
+
+                        _Conexion.SaveChanges();
+
+
+                        json = AsignarConsecutivoFactura(_v, DetalleProd, DetalleLote, string.Empty, _Conexion, true);
+
+
+
+                        if (json != string.Empty) return json;
+
+                
+
+                        scope.Complete();
+
+
+
+                        json = Cls_Mensaje.Tojson(string.Empty, 0, string.Empty, string.Empty, 0);
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
+
+
+
+
+        private string AsignarConsecutivoFactura(Venta _v , string DetalleProd, string DetalleLote, string DetatallePago,  BalancesEntities _Conexion, bool esNuevo)
+        {
+            string json = string.Empty;
+
+
+            try
+            {
+
+
+
                 if (_v.NoFactura == "" && _v.Estado != "Anulado")
                 {
 
@@ -1950,17 +2364,24 @@ namespace FAC_api.Controllers.FACT
                     DireccionCliente dir = _Conexion.DireccionCliente.FirstOrDefault(f => f.IdCliente == cl.IdCliente && f.Direccion == _v.Direccion);
                     FacturaVenta Factura = null;
 
-                    if(!esNuevo) Factura = _Conexion.FacturaVenta.FirstOrDefault(f => f.NoFactura == _v.NoFactura);
+                    if (!esNuevo)
+                    {
+                        Factura = _Conexion.FacturaVenta.FirstOrDefault(f => f.IdFactura == _v.IdFactura);
+                    }
 
 
-                    var query = (from _q in _Conexion.sp_GrabarFactura_Web((esNuevo ? 0 : Factura.IdFactura), 0, bo.IdBodega, _v.Serie, "", _v.Fecha, _v.CodCliente, _v.NomCliente, _v.Nombre, cl.NoCedula, _v.Contacto, cl.Celular, "correo", vend.IdVendedor, _v.NomVendedor, _v.TipoVenta, _v.Moneda, _v.TasaCambio,
-                        _v.Direccion, _v.Observaciones, _v.EsExportacion, (_v.TipoExoneracion == "Sin Exoneración" ? false : true), _v.NoExoneracion, _v.OrdenCompra, _v.EsContraentrega, _v.EsDelivery, (_v.NoFactura == string.Empty && (_v.Estado == "Solicitado" || _v.Estado == "Autorizado") ? string.Empty : Factura.Estado), "DETALLE", "LOTES", "PAGO", u.IdUsuario, string.Empty, string.Empty, (dir == null ? 0 : dir.IdDireccion))
-                         select new
-                         {
-                             _q.IdFactura,
-                             _q.MENSAJE,
-                            _q.ESTADO
-                         }).ToList();
+
+
+
+                    var query = (from _q in _Conexion.sp_GrabarFactura_Web(_v.IdFactura, _v.IdProforma, bo.IdBodega, _v.Serie, "", _v.Fecha, _v.CodCliente, _v.NomCliente, _v.Nombre, (_v.Ruc.TrimStart().TrimEnd() == string.Empty ? _v.Cedula.TrimStart().TrimEnd() : _v.Ruc.TrimStart().TrimEnd()), _v.Contacto, cl.Celular, "correo", vend.IdVendedor, _v.NomVendedor, _v.TipoVenta, _v.Moneda, _v.TasaCambio,
+                        _v.Direccion, _v.Observaciones, _v.EsExportacion, (_v.TipoExoneracion == "Sin Exoneración" ? false : true), _v.NoExoneracion, _v.OrdenCompra, _v.EsContraentrega, _v.EsDelivery, (_v.NoFactura == string.Empty && ((_v.Estado == "Solicitado" || _v.Estado == "Autorizado") && esNuevo) ? string.Empty : "Impresa"), DetalleProd, DetalleLote, DetatallePago, u.IdUsuario, string.Empty, string.Empty, (dir == null ? 0 : dir.IdDireccion))
+                                 select new
+                                 {
+                                     _q.IdFactura,
+                                     _q.NoFactura,
+                                     _q.MENSAJE,
+                                     _q.ESTADO
+                                 }).ToList();
 
 
 
@@ -1972,14 +2393,12 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                    if (esNuevo) Factura = _Conexion.FacturaVenta.Find((int)query[0].IdFactura);
+                    string NoFact = query[0].NoFactura;
+                    int IdFactura = (int)query[0].IdFactura;
 
+                    Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoFactura == NoFact);
 
-
-
-                    Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoFactura == Factura.NoFactura);
-
-                    if (vta != null)
+                    if (vta != null && !esNuevo)
                     {
                         json = Cls_Mensaje.Tojson(null, 0, "1", "<b>La factura genera duplicado.</>", 1);
                         return json;
@@ -1989,14 +2408,25 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                    _v.NoFactura = Factura.NoFactura;
+                    if (NoFact != string.Empty)
+                    {
+                        _v.NoFactura = NoFact;
+                        _v.Estado = "Impresa";
+                        if(DetatallePago != string.Empty) _v.Estado = "Facturada";
+                    }
+                    if (IdFactura != 0) _v.IdFactura = IdFactura;
+                    
                     _v.TipoDocumento = "Factura";
-                    _v.Estado = "Facturada";
-                    _v.Fecha = DateTime.Now;
+                    if (esNuevo) _v.Fecha = bo.FechaFacturacion.Value.Add(DateTime.Now.TimeOfDay);
+
                     _Conexion.SaveChanges();
 
- 
+
+
+
                 }
+
+
 
 
             }
@@ -2004,6 +2434,7 @@ namespace FAC_api.Controllers.FACT
             {
                 json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
             }
+
 
             return json;
         }
@@ -2028,6 +2459,7 @@ namespace FAC_api.Controllers.FACT
                 using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+               
 
                     var qDetalle = (from _q in _Conexion.VentaDetalle
                                     where _q.IdVenta == IdVenta
@@ -2037,8 +2469,13 @@ namespace FAC_api.Controllers.FACT
                                         _q.IdVentaDetalle,
                                         _q.IdVenta,
                                         _q.Index,
+                                        _q.IdProducto,
                                         _q.Codigo,
                                         _q.Producto,
+                                        _q.IdUnidad,
+                                        _q.IdImpuesto,
+                                        _q.TasaCambio,
+                                        _q.Existencia,
                                         _q.Precio,
                                         _q.PrecioCordoba,
                                         _q.PrecioDolar,
@@ -2097,7 +2534,7 @@ namespace FAC_api.Controllers.FACT
                     datos = new Cls_Datos();
                     datos.Nombre = "PERMISO MARGEN";
                     datos.d = string.Empty;
-                    if (per == null) datos.d = "<b>No tiene permiso para autorizar.</>";
+                    if (per == null) datos.d = per;
 
                     lstDatos.Add(datos);
 
@@ -2117,6 +2554,108 @@ namespace FAC_api.Controllers.FACT
 
 
 
+
+
+
+
+        [Route("api/Factura/GetFormaPago")]
+        [HttpGet]
+        public string GetFormaPago()
+        {
+            return V_GetFormaPago();
+        }
+
+
+        private string V_GetFormaPago()
+        {
+            string json = string.Empty;
+
+            try
+            {
+                using (BalancesEntities _Conexion = new BalancesEntities())
+                {
+                    List<Parametros> lstParametro = _Conexion.Parametros.ToList();
+                    string str_MonedaLocal = lstParametro[0].MonedaLocal;
+
+                    var qFormaPago = (from _f in _Conexion.FormaPago
+                                      join _m in _Conexion.Monedas on true equals true
+                                      where _f.Activo == true && _f.IdFormaPago == 1
+                                      select new
+                                      {
+                                          Key = string.Concat(_f.IdFormaPago, ";", "0", ";", _m.IdMoneda),
+                                          _f.IdFormaPago,
+                                          _f.Descripcion,
+                                          Descripcion2 = string.Concat(_f.Descripcion , " ", _m.Moneda),
+                                          Banco = string.Empty,
+                                          IdBanco = 0,
+                                          _m.Moneda,
+                                          _m.IdMoneda,
+                                          _m.Simbolo,
+                                          EsTransaccion = false,
+                                          EsRetencion = false,
+                                          Porc = "0"
+
+                                      }).Union(
+                        from _f in _Conexion.FormaPago
+                        join _b in _Conexion.Bancos on true equals true
+                        join _m in _Conexion.Monedas on true equals true
+                        where _f.Activo == true && _f.IdFormaPago == 4
+                        select new
+                        {
+                            Key = string.Concat(_f.IdFormaPago, ";", _b.IdBanco, ";", _m.IdMoneda),
+                            _f.IdFormaPago,
+                            _f.Descripcion,
+                            Descripcion2 = string.Concat(_f.Descripcion, " ", _m.Moneda, " ", _b.Banco),
+                            _b.Banco,
+                            _b.IdBanco,
+                            _m.Moneda,
+                            _m.IdMoneda,
+                            _m.Simbolo,
+                            EsTransaccion = true,
+                            EsRetencion = false,
+                            Porc = "0"
+
+                        }).Union(
+                        from _f in _Conexion.FormaPago
+                        join _m in _Conexion.Monedas on str_MonedaLocal equals _m.IdMoneda
+                        where _f.Activo == true && (_f.IdFormaPago == 5 || _f.IdFormaPago == 6)
+                        select new
+                        {
+                            Key = string.Concat(_f.IdFormaPago, ";", "0", ";", _m.IdMoneda),
+                            _f.IdFormaPago,
+                            _f.Descripcion,
+                            Descripcion2 = string.Concat(_f.Descripcion, " ", _m.Moneda),
+                            Banco = string.Empty,
+                            IdBanco = 0,
+                            _m.Moneda,
+                            _m.IdMoneda,
+                            _m.Simbolo,
+                            EsTransaccion = false,
+                            EsRetencion = true,
+                            Porc = _f.Descripcion.Replace("Retencion", string.Empty).Replace("%", string.Empty)
+
+                        }).ToList();
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "FORMA PAGO";
+                    datos.d = qFormaPago;
+               
+
+
+                    json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
 
 
 
@@ -2152,6 +2691,23 @@ namespace FAC_api.Controllers.FACT
 
 
             return true;
+        }
+
+        private object GetProperty<T, TKey>(T obj, TKey key)
+        {
+            var dictionary = obj as IDictionary<TKey, object>;
+            if (dictionary != null)
+            {
+                return dictionary[key];
+            }
+
+            var propertyInfo = typeof(T).GetProperty(key.ToString());
+            if (propertyInfo != null)
+            {
+                return (object)propertyInfo.GetValue(obj);
+            }
+
+            throw new ArgumentException($"Invalid key {key}");
         }
 
 

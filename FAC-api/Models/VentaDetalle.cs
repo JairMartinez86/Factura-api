@@ -17,8 +17,13 @@ namespace FAC_api.Models
         public System.Guid IdVentaDetalle { get; set; }
         public System.Guid IdVenta { get; set; }
         public int Index { get; set; }
+        public int IdProducto { get; set; }
         public string Codigo { get; set; }
         public string Producto { get; set; }
+        public int IdUnidad { get; set; }
+        public int IdImpuesto { get; set; }
+        public decimal TasaCambio { get; set; }
+        public int Existencia { get; set; }
         public decimal Precio { get; set; }
         public decimal PrecioCordoba { get; set; }
         public decimal PrecioDolar { get; set; }

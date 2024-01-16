@@ -18,18 +18,23 @@ namespace FAC_api.Models
         public Venta()
         {
             this.VentaDetalle = new HashSet<VentaDetalle>();
+            this.VentaLote = new HashSet<VentaLote>();
         }
     
         public System.Guid IdVenta { get; set; }
         public long ID { get; set; }
         public string TipoDocumento { get; set; }
         public string Serie { get; set; }
+        public Nullable<int> IdFactura { get; set; }
+        public Nullable<int> IdProforma { get; set; }
         public string NoFactura { get; set; }
         public string NoPedido { get; set; }
         public string CodCliente { get; set; }
         public string NomCliente { get; set; }
         public string Nombre { get; set; }
-        public string RucCedula { get; set; }
+        public string Cedula { get; set; }
+        public string Ruc { get; set; }
+        public string Correo { get; set; }
         public string Contacto { get; set; }
         public decimal Limite { get; set; }
         public decimal Disponible { get; set; }
@@ -68,5 +73,7 @@ namespace FAC_api.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VentaDetalle> VentaDetalle { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<VentaLote> VentaLote { get; set; }
     }
 }

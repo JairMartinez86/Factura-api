@@ -344,6 +344,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Balance.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Bancos.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BodegaLaboratorioKardex.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
@@ -380,6 +383,9 @@
     <Compile Include="Models\FacturaVenta.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FormaPago.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Impuestos.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
@@ -390,6 +396,9 @@
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LiberarPrecio.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Monedas.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Municipio.cs">
@@ -410,10 +419,28 @@
     <Compile Include="Models\Productos.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProformaVenta.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Serie.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_AnularFacturaVenta_Result.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_AnularFacturaVenta_WEB_Result.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_AnularProformaVenta_Web_Result.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_GrabarFactura_Web_Result.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_GrabarFactura_Web_Result1.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_GrabarProforma_Web_Result.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Usuarios.cs">
@@ -429,6 +456,9 @@
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VentaDetalle.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VentaLote.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
