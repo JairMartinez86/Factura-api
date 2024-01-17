@@ -2004,12 +2004,12 @@ namespace FAC_api.Controllers.FACT
 
         [Route("api/Factura/Imprimir")]
         [HttpGet]
-        public string Imprimir(Guid IdVenta, bool enviarCorreo)
+        public string Imprimir(Guid IdVenta, bool ImprimirProforma, bool enviarCorreo)
         {
-            return v_Imprimir(IdVenta, enviarCorreo);
+            return v_Imprimir(IdVenta, ImprimirProforma, enviarCorreo);
         }
 
-        private string v_Imprimir(Guid IdVenta, bool enviarCorreo)
+        private string v_Imprimir(Guid IdVenta, bool ImprimirProforma, bool enviarCorreo)
         {
             string json = string.Empty;
 
@@ -2027,12 +2027,14 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                       if(_v.TipoDocumento == "Factura")
+                       if(_v.TipoDocumento == "Factura" && !ImprimirProforma)
                         {
                            string NoFact = _Conexion.Database.SqlQuery<string>($"SELECT NoFactura  FROM FAC.FacturaVenta WHERE IdFactura = {_v.IdFactura}").First();
 
                             if(NoFact == string.Empty) json = AsignarConsecutivoFactura(_v, string.Empty, string.Empty, string.Empty, _Conexion, false);
                         }
+                   
+
 
 
 
@@ -2046,7 +2048,7 @@ namespace FAC_api.Controllers.FACT
 
 
                         Cls_Datos datos = new Cls_Datos();
-                        if (_v.TipoDocumento == "Factura")
+                        if (_v.TipoDocumento == "Factura" && !ImprimirProforma)
                         {
                             
                             datos.Nombre = string.Concat("Factura No", _v.NoFactura);
