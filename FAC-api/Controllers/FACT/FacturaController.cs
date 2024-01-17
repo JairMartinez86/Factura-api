@@ -1,4 +1,5 @@
 ﻿using DevExpress.Charts.Native;
+using DevExpress.ClipboardSource.SpreadsheetML;
 using DevExpress.Data;
 using DevExpress.DataProcessing;
 using DevExpress.DirectX.Common.Direct2D;
@@ -12,6 +13,7 @@ using FAC_api.Class.INV;
 using FAC_api.Class.SIS;
 using FAC_api.Models;
 using Microsoft.Ajax.Utilities;
+using ReporteBalance;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -1276,7 +1278,7 @@ namespace FAC_api.Controllers.FACT
                     using (BalancesEntities _Conexion = new BalancesEntities())
                     {
 
-                       
+         
                         bool esNuevo = false;
                         bool MandarCorreo = false;
                         string ProductosMail = string.Empty;
@@ -1364,11 +1366,10 @@ namespace FAC_api.Controllers.FACT
 
                             if (vta != null && prof == null)
                             {
-                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b>El pedido genera duplicado.</>", 1);
+                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b>El proforma genera duplicado.</>", 1);
                                 return json;
 
                             }
-
 
                         }
 
@@ -1774,7 +1775,7 @@ namespace FAC_api.Controllers.FACT
 
 
                             mail.Subject = esNuevo ?  $"Pendiente Autorizar ({_v.NoPedido})" : "Margen Autorizado";
-                            mail.Body = $"<p>Pedido No. <b>{_v.NoPedido}</b>";
+                            mail.Body = $"<p>Proforma No. <b>{_v.NoPedido}</b>";
                             mail.Body += $"<br>CLIENTE: <b>{_v.CodCliente} { (_v.Nombre.TrimStart().TrimEnd() == string.Empty ? _v.NomCliente : _v.NomCliente) }</b>";
                             mail.Body += $"<br>Usuario Autoriza: <b>{d.UsuarioRegistra}</b>";
                             mail.Body += "<br><br><b>PRODUCTOS AUTORIZADOS</b>";
@@ -1803,6 +1804,24 @@ namespace FAC_api.Controllers.FACT
 
   
                         }
+                        else
+                        {
+                            if(esNuevo)
+                            {
+                                ReporteBalance.cFactura cFactura = new ReporteBalance.cFactura();
+                                object[] obj = cFactura.ReporteProforma(IdProforma, d.Correo, true, _Conexion.Database.Connection);
+
+                                if (obj[0].ToString() != string.Empty)
+                                {
+                                    json = Cls_Mensaje.Tojson(null, 0, "1", obj[0].ToString(), 1);
+                                    return json;
+                                }
+                            }
+
+                           
+                        }
+
+
 
 
 
@@ -1985,12 +2004,12 @@ namespace FAC_api.Controllers.FACT
 
         [Route("api/Factura/Imprimir")]
         [HttpGet]
-        public string Imprimir(Guid IdVenta)
+        public string Imprimir(Guid IdVenta, bool enviarCorreo)
         {
-            return v_Imprimir(IdVenta);
+            return v_Imprimir(IdVenta, enviarCorreo);
         }
 
-        private string v_Imprimir(Guid IdVenta)
+        private string v_Imprimir(Guid IdVenta, bool enviarCorreo)
         {
             string json = string.Empty;
 
@@ -2019,118 +2038,60 @@ namespace FAC_api.Controllers.FACT
 
                         if (json != string.Empty) return json;
 
+                        ReporteBalance.cFactura cFactura = new ReporteBalance.cFactura();
+                        Monedas m = _Conexion.Monedas.Find(_v.Moneda);
+                        Bodegas b = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == _v.CodBodega);
+                        List<Parametros> lstParametro = _Conexion.Parametros.ToList();
+                        string str_MonedaLocal = lstParametro[0].MonedaLocal;
 
-
-                        /*
 
                         Cls_Datos datos = new Cls_Datos();
-                        datos.Nombre = string.Concat("Factura No", _v.NoFactura);
-
-                        MemoryStream stream = new MemoryStream();
-
-                       
-                        DsetReporte Dset = new DsetReporte();
-                    
-                        List<SP_FacturaImpresa_Result>   Query = (from _q in _Conexion.SP_FacturaImpresa(_v.IdVenta).AsEnumerable()
-                                     select  _q).ToList();
-
-                        DataTable tbl = Cls_ListToDataTableConverter.ToDataTable(Query);
-                        tbl.Select().CopyToDataTable(Dset.SP_FacturaImpresa, LoadOption.PreserveChanges);
-
-
-                        if (_v.TipoVenta == "Contado")
+                        if (_v.TipoDocumento == "Factura")
                         {
-                            xrpFacturaContado xrpContado = new xrpFacturaContado();
-                            xrpContado.Parameters["P_Letra"].Value = Cls_Letras.NumeroALetras(_v.TotalCordoba);
-                            xrpContado.DataSource = Dset;
-                            xrpContado.ShowPrintMarginsWarning = false;
+                            
+                            datos.Nombre = string.Concat("Factura No", _v.NoFactura);
+                            object[] ob = cFactura.ImprimirFacturaVenta((int)_v.IdFactura, _v.TotalCordoba, _v.Moneda, m.Moneda, b.IdBodega, false, (_v.TipoVenta == "Contado" ? false : true), false, str_MonedaLocal, _Conexion.Database.Connection);
 
 
-                     
-
-
-                            xrpContado.CreateDocument(false);
-                            foreach(string Impresora in PrinterSettings.InstalledPrinters)
+                            if (ob[0].ToString() != string.Empty)
                             {
-                                if(Impresora.Contains("SRP-275"))
-                                {
-                                    xrpContado.Print(Impresora);
-                                    break;
-                                }
+                                json = Cls_Mensaje.Tojson(null, 0, "1", ob[0].ToString(), 1);
+                                return json;
                             }
-      
-                       
 
 
-                            xrpContado.ExportToPdf(stream, null);
-                            stream.Seek(0, SeekOrigin.Begin);
+                            datos.d = ob[2];
+                            lstDatos.Add(datos);
 
-                            datos.d = stream.ToArray();
+
+
+
+
+                            datos = new Cls_Datos();
+                            datos.Nombre = string.Concat("Manifiesto No ", _v.NoFactura);
+                            datos.d = ob[3];
+                            lstDatos.Add(datos);
 
                         }
                         else
                         {
-                            xrpFacturaCredito xrpCredito = new xrpFacturaCredito();
-                            xrpCredito.Parameters["P_Letra"].Value = Cls_Letras.NumeroALetras(_v.TotalCordoba);
-                            xrpCredito.DataSource = Dset;
-                            xrpCredito.ShowPrintMarginsWarning = false;
+                          
+                            object[] obj = cFactura.ReporteProforma((int)_v.IdProforma, _v.Correo, enviarCorreo, _Conexion.Database.Connection);
 
-
-                            foreach (string Impresora in PrinterSettings.InstalledPrinters)
+                            if (obj[0].ToString() != string.Empty)
                             {
-                                if (Impresora.Contains("SRP-275"))
-                                {
-                                    xrpCredito.Print(Impresora);
-                                    break;
-                                }
+                                json = Cls_Mensaje.Tojson(null, 0, "1", obj[0].ToString(), 1);
+                                return json;
                             }
 
 
-                            xrpCredito.ExportToPdf(stream, null);
-                            stream.Seek(0, SeekOrigin.Begin);
+                            datos.Nombre = string.Concat("Proforma No ", obj[1]);
+                            datos.d = obj[2];
+                            lstDatos.Add(datos);
 
-                            datos.d = stream.ToArray();
+
                         }
 
-
-                        lstDatos.Add(datos);
-
-
-
-
-                        datos = new Cls_Datos();
-                        datos.Nombre = string.Concat( "Manifiesto No ", _v.NoFactura);
-                       
-
-
-                        MemoryStream stream2 = new MemoryStream();
-                        xrpManifiesto xrpManifiesto = new xrpManifiesto();
-                        xrpManifiesto.DataSource = Dset;
-                        xrpManifiesto.ShowPrintMarginsWarning = false;
-
-                        xrpManifiesto.CreateDocument(false);
-                        foreach (string Impresora in PrinterSettings.InstalledPrinters)
-                        {
-                            if (Impresora.Contains("tm-u220"))
-                            {
-                                xrpManifiesto.Print(Impresora);
-                                break;
-                            }
-                        }
-
-
-
-                        xrpManifiesto.ExportToPdf(stream2, null);
-                        stream2.Seek(0, SeekOrigin.Begin);
-
-                        datos.d = stream2.ToArray();
-                        lstDatos.Add(datos);
-
-
-
-                        */
-
-                        _Conexion.SaveChanges();
 
                         scope.Complete();
 
@@ -2204,7 +2165,6 @@ namespace FAC_api.Controllers.FACT
 
                         Bodegas bo = _Conexion.Bodegas.FirstOrDefault(f => f.Codigo == _v.CodBodega);
                         _v.Fecha = bo.FechaFacturacion.Value.Add(DateTime.Now.TimeOfDay);
-                        _v.Fecha = DateTime.Now;
                         _v.TipoDocumento = "Factura";
                         _Conexion.SaveChanges();
 
@@ -2320,6 +2280,75 @@ namespace FAC_api.Controllers.FACT
 
 
 
+        [Route("api/Factura/PagarFactura")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult PagarFactura(Cls_Pago_Factura d)
+        {
+            if (ModelState.IsValid)
+            {
+
+                return Ok(V_PagarFactura(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string V_PagarFactura(Cls_Pago_Factura d)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (BalancesEntities _Conexion = new BalancesEntities())
+                    {
+
+
+
+                        Venta _v = _Conexion.Venta.FirstOrDefault( f => f.IdFactura == d.IdFactura);
+
+
+
+                        json = AsignarConsecutivoFactura(_v, string.Empty, string.Empty, d.Pago, _Conexion, false);
+
+
+
+                        if (json != string.Empty) return json;
+
+
+
+                        scope.Complete();
+
+
+
+                        json = Cls_Mensaje.Tojson(string.Empty, 0, string.Empty, string.Empty, 0);
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
+
+
+
+
+
         private string AsignarConsecutivoFactura(Venta _v , string DetalleProd, string DetalleLote, string DetatallePago,  BalancesEntities _Conexion, bool esNuevo)
         {
             string json = string.Empty;
@@ -2330,7 +2359,7 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                if (_v.NoFactura == "" && _v.Estado != "Anulado")
+                if (_v.Estado != "Anulado" && _v.Estado != "Facturada")
                 {
 
 
@@ -2398,7 +2427,7 @@ namespace FAC_api.Controllers.FACT
 
                     Venta vta = _Conexion.Venta.FirstOrDefault(f => f.NoFactura == NoFact);
 
-                    if (vta != null && !esNuevo)
+                    if (vta != null && !esNuevo && DetatallePago == string.Empty)
                     {
                         json = Cls_Mensaje.Tojson(null, 0, "1", "<b>La factura genera duplicado.</>", 1);
                         return json;
@@ -2412,7 +2441,7 @@ namespace FAC_api.Controllers.FACT
                     {
                         _v.NoFactura = NoFact;
                         _v.Estado = "Impresa";
-                        if(DetatallePago != string.Empty) _v.Estado = "Facturada";
+                        if(DetatallePago != string.Empty || _v.TipoVenta == "Credito") _v.Estado = "Facturada";
                     }
                     if (IdFactura != 0) _v.IdFactura = IdFactura;
                     
