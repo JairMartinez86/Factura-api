@@ -51,7 +51,7 @@ namespace FAC_api.Class.SIS
                                         Bodega = _b.Codigo,
                                         _q.Lotificar,
                                         FechaLogin = string.Format("{0:yyyy-MM-dd hh:mm:ss}", DateTime.Now),
-                                        _q.Desconectar
+                                        Desconectar = (!_q.AccesoWeb ? true : _q.Desconectar )
                                     }).ToList();
 
 
@@ -118,7 +118,7 @@ namespace FAC_api.Class.SIS
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
                     Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == user);
           
-                    lstDatos.AddRange(v_FechaServidor(user, (u  == null ? true : u.Desconectar), _Conexion));
+                    lstDatos.AddRange(v_FechaServidor(user, (u  == null ? true : (!u.AccesoWeb ? true : u.Desconectar)), _Conexion));
 
 
 
