@@ -116,8 +116,9 @@ namespace FAC_api.Class.SIS
                 using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+                    Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == user);
           
-                    lstDatos.AddRange(v_FechaServidor(user, false, _Conexion));
+                    lstDatos.AddRange(v_FechaServidor(user, (u  == null ? true : u.Desconectar), _Conexion));
 
 
 
