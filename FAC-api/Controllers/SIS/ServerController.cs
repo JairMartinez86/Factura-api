@@ -51,7 +51,8 @@ namespace FAC_api.Class.SIS
                                         Bodega = _b.Codigo,
                                         _q.Lotificar,
                                         FechaLogin = string.Format("{0:yyyy-MM-dd hh:mm:ss}", DateTime.Now),
-                                        Desconectar = (!_q.AccesoWeb ? true : _q.Desconectar )
+                                        Desconectar = (!_q.AccesoWeb ? true : _q.Desconectar ),
+                                        _q.ColaImpresionWeb
                                     }).ToList();
 
 
