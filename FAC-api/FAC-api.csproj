@@ -323,6 +323,7 @@
     <Compile Include="Class\FACT\Cls_Pago_Factura.cs" />
     <Compile Include="Class\FACT\Cls_Precio.cs" />
     <Compile Include="Class\FACT\Cls_Productos_Liberados_INVESCASAN.cs" />
+    <Compile Include="Class\INV\Cls_E_Response.cs" />
     <Compile Include="Class\INV\ExistenciaUbicacion.cs" />
     <Compile Include="Class\SIS\Cls_Letras.cs" />
     <Compile Include="Class\SIS\Cls_ListToDataTableConverter.cs" />

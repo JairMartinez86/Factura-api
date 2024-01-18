@@ -7,12 +7,14 @@ using DevExpress.PivotGrid.OLAP.Mdx;
 using DevExpress.Xpo.DB.Helpers;
 using DevExpress.XtraCharts;
 using DevExpress.XtraCharts.Native;
+using Escasan_Api.Class;
 using FAC_api.Class;
 using FAC_api.Class.FACT;
 using FAC_api.Class.INV;
 using FAC_api.Class.SIS;
 using FAC_api.Models;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using ReporteBalance;
 using System;
 using System.Collections.Generic;
@@ -2687,6 +2689,42 @@ namespace FAC_api.Controllers.FACT
 
             return json;
         }
+
+
+
+
+
+        [Route("api/Factura/GetExistenciaUbicacion")]
+        [HttpGet]
+        public Task<List<ExistenciaUbicacion>> GetExistenciaUbicacion(string CodProducto, string CodBodega)
+        {
+            return V_GetExistenciaUbicacion(CodProducto, CodBodega);
+        }
+
+
+        public async Task<List<ExistenciaUbicacion>> V_GetExistenciaUbicacion(string CodProducto, string CodBodega)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+
+
+                HttpResponseMessage response = await client.GetAsync($"http://localhost:140/api/INV/Kardex/ExistenciaUbicacion?CodProducto={CodProducto}&CodBodega={CodBodega}");
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                Cls_E_Response datos = JsonConvert.DeserializeObject<Cls_E_Response>(responseBody);
+
+                return JsonConvert.DeserializeObject<List<ExistenciaUbicacion>>(datos.d);
+            }
+            catch (Exception ex)
+            {
+                var a = ex.Message;
+            }
+
+            return null;
+        }
+
 
 
 
