@@ -741,7 +741,9 @@ namespace FAC_api.Controllers.FACT
 
                     }
 
-                    qPrecios = qPrecios.Where(w => w.Tipo == "Distribuidor" || w.Tipo == "Publico" || w.EsPrincipal || w.EsEscala || w.Liberado).ToList();
+                    if(U.IdRol != 1 && U.IdRol != 8) qPrecios = qPrecios.Where(w => w.Tipo == "Distribuidor" || w.Tipo == "Publico" || w.EsPrincipal || w.EsEscala || w.Liberado).ToList();
+
+
 
                     qPrecios = qPrecios.OrderBy(o => o.Index).ToList();
 

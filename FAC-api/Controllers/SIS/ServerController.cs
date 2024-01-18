@@ -41,7 +41,7 @@ namespace FAC_api.Class.SIS
                     var qUsuario = (from _q in _Conexion.Usuarios.ToList()
                                     join _e in _Conexion.Estaciones on _q.IdUsuario equals _e.IdUsuario
                                     join _b in _Conexion.Bodegas on _e.IdBodega equals _b.IdBodega
-                                    where _q.Usuario.TrimStart().TrimEnd() == user
+                                    where _q.Usuario.TrimStart().TrimEnd() == user && _q.AccesoWeb
                                     select new
                                     {
                                         User = _q.Usuario,
