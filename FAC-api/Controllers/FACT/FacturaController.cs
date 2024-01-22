@@ -422,6 +422,7 @@ namespace FAC_api.Controllers.FACT
                                              _q.IdUnidad,
                                              Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
                                              Bonificable = _q.AplicarBonificacion,
+                                             Servicios = _q.Servicios == null ? false : _q.Servicios,
                                              FacturaNegativo = (_q.Servicios == null ? (_q.FacturaNegativo == null ? false : _q.FacturaNegativo ) : ((bool)!_q.Servicios ? (_q.FacturaNegativo == null ? false : _q.FacturaNegativo) : false ) )
                                          }).ToList();
 
