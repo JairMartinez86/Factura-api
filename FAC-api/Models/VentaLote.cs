@@ -27,6 +27,7 @@ namespace FAC_api.Models
         public bool EsBonificado { get; set; }
         public int Existencia { get; set; }
         public bool FacturaNegativo { get; set; }
+        public bool Servicios { get; set; }
     
         public virtual Venta Venta { get; set; }
     }

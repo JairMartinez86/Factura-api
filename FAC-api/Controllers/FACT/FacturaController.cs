@@ -1564,6 +1564,7 @@ namespace FAC_api.Controllers.FACT
                             _vDet.IdLiberacion = det.IdLiberacion;
                             _vDet.IdLiberacionBonif = det.IdLiberacionBonif;
                             _vDet.FacturaNegativo = det.FacturaNegativo;
+                            _vDet.Servicios = det.Servicios;
                             _vDet.Lotificado = det.Lotificado;
 
 
@@ -1722,9 +1723,9 @@ namespace FAC_api.Controllers.FACT
                             _vDetLote.EsBonificado = l.EsBonificado;
                             _vDetLote.Existencia = l.Existencia;
                             _vDetLote.FacturaNegativo = l.FacturaNegativo;
+                            _vDetLote.Servicios = l.Servicios;
 
-
-                            if(esNuevoLote) _Conexion.VentaLote.Add(_vDetLote);
+                            if (esNuevoLote) _Conexion.VentaLote.Add(_vDetLote);
 
 
 
@@ -2235,6 +2236,7 @@ namespace FAC_api.Controllers.FACT
                             _vDetLote.EsBonificado = l.EsBonificado;
                             _vDetLote.Existencia = l.Existencia;
                             _vDetLote.FacturaNegativo = l.FacturaNegativo;
+                            _vDetLote.Servicios = l.Servicios;
 
 
                             if (esNuevoLote) _Conexion.VentaLote.Add(_vDetLote);
@@ -2556,9 +2558,10 @@ namespace FAC_api.Controllers.FACT
                                         _q.IdEscala,
                                         _q.IdDescuentoDet,
                                         _q.IdLiberacion,
-                                        _q.IdLiberacionBonif
-                                        ,_q.FacturaNegativo
-                                        ,_q.Lotificado
+                                        _q.IdLiberacionBonif,
+                                        _q.FacturaNegativo,
+                                        _q.Servicios,
+                                        _q.Lotificado
                                     }).ToList();
 
 

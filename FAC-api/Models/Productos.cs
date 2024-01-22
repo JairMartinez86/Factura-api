@@ -86,6 +86,7 @@ namespace FAC_api.Models
         public Nullable<bool> AplicarDescuento { get; set; }
         public Nullable<bool> AplicarPagoComision { get; set; }
         public string PrintManifiesto { get; set; }
+        public Nullable<bool> Promotoria { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bonificaciones> Bonificaciones { get; set; }

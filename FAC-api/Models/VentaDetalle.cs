@@ -69,6 +69,7 @@ namespace FAC_api.Models
         public Nullable<int> IdLiberacion { get; set; }
         public Nullable<int> IdLiberacionBonif { get; set; }
         public bool FacturaNegativo { get; set; }
+        public bool Servicios { get; set; }
         public int Lotificado { get; set; }
     
         public virtual Venta Venta { get; set; }

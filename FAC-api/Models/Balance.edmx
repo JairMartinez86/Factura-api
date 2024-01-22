@@ -473,6 +473,7 @@
           <Property Name="AplicarDescuento" Type="bit" />
           <Property Name="AplicarPagoComision" Type="bit" />
           <Property Name="PrintManifiesto" Type="nvarchar" MaxLength="50" />
+          <Property Name="Promotoria" Type="bit" />
         </EntityType>
         <EntityType Name="BodegaLaboratorioKardex">
           <Key>
@@ -739,6 +740,7 @@
           <Property Name="IdLiberacion" Type="int" />
           <Property Name="IdLiberacionBonif" Type="int" />
           <Property Name="FacturaNegativo" Type="bit" Nullable="false" />
+          <Property Name="Servicios" Type="bit" Nullable="false" />
           <Property Name="Lotificado" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="VentaLote">
@@ -758,6 +760,7 @@
           <Property Name="EsBonificado" Type="bit" Nullable="false" />
           <Property Name="Existencia" Type="int" Nullable="false" />
           <Property Name="FacturaNegativo" Type="bit" Nullable="false" />
+          <Property Name="Servicios" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Bonificaciones_Productos">
           <End Role="Productos" Type="Self.Productos" Multiplicity="1" />
@@ -1208,6 +1211,9 @@
             <Parameter Name="P_Latitud" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="Venta" EntityType="BalancesModel.Venta" />
+          <EntitySet Name="FormaPago" EntityType="BalancesModel.FormaPago" />
+          <EntitySet Name="Bancos" EntityType="BalancesModel.Bancos" />
+          <EntitySet Name="Monedas" EntityType="BalancesModel.Monedas" />
           <EntitySet Name="VentaDetalle" EntityType="BalancesModel.VentaDetalle" />
           <EntitySet Name="VentaLote" EntityType="BalancesModel.VentaLote" />
           <AssociationSet Name="FK_VentaDetalle_Venta" Association="BalancesModel.FK_VentaDetalle_Venta">
@@ -1218,9 +1224,6 @@
             <End Role="Venta" EntitySet="Venta" />
             <End Role="VentaLote" EntitySet="VentaLote" />
           </AssociationSet>
-          <EntitySet Name="FormaPago" EntityType="BalancesModel.FormaPago" />
-          <EntitySet Name="Bancos" EntityType="BalancesModel.Bancos" />
-          <EntitySet Name="Monedas" EntityType="BalancesModel.Monedas" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -1372,6 +1375,7 @@
           <Property Name="PrintManifiesto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Bonificaciones" Relationship="BalancesModel.FK_Bonificaciones_Productos" FromRole="Productos" ToRole="Bonificaciones" />
           <NavigationProperty Name="Descuentos" Relationship="BalancesModel.FK_Descuentos_Productos" FromRole="Productos" ToRole="Descuentos" />
+          <Property Name="Promotoria" Type="Boolean" />
         </EntityType>
         <EntityType Name="Impuestos">
           <Key>
@@ -1859,6 +1863,32 @@
           <NavigationProperty Name="VentaDetalle" Relationship="BalancesModel.FK_VentaDetalle_Venta" FromRole="Venta" ToRole="VentaDetalle" />
           <NavigationProperty Name="VentaLote" Relationship="BalancesModel.FK_VentaLote_Venta" FromRole="Venta" ToRole="VentaLote" />
         </EntityType>
+        <EntityType Name="FormaPago">
+          <Key>
+            <PropertyRef Name="IdFormaPago" />
+          </Key>
+          <Property Name="IdFormaPago" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EsTransaccion" Type="Boolean" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Bancos">
+          <Key>
+            <PropertyRef Name="IdBanco" />
+          </Key>
+          <Property Name="IdBanco" Type="Int32" Nullable="false" />
+          <Property Name="Banco" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CuentaC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CuentaD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Monedas">
+          <Key>
+            <PropertyRef Name="IdMoneda" />
+          </Key>
+          <Property Name="IdMoneda" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Moneda" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Simbolo" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="VentaDetalle">
           <Key>
             <PropertyRef Name="IdVentaDetalle" />
@@ -1918,6 +1948,7 @@
           <Property Name="IdLiberacion" Type="Int32" />
           <Property Name="IdLiberacionBonif" Type="Int32" />
           <Property Name="FacturaNegativo" Type="Boolean" Nullable="false" />
+          <Property Name="Servicios" Type="Boolean" Nullable="false" />
           <Property Name="Lotificado" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Venta" Relationship="BalancesModel.FK_VentaDetalle_Venta" FromRole="VentaDetalle" ToRole="Venta" />
         </EntityType>
@@ -1938,6 +1969,7 @@
           <Property Name="EsBonificado" Type="Boolean" Nullable="false" />
           <Property Name="Existencia" Type="Int32" Nullable="false" />
           <Property Name="FacturaNegativo" Type="Boolean" Nullable="false" />
+          <Property Name="Servicios" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Venta" Relationship="BalancesModel.FK_VentaLote_Venta" FromRole="VentaLote" ToRole="Venta" />
         </EntityType>
         <Association Name="FK_VentaDetalle_Venta">
@@ -1964,32 +1996,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="FormaPago">
-          <Key>
-            <PropertyRef Name="IdFormaPago" />
-          </Key>
-          <Property Name="IdFormaPago" Type="Int32" Nullable="false" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EsTransaccion" Type="Boolean" Nullable="false" />
-          <Property Name="Activo" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="Bancos">
-          <Key>
-            <PropertyRef Name="IdBanco" />
-          </Key>
-          <Property Name="IdBanco" Type="Int32" Nullable="false" />
-          <Property Name="Banco" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CuentaC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CuentaD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Monedas">
-          <Key>
-            <PropertyRef Name="IdMoneda" />
-          </Key>
-          <Property Name="IdMoneda" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
-          <Property Name="Moneda" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Simbolo" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2183,6 +2189,7 @@
           <EntitySetMapping Name="Productos">
             <EntityTypeMapping TypeName="BalancesModel.Productos">
               <MappingFragment StoreEntitySet="Productos">
+                <ScalarProperty Name="Promotoria" ColumnName="Promotoria" />
                 <ScalarProperty Name="PrintManifiesto" ColumnName="PrintManifiesto" />
                 <ScalarProperty Name="AplicarPagoComision" ColumnName="AplicarPagoComision" />
                 <ScalarProperty Name="AplicarDescuento" ColumnName="AplicarDescuento" />
@@ -2707,10 +2714,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FormaPago">
+            <EntityTypeMapping TypeName="BalancesModel.FormaPago">
+              <MappingFragment StoreEntitySet="FormaPago">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="EsTransaccion" ColumnName="EsTransaccion" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdFormaPago" ColumnName="IdFormaPago" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bancos">
+            <EntityTypeMapping TypeName="BalancesModel.Bancos">
+              <MappingFragment StoreEntitySet="Bancos">
+                <ScalarProperty Name="CuentaD" ColumnName="CuentaD" />
+                <ScalarProperty Name="CuentaC" ColumnName="CuentaC" />
+                <ScalarProperty Name="Banco" ColumnName="Banco" />
+                <ScalarProperty Name="IdBanco" ColumnName="IdBanco" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Monedas">
+            <EntityTypeMapping TypeName="BalancesModel.Monedas">
+              <MappingFragment StoreEntitySet="Monedas">
+                <ScalarProperty Name="Simbolo" ColumnName="Simbolo" />
+                <ScalarProperty Name="Moneda" ColumnName="Moneda" />
+                <ScalarProperty Name="IdMoneda" ColumnName="IdMoneda" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="VentaDetalle">
             <EntityTypeMapping TypeName="BalancesModel.VentaDetalle">
               <MappingFragment StoreEntitySet="VentaDetalle">
                 <ScalarProperty Name="Lotificado" ColumnName="Lotificado" />
+                <ScalarProperty Name="Servicios" ColumnName="Servicios" />
                 <ScalarProperty Name="FacturaNegativo" ColumnName="FacturaNegativo" />
                 <ScalarProperty Name="IdLiberacionBonif" ColumnName="IdLiberacionBonif" />
                 <ScalarProperty Name="IdLiberacion" ColumnName="IdLiberacion" />
@@ -2772,6 +2809,7 @@
           <EntitySetMapping Name="VentaLote">
             <EntityTypeMapping TypeName="BalancesModel.VentaLote">
               <MappingFragment StoreEntitySet="VentaLote">
+                <ScalarProperty Name="Servicios" ColumnName="Servicios" />
                 <ScalarProperty Name="FacturaNegativo" ColumnName="FacturaNegativo" />
                 <ScalarProperty Name="Existencia" ColumnName="Existencia" />
                 <ScalarProperty Name="EsBonificado" ColumnName="EsBonificado" />
@@ -2785,35 +2823,6 @@
                 <ScalarProperty Name="Index" ColumnName="Index" />
                 <ScalarProperty Name="IdVenta" ColumnName="IdVenta" />
                 <ScalarProperty Name="IdDetLote" ColumnName="IdDetLote" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FormaPago">
-            <EntityTypeMapping TypeName="BalancesModel.FormaPago">
-              <MappingFragment StoreEntitySet="FormaPago">
-                <ScalarProperty Name="Activo" ColumnName="Activo" />
-                <ScalarProperty Name="EsTransaccion" ColumnName="EsTransaccion" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="IdFormaPago" ColumnName="IdFormaPago" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Bancos">
-            <EntityTypeMapping TypeName="BalancesModel.Bancos">
-              <MappingFragment StoreEntitySet="Bancos">
-                <ScalarProperty Name="CuentaD" ColumnName="CuentaD" />
-                <ScalarProperty Name="CuentaC" ColumnName="CuentaC" />
-                <ScalarProperty Name="Banco" ColumnName="Banco" />
-                <ScalarProperty Name="IdBanco" ColumnName="IdBanco" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Monedas">
-            <EntityTypeMapping TypeName="BalancesModel.Monedas">
-              <MappingFragment StoreEntitySet="Monedas">
-                <ScalarProperty Name="Simbolo" ColumnName="Simbolo" />
-                <ScalarProperty Name="Moneda" ColumnName="Moneda" />
-                <ScalarProperty Name="IdMoneda" ColumnName="IdMoneda" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

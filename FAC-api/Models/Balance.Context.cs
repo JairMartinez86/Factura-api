@@ -55,11 +55,11 @@ namespace FAC_api.Models
         public virtual DbSet<FacturaVenta> FacturaVenta { get; set; }
         public virtual DbSet<ProformaVenta> ProformaVenta { get; set; }
         public virtual DbSet<Venta> Venta { get; set; }
-        public virtual DbSet<VentaDetalle> VentaDetalle { get; set; }
-        public virtual DbSet<VentaLote> VentaLote { get; set; }
         public virtual DbSet<FormaPago> FormaPago { get; set; }
         public virtual DbSet<Bancos> Bancos { get; set; }
         public virtual DbSet<Monedas> Monedas { get; set; }
+        public virtual DbSet<VentaDetalle> VentaDetalle { get; set; }
+        public virtual DbSet<VentaLote> VentaLote { get; set; }
     
         public virtual ObjectResult<sp_GrabarFactura_Web_Result1> sp_GrabarFactura_Web(Nullable<int> p_IdFactura, Nullable<int> p_IdProforma, Nullable<int> p_IdBodega, string p_IdSerie, string p_NoFactura, Nullable<System.DateTime> p_Fecha, string p_CodCliente, string p_NomCliente, string p_Nombre, string p_Ruc, string p_Telefono, string p_Celular, string p_Correo, Nullable<int> p_IdVendedor, string p_NomVendedor, string p_TipoVenta, string p_IdMoneda, Nullable<decimal> p_TasaCambio, string p_DireccionEntrega, string p_Observacion, Nullable<bool> p_Exportacion, Nullable<bool> p_Exoneracion, string p_NoExoneracion, string p_OrdenCompra, Nullable<bool> p_ContraEntrega, Nullable<bool> p_EsDelivery, string p_Estado, string p_DatosDetalle, string p_DatosLote, string p_DatosPago, Nullable<int> p_IdUsuario, string p_Longitud, string p_Latitud, Nullable<int> p_IdDireccion)
         {
