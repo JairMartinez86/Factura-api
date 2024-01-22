@@ -1334,7 +1334,7 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                            var query = (from _q in _Conexion.sp_GrabarProforma_Web((_v == null ? 0: d.IdProforma), d.CodBodega, d.Serie, string.Empty, d.CodCliente, d.NomCliente, "ATENCION", d.Nombre, d.TipoVenta, d.Ruc, d.Cedula, d.Contacto, d.Contacto, d.Correo, vend.IdVendedor, d.NomVendedor,
+                            var query = (from _q in _Conexion.sp_GrabarProforma_Web((_v == null ? 0: d.IdProforma), d.CodBodega, d.Serie, (_v == null ? string.Empty : _v.NoPedido), d.CodCliente, d.NomCliente, "ATENCION", d.Nombre, d.TipoVenta, d.Ruc, d.Cedula, d.Contacto, d.Contacto, d.Correo, vend.IdVendedor, d.NomVendedor,
                                 d.Moneda, d.Fecha, 29, d.Plazo, d.TasaCambio, d.Observaciones, (d.TipoExoneracion == "Sin Exoneración" ? false : true), d.NoExoneracion, false, (prof == null ? "Solicitado" : prof.Estado), DetalleProd, u.IdUsuario, d.OrdenCompra, string.Empty, string.Empty
                                 )
                                          select new
@@ -1344,6 +1344,7 @@ namespace FAC_api.Controllers.FACT
                                              _q.MENSAJE,
                                              _q.ESTADO
                                          }).ToList();
+
 
 
 
@@ -1365,6 +1366,7 @@ namespace FAC_api.Controllers.FACT
                                 NoProf = prof.NoProforma;
                                 IdProforma = prof.IdProforma;
 
+                       
                             }
 
 
