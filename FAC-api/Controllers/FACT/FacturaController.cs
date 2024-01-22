@@ -1101,6 +1101,7 @@ namespace FAC_api.Controllers.FACT
                                             _q.TasaCambio,
                                             _q.PedirAutorizacion,
                                             _q.Estado,
+                                            UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
                                             Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
                                         }).ToList();
 
