@@ -1721,6 +1721,8 @@ namespace FAC_api.Controllers.FACT
                             _vDetLote.Codigo = l.Codigo;
                             _vDetLote.Ubicacion = l.Ubicacion;
                             _vDetLote.Cantidad = l.Cantidad;
+                            if (l.NoLote == null) l.NoLote = "S/L";
+                            if (l.NoLote == string.Empty) l.NoLote = "S/L";
                             _vDetLote.NoLote = l.NoLote;
                             if (l.Vence == new DateTime(1900, 1, 1)) l.Vence = null;
                             _vDetLote.Vence = l.Vence;
