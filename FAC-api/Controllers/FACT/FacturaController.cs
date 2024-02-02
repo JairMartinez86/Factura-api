@@ -1722,6 +1722,7 @@ namespace FAC_api.Controllers.FACT
                             _vDetLote.Ubicacion = l.Ubicacion;
                             _vDetLote.Cantidad = l.Cantidad;
                             _vDetLote.NoLote = l.NoLote;
+                            if (l.Vence == new DateTime(1900, 1, 1)) l.Vence = null;
                             _vDetLote.Vence = l.Vence;
                             _vDetLote.EsBonificado = l.EsBonificado;
                             _vDetLote.Existencia = l.Existencia;
@@ -2720,7 +2721,7 @@ namespace FAC_api.Controllers.FACT
                 HttpClient client = new HttpClient();
 
 
-                HttpResponseMessage response = await client.GetAsync($"http://localhost:140/api/INV/Kardex/ExistenciaUbicacion?CodProducto={CodProducto}&CodBodega={CodBodega}");
+                HttpResponseMessage response = await client.GetAsync($"http://192.168.0.118:140/api/INV/Kardex/ExistenciaUbicacion?CodProducto={CodProducto}&CodBodega={CodBodega}");
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
 
