@@ -521,7 +521,7 @@ namespace FAC_api.Controllers.FACT
                     if (!EsINVESCASAN(CodProducto, CodBodega, _Conexion))
                     {
                         qUbicacion = (from _q in _Conexion.Kardex
-                                      where _q.CodProducto.TrimStart().TrimEnd() == CodProducto  && ub.Contains(_q.Bodega) && _q.Anulado == false
+                                      where _q.CodProducto.TrimStart().TrimEnd() == CodProducto   && _q.Anulado == false //&& ub.Contains(_q.Bodega)
                                       group _q by new { _q.CodProducto, _q.Bodega} into g
                                       select new ExistenciaUbicacion
                                       {
@@ -554,7 +554,7 @@ namespace FAC_api.Controllers.FACT
                         where_bodega = where_bodega.Substring(0, where_bodega.Length - 1);
 
 
-                        List<ExistenciaUbicacion> qExistencia = _Conexion.Database.SqlQuery<ExistenciaUbicacion>($"SELECT CONCAT(CAST(LTRIM(RTRIM(T.CodiProd)) AS NVARCHAR(12)), RTRIM(LTRIM(T.Bodega))) AS [Key], T.CodiProd AS CodProducto, RTRIM(LTRIM(T.Bodega)) AS Bodega, '' AS Ubicacion,  SUM(T.Entrada - T.Salidas)  AS Existencia,  '' AS NoLote, NULL AS Vence, CAST(IIF(RTRIM(LTRIM(T.Bodega)) = '{CodBodega}', 1, 0) AS BIT) AS EsPrincipal \r\nFROM INVESCASAN.DBO.Kardex AS T\r\nWHERE T.CodiProd = '{CodProducto}' AND T.Bodega IN( {where_bodega}) \r\nGROUP BY T.CodiProd, T.Bodega").ToList();
+                        List<ExistenciaUbicacion> qExistencia = _Conexion.Database.SqlQuery<ExistenciaUbicacion>($"SELECT CONCAT(CAST(LTRIM(RTRIM(T.CodiProd)) AS NVARCHAR(12)), RTRIM(LTRIM(T.Bodega))) AS [Key], T.CodiProd AS CodProducto, RTRIM(LTRIM(T.Bodega)) AS Bodega, '' AS Ubicacion,  SUM(T.Entrada - T.Salidas)  AS Existencia,  '' AS NoLote, NULL AS Vence, CAST(IIF(RTRIM(LTRIM(T.Bodega)) = '{CodBodega}', 1, 0) AS BIT) AS EsPrincipal \r\nFROM INVESCASAN.DBO.Kardex AS T\r\nWHERE T.CodiProd = '{CodProducto}' /*AND T.Bodega IN( {where_bodega})*/ \r\nGROUP BY T.CodiProd, T.Bodega").ToList();
 
                         foreach (ExistenciaUbicacion neg in qExistencia.Where(w => w.Existencia < 0))
                         {
