@@ -719,26 +719,30 @@ namespace FAC_api.Controllers.FACT
 
                     if(qPrecios != null)
                     {
-
-                        if (iPrecio.PrecioCordoba == 0)
+                        if(iPrecio != null)
                         {
-                            iPrecio.EsPrincipal = false;
-                            iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Distribuidor");
-                            if (iPrecio != null) iPrecio.EsPrincipal = true;
+                            if (iPrecio.PrecioCordoba == 0)
+                            {
+                                iPrecio.EsPrincipal = false;
+                                iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Distribuidor");
+                                if (iPrecio != null) iPrecio.EsPrincipal = true;
+                            }
+
+                            if (iPrecio.PrecioCordoba == 0)
+                            {
+                                iPrecio.EsPrincipal = false;
+                                iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Publico");
+                                if (iPrecio != null) iPrecio.EsPrincipal = true;
+                            }
+
+                            if (iPrecio.EsPrincipal)
+                            {
+                                iPrecio.Liberado = LiberadoPrecio;
+                                iPrecio.IdLiberacion = IdLiberacion;
+                            }
                         }
 
-                        if (iPrecio.PrecioCordoba == 0)
-                        {
-                            iPrecio.EsPrincipal = false;
-                            iPrecio = qPrecios.FirstOrDefault(f => f.Tipo == "Publico");
-                            if (iPrecio != null) iPrecio.EsPrincipal = true;
-                        }
-
-                        if (iPrecio.EsPrincipal)
-                        {
-                            iPrecio.Liberado = LiberadoPrecio;
-                            iPrecio.IdLiberacion = IdLiberacion;
-                        }
+                       
 
                     }
 
