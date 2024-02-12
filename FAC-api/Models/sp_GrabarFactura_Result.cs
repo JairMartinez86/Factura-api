@@ -11,11 +11,10 @@ namespace FAC_api.Models
 {
     using System;
     
-    public partial class sp_GrabarFactura_Web_Result
+    public partial class sp_GrabarFactura_Result
     {
         public Nullable<int> ESTADO { get; set; }
         public string MENSAJE { get; set; }
         public Nullable<int> IdFactura { get; set; }
-        public string NoFactura { get; set; }
     }
 }

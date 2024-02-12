@@ -834,11 +834,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="sp_AnularFacturaVenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FAC">
+          <Parameter Name="P_IdFactura" Type="int" Mode="In" />
+          <Parameter Name="P_Serie" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_NoFactura" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdBodega" Type="int" Mode="In" />
+          <Parameter Name="P_MotivoAnulacion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdusuarioAnula" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_AnularFacturaVenta_WEB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FAC">
           <Parameter Name="P_IdFactura" Type="int" Mode="In" />
           <Parameter Name="P_Serie" Type="nvarchar" Mode="In" />
           <Parameter Name="P_NoFactura" Type="nvarchar" Mode="In" />
           <Parameter Name="P_IdBodega" Type="int" Mode="In" />
+          <Parameter Name="P_MotivoAnulacion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdusuarioAnula" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_AnularProformaVenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FAC">
+          <Parameter Name="P_IdProforma" Type="int" Mode="In" />
+          <Parameter Name="P_Serie" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_NoProforma" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_CodBodega" Type="nvarchar" Mode="In" />
           <Parameter Name="P_MotivoAnulacion" Type="nvarchar" Mode="In" />
           <Parameter Name="P_IdusuarioAnula" Type="int" Mode="In" />
         </Function>
@@ -849,6 +865,42 @@
           <Parameter Name="P_CodBodega" Type="nvarchar" Mode="In" />
           <Parameter Name="P_MotivoAnulacion" Type="nvarchar" Mode="In" />
           <Parameter Name="P_IdusuarioAnula" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_GrabarFactura" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FAC">
+          <Parameter Name="P_IdFactura" Type="int" Mode="In" />
+          <Parameter Name="P_IdProforma" Type="int" Mode="In" />
+          <Parameter Name="P_IdBodega" Type="int" Mode="In" />
+          <Parameter Name="P_IdSerie" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_NoFactura" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Fecha" Type="datetime2" Mode="In" />
+          <Parameter Name="P_CodCliente" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_NomCliente" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Ruc" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Telefono" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Celular" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Correo" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdVendedor" Type="int" Mode="In" />
+          <Parameter Name="P_NomVendedor" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_TipoVenta" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdMoneda" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_TasaCambio" Type="decimal" Mode="In" />
+          <Parameter Name="P_DireccionEntrega" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Observacion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Exportacion" Type="bit" Mode="In" />
+          <Parameter Name="P_Exoneracion" Type="bit" Mode="In" />
+          <Parameter Name="P_NoExoneracion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_OrdenCompra" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_ContraEntrega" Type="bit" Mode="In" />
+          <Parameter Name="P_EsDelivery" Type="bit" Mode="In" />
+          <Parameter Name="P_Estado" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_DatosDetalle" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="P_DatosLote" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="P_DatosPago" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="P_IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="P_Longitud" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Latitud" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdDireccion" Type="int" Mode="In" />
         </Function>
         <Function Name="sp_GrabarFactura_Web" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FAC">
           <Parameter Name="P_IdFactura" Type="int" Mode="In" />
@@ -885,6 +937,39 @@
           <Parameter Name="P_Longitud" Type="nvarchar" Mode="In" />
           <Parameter Name="P_Latitud" Type="nvarchar" Mode="In" />
           <Parameter Name="P_IdDireccion" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_GrabarProforma" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FAC">
+          <Parameter Name="P_IdProforma" Type="int" Mode="In" />
+          <Parameter Name="P_CodBodega" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdSerie" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_NoProforma" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_CodCliente" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_NomCliente" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Atencion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_TipoVenta" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Ruc" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Cedula" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Telefono" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Celular" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Correo" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdVendedor" Type="int" Mode="In" />
+          <Parameter Name="P_NomVendedor" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_IdMoneda" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Fecha" Type="datetime2" Mode="In" />
+          <Parameter Name="P_IdPlazo" Type="int" Mode="In" />
+          <Parameter Name="P_Plazo" Type="int" Mode="In" />
+          <Parameter Name="P_TasaCambio" Type="decimal" Mode="In" />
+          <Parameter Name="P_Observacion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Exoneracion" Type="bit" Mode="In" />
+          <Parameter Name="P_NoExoneracion" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_EsPublica" Type="bit" Mode="In" />
+          <Parameter Name="P_Estado" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_DatosDetalle" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="P_IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="P_OrdenTaller" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Longitud" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Latitud" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_GrabarProforma_Web" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="FAC">
           <Parameter Name="P_IdProforma" Type="int" Mode="In" />
@@ -1124,7 +1209,38 @@
           <EntitySet Name="PermisoFactura" EntityType="BalancesModel.PermisoFactura" />
           <EntitySet Name="LiberarBonificacion" EntityType="BalancesModel.LiberarBonificacion" />
           <EntitySet Name="FacturaVenta" EntityType="BalancesModel.FacturaVenta" />
-          <FunctionImport Name="sp_GrabarFactura_Web" ReturnType="Collection(BalancesModel.sp_GrabarFactura_Web_Result1)">
+          <EntitySet Name="ProformaVenta" EntityType="BalancesModel.ProformaVenta" />
+          <EntitySet Name="Venta" EntityType="BalancesModel.Venta" />
+          <EntitySet Name="FormaPago" EntityType="BalancesModel.FormaPago" />
+          <EntitySet Name="Bancos" EntityType="BalancesModel.Bancos" />
+          <EntitySet Name="Monedas" EntityType="BalancesModel.Monedas" />
+          <EntitySet Name="VentaDetalle" EntityType="BalancesModel.VentaDetalle" />
+          <EntitySet Name="VentaLote" EntityType="BalancesModel.VentaLote" />
+          <AssociationSet Name="FK_VentaDetalle_Venta" Association="BalancesModel.FK_VentaDetalle_Venta">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="VentaDetalle" EntitySet="VentaDetalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VentaLote_Venta" Association="BalancesModel.FK_VentaLote_Venta">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="VentaLote" EntitySet="VentaLote" />
+          </AssociationSet>
+          <FunctionImport Name="sp_AnularFacturaVenta" ReturnType="Collection(BalancesModel.sp_AnularFacturaVenta_Result)">
+            <Parameter Name="P_IdFactura" Mode="In" Type="Int32" />
+            <Parameter Name="P_Serie" Mode="In" Type="String" />
+            <Parameter Name="P_NoFactura" Mode="In" Type="String" />
+            <Parameter Name="P_IdBodega" Mode="In" Type="Int32" />
+            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
+            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_AnularFacturaVenta_WEB" ReturnType="Collection(BalancesModel.sp_AnularFacturaVenta_WEB_Result)">
+            <Parameter Name="P_IdFactura" Mode="In" Type="Int32" />
+            <Parameter Name="P_Serie" Mode="In" Type="String" />
+            <Parameter Name="P_NoFactura" Mode="In" Type="String" />
+            <Parameter Name="P_IdBodega" Mode="In" Type="Int32" />
+            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
+            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GrabarFactura" ReturnType="Collection(BalancesModel.sp_GrabarFactura_Result)">
             <Parameter Name="P_IdFactura" Mode="In" Type="Int32" />
             <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
             <Parameter Name="P_IdBodega" Mode="In" Type="Int32" />
@@ -1160,23 +1276,75 @@
             <Parameter Name="P_Latitud" Mode="In" Type="String" />
             <Parameter Name="P_IdDireccion" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_AnularFacturaVenta_WEB" ReturnType="Collection(BalancesModel.sp_AnularFacturaVenta_WEB_Result)">
+          <FunctionImport Name="sp_GrabarFactura_Web" ReturnType="Collection(BalancesModel.sp_GrabarFactura_Web_Result)">
             <Parameter Name="P_IdFactura" Mode="In" Type="Int32" />
-            <Parameter Name="P_Serie" Mode="In" Type="String" />
-            <Parameter Name="P_NoFactura" Mode="In" Type="String" />
-            <Parameter Name="P_IdBodega" Mode="In" Type="Int32" />
-            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
-            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_AnularProformaVenta_Web" ReturnType="Collection(BalancesModel.sp_AnularProformaVenta_Web_Result)">
             <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
-            <Parameter Name="P_Serie" Mode="In" Type="String" />
-            <Parameter Name="P_NoProforma" Mode="In" Type="String" />
-            <Parameter Name="P_CodBodega" Mode="In" Type="String" />
-            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
-            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
+            <Parameter Name="P_IdBodega" Mode="In" Type="Int32" />
+            <Parameter Name="P_IdSerie" Mode="In" Type="String" />
+            <Parameter Name="P_NoFactura" Mode="In" Type="String" />
+            <Parameter Name="P_Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="P_CodCliente" Mode="In" Type="String" />
+            <Parameter Name="P_NomCliente" Mode="In" Type="String" />
+            <Parameter Name="P_Nombre" Mode="In" Type="String" />
+            <Parameter Name="P_Ruc" Mode="In" Type="String" />
+            <Parameter Name="P_Telefono" Mode="In" Type="String" />
+            <Parameter Name="P_Celular" Mode="In" Type="String" />
+            <Parameter Name="P_Correo" Mode="In" Type="String" />
+            <Parameter Name="P_IdVendedor" Mode="In" Type="Int32" />
+            <Parameter Name="P_NomVendedor" Mode="In" Type="String" />
+            <Parameter Name="P_TipoVenta" Mode="In" Type="String" />
+            <Parameter Name="P_IdMoneda" Mode="In" Type="String" />
+            <Parameter Name="P_TasaCambio" Mode="In" Type="Decimal" />
+            <Parameter Name="P_DireccionEntrega" Mode="In" Type="String" />
+            <Parameter Name="P_Observacion" Mode="In" Type="String" />
+            <Parameter Name="P_Exportacion" Mode="In" Type="Boolean" />
+            <Parameter Name="P_Exoneracion" Mode="In" Type="Boolean" />
+            <Parameter Name="P_NoExoneracion" Mode="In" Type="String" />
+            <Parameter Name="P_OrdenCompra" Mode="In" Type="String" />
+            <Parameter Name="P_ContraEntrega" Mode="In" Type="Boolean" />
+            <Parameter Name="P_EsDelivery" Mode="In" Type="Boolean" />
+            <Parameter Name="P_Estado" Mode="In" Type="String" />
+            <Parameter Name="P_DatosDetalle" Mode="In" Type="String" />
+            <Parameter Name="P_DatosLote" Mode="In" Type="String" />
+            <Parameter Name="P_DatosPago" Mode="In" Type="String" />
+            <Parameter Name="P_IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="P_Longitud" Mode="In" Type="String" />
+            <Parameter Name="P_Latitud" Mode="In" Type="String" />
+            <Parameter Name="P_IdDireccion" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="ProformaVenta" EntityType="BalancesModel.ProformaVenta" />
+          <FunctionImport Name="sp_GrabarProforma" ReturnType="Collection(BalancesModel.sp_GrabarProforma_Result)">
+            <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
+            <Parameter Name="P_CodBodega" Mode="In" Type="String" />
+            <Parameter Name="P_IdSerie" Mode="In" Type="String" />
+            <Parameter Name="P_NoProforma" Mode="In" Type="String" />
+            <Parameter Name="P_CodCliente" Mode="In" Type="String" />
+            <Parameter Name="P_NomCliente" Mode="In" Type="String" />
+            <Parameter Name="P_Atencion" Mode="In" Type="String" />
+            <Parameter Name="P_Nombre" Mode="In" Type="String" />
+            <Parameter Name="P_TipoVenta" Mode="In" Type="String" />
+            <Parameter Name="P_Ruc" Mode="In" Type="String" />
+            <Parameter Name="P_Cedula" Mode="In" Type="String" />
+            <Parameter Name="P_Telefono" Mode="In" Type="String" />
+            <Parameter Name="P_Celular" Mode="In" Type="String" />
+            <Parameter Name="P_Correo" Mode="In" Type="String" />
+            <Parameter Name="P_IdVendedor" Mode="In" Type="Int32" />
+            <Parameter Name="P_NomVendedor" Mode="In" Type="String" />
+            <Parameter Name="P_IdMoneda" Mode="In" Type="String" />
+            <Parameter Name="P_Fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="P_IdPlazo" Mode="In" Type="Int32" />
+            <Parameter Name="P_Plazo" Mode="In" Type="Int32" />
+            <Parameter Name="P_TasaCambio" Mode="In" Type="Decimal" />
+            <Parameter Name="P_Observacion" Mode="In" Type="String" />
+            <Parameter Name="P_Exoneracion" Mode="In" Type="Boolean" />
+            <Parameter Name="P_NoExoneracion" Mode="In" Type="String" />
+            <Parameter Name="P_EsPublica" Mode="In" Type="Boolean" />
+            <Parameter Name="P_Estado" Mode="In" Type="String" />
+            <Parameter Name="P_DatosDetalle" Mode="In" Type="String" />
+            <Parameter Name="P_IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="P_OrdenTaller" Mode="In" Type="String" />
+            <Parameter Name="P_Longitud" Mode="In" Type="String" />
+            <Parameter Name="P_Latitud" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="sp_GrabarProforma_Web" ReturnType="Collection(BalancesModel.sp_GrabarProforma_Web_Result)">
             <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
             <Parameter Name="P_CodBodega" Mode="In" Type="String" />
@@ -1210,20 +1378,22 @@
             <Parameter Name="P_Longitud" Mode="In" Type="String" />
             <Parameter Name="P_Latitud" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="Venta" EntityType="BalancesModel.Venta" />
-          <EntitySet Name="FormaPago" EntityType="BalancesModel.FormaPago" />
-          <EntitySet Name="Bancos" EntityType="BalancesModel.Bancos" />
-          <EntitySet Name="Monedas" EntityType="BalancesModel.Monedas" />
-          <EntitySet Name="VentaDetalle" EntityType="BalancesModel.VentaDetalle" />
-          <EntitySet Name="VentaLote" EntityType="BalancesModel.VentaLote" />
-          <AssociationSet Name="FK_VentaDetalle_Venta" Association="BalancesModel.FK_VentaDetalle_Venta">
-            <End Role="Venta" EntitySet="Venta" />
-            <End Role="VentaDetalle" EntitySet="VentaDetalle" />
-          </AssociationSet>
-          <AssociationSet Name="FK_VentaLote_Venta" Association="BalancesModel.FK_VentaLote_Venta">
-            <End Role="Venta" EntitySet="Venta" />
-            <End Role="VentaLote" EntitySet="VentaLote" />
-          </AssociationSet>
+          <FunctionImport Name="sp_AnularProformaVenta" ReturnType="Collection(BalancesModel.sp_AnularProformaVenta_Result)">
+            <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
+            <Parameter Name="P_Serie" Mode="In" Type="String" />
+            <Parameter Name="P_NoProforma" Mode="In" Type="String" />
+            <Parameter Name="P_CodBodega" Mode="In" Type="String" />
+            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
+            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_AnularProformaVenta_Web" ReturnType="Collection(BalancesModel.sp_AnularProformaVenta_Web_Result)">
+            <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
+            <Parameter Name="P_Serie" Mode="In" Type="String" />
+            <Parameter Name="P_NoProforma" Mode="In" Type="String" />
+            <Parameter Name="P_CodBodega" Mode="In" Type="String" />
+            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
+            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -1685,11 +1855,6 @@
           <Property Name="FechaInactiva" Type="DateTime" Precision="7" />
           <Property Name="IdUsuarioInactiva" Type="Int32" />
         </EntityType>
-        <ComplexType Name="sp_GrabarFactura_Web_Result">
-          <Property Type="Int32" Name="ESTADO" Nullable="true" />
-          <Property Type="String" Name="MENSAJE" Nullable="true" />
-          <Property Type="Int32" Name="IdFactura" Nullable="true" />
-        </ComplexType>
         <EntityType Name="FacturaVenta">
           <Key>
             <PropertyRef Name="IdFactura" />
@@ -1738,24 +1903,6 @@
           <Property Name="Latitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EsCentralizacion" Type="Boolean" />
         </EntityType>
-        <ComplexType Name="sp_GrabarFactura_Web_Result1">
-          <Property Type="Int32" Name="ESTADO" Nullable="true" />
-          <Property Type="String" Name="MENSAJE" Nullable="true" />
-          <Property Type="Int32" Name="IdFactura" Nullable="true" />
-          <Property Type="String" Name="NoFactura" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="sp_AnularFacturaVenta_Result">
-          <Property Type="Int32" Name="ESTADO" Nullable="true" />
-          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
-        </ComplexType>
-        <ComplexType Name="sp_AnularFacturaVenta_WEB_Result">
-          <Property Type="Int32" Name="ESTADO" Nullable="true" />
-          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
-        </ComplexType>
-        <ComplexType Name="sp_AnularProformaVenta_Web_Result">
-          <Property Type="Int32" Name="ESTADO" Nullable="true" />
-          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
-        </ComplexType>
         <EntityType Name="ProformaVenta">
           <Key>
             <PropertyRef Name="IdProforma" />
@@ -1801,12 +1948,6 @@
           <Property Name="Latitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OrdenTaller" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <ComplexType Name="sp_GrabarProforma_Web_Result">
-          <Property Type="Int32" Name="ESTADO" Nullable="true" />
-          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
-          <Property Type="Int32" Name="IdProforma" Nullable="true" />
-          <Property Type="String" Name="NoProforma" Nullable="true" MaxLength="50" />
-        </ComplexType>
         <EntityType Name="Venta">
           <Key>
             <PropertyRef Name="IdVenta" />
@@ -1996,6 +2137,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="sp_AnularFacturaVenta_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="sp_AnularFacturaVenta_WEB_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="sp_GrabarFactura_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" />
+          <Property Type="Int32" Name="IdFactura" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_GrabarFactura_Web_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" />
+          <Property Type="Int32" Name="IdFactura" Nullable="true" />
+          <Property Type="String" Name="NoFactura" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_GrabarProforma_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="IdProforma" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_GrabarProforma_Web_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="IdProforma" Nullable="true" />
+          <Property Type="String" Name="NoProforma" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_AnularProformaVenta_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="sp_AnularProformaVenta_Web_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2577,32 +2756,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_GrabarFactura_Web" FunctionName="BalancesModel.Store.sp_GrabarFactura_Web">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BalancesModel.sp_GrabarFactura_Web_Result1">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
-                <ScalarProperty Name="IdFactura" ColumnName="IdFactura" />
-                <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_AnularFacturaVenta_WEB" FunctionName="BalancesModel.Store.sp_AnularFacturaVenta_WEB">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularFacturaVenta_WEB_Result">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_AnularProformaVenta_Web" FunctionName="BalancesModel.Store.sp_AnularProformaVenta_Web">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularProformaVenta_Web_Result">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="ProformaVenta">
             <EntityTypeMapping TypeName="BalancesModel.ProformaVenta">
               <MappingFragment StoreEntitySet="ProformaVenta">
@@ -2649,16 +2802,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_GrabarProforma_Web" FunctionName="BalancesModel.Store.sp_GrabarProforma_Web">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BalancesModel.sp_GrabarProforma_Web_Result">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
-                <ScalarProperty Name="IdProforma" ColumnName="IdProforma" />
-                <ScalarProperty Name="NoProforma" ColumnName="NoProforma" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="Venta">
             <EntityTypeMapping TypeName="BalancesModel.Venta">
               <MappingFragment StoreEntitySet="Venta">
@@ -2826,6 +2969,76 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_AnularFacturaVenta" FunctionName="BalancesModel.Store.sp_AnularFacturaVenta">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularFacturaVenta_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_AnularFacturaVenta_WEB" FunctionName="BalancesModel.Store.sp_AnularFacturaVenta_WEB">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularFacturaVenta_WEB_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GrabarFactura" FunctionName="BalancesModel.Store.sp_GrabarFactura">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_GrabarFactura_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+                <ScalarProperty Name="IdFactura" ColumnName="IdFactura" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GrabarFactura_Web" FunctionName="BalancesModel.Store.sp_GrabarFactura_Web">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_GrabarFactura_Web_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+                <ScalarProperty Name="IdFactura" ColumnName="IdFactura" />
+                <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GrabarProforma" FunctionName="BalancesModel.Store.sp_GrabarProforma">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_GrabarProforma_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+                <ScalarProperty Name="IdProforma" ColumnName="IdProforma" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GrabarProforma_Web" FunctionName="BalancesModel.Store.sp_GrabarProforma_Web">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_GrabarProforma_Web_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+                <ScalarProperty Name="IdProforma" ColumnName="IdProforma" />
+                <ScalarProperty Name="NoProforma" ColumnName="NoProforma" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_AnularProformaVenta" FunctionName="BalancesModel.Store.sp_AnularProformaVenta">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularProformaVenta_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_AnularProformaVenta_Web" FunctionName="BalancesModel.Store.sp_AnularProformaVenta_Web">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularProformaVenta_Web_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

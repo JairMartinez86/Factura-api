@@ -436,13 +436,19 @@
     <Compile Include="Models\sp_AnularFacturaVenta_WEB_Result.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_AnularProformaVenta_Result.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_AnularProformaVenta_Web_Result.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_GrabarFactura_Result.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_GrabarFactura_Web_Result.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_GrabarFactura_Web_Result1.cs">
+    <Compile Include="Models\sp_GrabarProforma_Result.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_GrabarProforma_Web_Result.cs">
