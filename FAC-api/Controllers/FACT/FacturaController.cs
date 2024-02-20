@@ -1060,7 +1060,7 @@ namespace FAC_api.Controllers.FACT
                         if(esCola)
                         {
                             var qDoc = (from _q in _Conexion.Venta
-                                        where  _q.TipoDocumento == Tipo && (_q.Estado == "Solicitado" || _q.Estado == "Impresa" || (_q.Estado == "Autorizado" && _q.NoFactura == string.Empty))
+                                        where  _q.TipoDocumento == Tipo && (_q.Estado == "Solicitado" || _q.Estado == "Impresa"  || (_q.Estado == "Autorizado" && _q.NoFactura == string.Empty))
                                         orderby _q.CodBodega descending, _q.Fecha descending
                                         select new
                                         {
@@ -1105,7 +1105,7 @@ namespace FAC_api.Controllers.FACT
                                             _q.TasaCambio,
                                             _q.PedirAutorizacion,
                                             _q.Estado,
-                                            UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
+                                            _q.UsuarioRegistra,//UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
                                             Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
                                         }).ToList();
 
@@ -1163,7 +1163,7 @@ namespace FAC_api.Controllers.FACT
                                             _q.TasaCambio,
                                             _q.PedirAutorizacion,
                                             _q.Estado,
-                                            UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
+                                            _q.UsuarioRegistra,//UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
                                             Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
                                         }).ToList();
 
@@ -1225,7 +1225,7 @@ namespace FAC_api.Controllers.FACT
                                         _q.TasaCambio,
                                         _q.PedirAutorizacion,
                                         _q.Estado,
-                                        UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
+                                        _q.UsuarioRegistra,//UsuarioRegistra = _q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra,
                                         Filtro = string.Concat(_q.NoFactura, _q.NoPedido, _q.CodCliente, _q.NomCliente, _q.Nombre, _q.CodBodega, _q.NomBodega, _q.CodVendedor, _q.NomVendedor, _q.TipoVenta, _q.Estado, (_q.Estado == "Anulado" ? _q.UsuarioAnula : _q.UsuarioRegistra))
                                     }).ToList();
 
@@ -1852,7 +1852,28 @@ namespace FAC_api.Controllers.FACT
                         lstDatos.Add(datos);
 
 
-                      
+
+                        if (_v.TipoDocumento == "Factura")
+                        {
+                            cFactura cFactura = new cFactura();
+
+                            object[] ob = cFactura.FormatoA4((int)_v.IdFactura, _v.TotalCordoba, _Conexion.Database.Connection);
+
+
+                            if (ob[0].ToString() != string.Empty)
+                            {
+                                json = Cls_Mensaje.Tojson(null, 0, "1", ob[0].ToString(), 1);
+                                return json;
+                            }
+                            datos = new Cls_Datos();
+                            datos.Nombre = "A4";
+                            datos.d = ob[2];
+                            lstDatos.Add(datos);
+
+
+                        }
+
+
 
                         scope.Complete();
 
@@ -2070,7 +2091,7 @@ namespace FAC_api.Controllers.FACT
                         {
                             
                             datos.Nombre = string.Concat("Factura No", _v.NoFactura);
-                            object[] ob = cFactura.ImprimirFacturaVenta((int)_v.IdFactura, _v.TotalCordoba, _v.Moneda, m.Moneda, b.IdBodega, false, (_v.TipoVenta == "Contado" ? false : true), false, str_MonedaLocal, _Conexion.Database.Connection);
+                            object[] ob = cFactura.ImprimirFacturaVenta((int)_v.IdFactura, _v.TotalCordoba, _v.Moneda, m.Moneda, b.IdBodega, false, (_v.TipoVenta == "Contado" ? false : true), str_MonedaLocal, _Conexion.Database.Connection);
 
 
                             if (ob[0].ToString() != string.Empty)
