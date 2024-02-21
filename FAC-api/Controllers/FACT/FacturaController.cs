@@ -1785,11 +1785,9 @@ namespace FAC_api.Controllers.FACT
                             }
 
 
-                            //SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
-                            //NetworkCredential nameAndPassword = new NetworkCredential("info@escasan.com.ni", "Inf0Escasan2018!.");
-
                             SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
-                            NetworkCredential nameAndPassword = new NetworkCredential("notificaciones@globalvet.com.ni", "Mam02771");
+                            NetworkCredential nameAndPassword = new NetworkCredential("info@escasan.com.ni", "@Ch1L1ndr1n$24!#$");
+
 
 
                             mail.Subject = esNuevo ?  $"Pendiente Autorizar ({_v.NoPedido})" : "Margen Autorizado";
