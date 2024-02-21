@@ -34,8 +34,6 @@
         <EntityTypeShape EntityType="BalancesModel.CorreoAutorizaFactura" Width="1.5" PointX="13.375" PointY="3.75" />
         <EntityTypeShape EntityType="BalancesModel.PermisoFactura" Width="1.5" PointX="14.375" PointY="6.75" />
         <EntityTypeShape EntityType="BalancesModel.LiberarBonificacion" Width="1.5" PointX="15.375" PointY="0.75" />
-        <EntityTypeShape EntityType="BalancesModel.FacturaVenta" Width="1.5" PointX="17.375" PointY="0.75" />
-        <EntityTypeShape EntityType="BalancesModel.ProformaVenta" Width="1.5" PointX="0.75" PointY="18.75" />
         <EntityTypeShape EntityType="BalancesModel.Venta" Width="1.5" PointX="13.375" PointY="16.5" />
         <EntityTypeShape EntityType="BalancesModel.FormaPago" Width="1.5" PointX="14.375" PointY="9.75" />
         <EntityTypeShape EntityType="BalancesModel.Bancos" Width="1.5" PointX="18.375" PointY="11.75" />
@@ -44,6 +42,8 @@
         <EntityTypeShape EntityType="BalancesModel.VentaLote" Width="1.5" PointX="15.625" PointY="13.5" />
         <AssociationConnector Association="BalancesModel.FK_VentaDetalle_Venta" />
         <AssociationConnector Association="BalancesModel.FK_VentaLote_Venta" />
+        <EntityTypeShape EntityType="BalancesModel.FacturaVenta" Width="1.5" PointX="17.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BalancesModel.ProformaVenta" Width="1.5" PointX="0.75" PointY="18.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

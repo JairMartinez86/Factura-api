@@ -60,6 +60,7 @@
           <Property Name="ReportarCentralRiesgo" Type="bit" />
           <Property Name="CodTipoCliente" Type="nvarchar" MaxLength="10" />
           <Property Name="IdContribuyente" Type="int" />
+          <Property Name="ClasificacionFinanciera" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="Departamento">
           <Key>
@@ -177,7 +178,7 @@
           <Property Name="Ruc" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Telefono" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Celular" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Correo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Correo" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IdVendedor" Type="int" Nullable="false" />
           <Property Name="NomVendedor" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="TipoVenta" Type="nvarchar" MaxLength="20" Nullable="false" />
@@ -303,7 +304,7 @@
           <Property Name="Cedula" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Celular" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Telefono" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Correo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Correo" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IdVendedor" Type="int" Nullable="false" />
           <Property Name="NomVendedor" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="TipoVenta" Type="nvarchar" MaxLength="20" Nullable="false" />
@@ -644,7 +645,7 @@
           <Property Name="Nombre" Type="nvarchar" MaxLength="1000" Nullable="false" />
           <Property Name="Cedula" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Ruc" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Correo" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Correo" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Contacto" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Limite" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Disponible" Type="decimal" Precision="18" Scale="2" Nullable="false" />
@@ -879,7 +880,7 @@
           <Parameter Name="P_Ruc" Type="nvarchar" Mode="In" />
           <Parameter Name="P_Telefono" Type="nvarchar" Mode="In" />
           <Parameter Name="P_Celular" Type="nvarchar" Mode="In" />
-          <Parameter Name="P_Correo" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Correo" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="P_IdVendedor" Type="int" Mode="In" />
           <Parameter Name="P_NomVendedor" Type="nvarchar" Mode="In" />
           <Parameter Name="P_TipoVenta" Type="nvarchar" Mode="In" />
@@ -952,7 +953,7 @@
           <Parameter Name="P_Cedula" Type="nvarchar" Mode="In" />
           <Parameter Name="P_Telefono" Type="nvarchar" Mode="In" />
           <Parameter Name="P_Celular" Type="nvarchar" Mode="In" />
-          <Parameter Name="P_Correo" Type="nvarchar" Mode="In" />
+          <Parameter Name="P_Correo" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="P_IdVendedor" Type="int" Mode="In" />
           <Parameter Name="P_NomVendedor" Type="nvarchar" Mode="In" />
           <Parameter Name="P_IdMoneda" Type="nvarchar" Mode="In" />
@@ -1208,8 +1209,6 @@
           <EntitySet Name="CorreoAutorizaFactura" EntityType="BalancesModel.CorreoAutorizaFactura" />
           <EntitySet Name="PermisoFactura" EntityType="BalancesModel.PermisoFactura" />
           <EntitySet Name="LiberarBonificacion" EntityType="BalancesModel.LiberarBonificacion" />
-          <EntitySet Name="FacturaVenta" EntityType="BalancesModel.FacturaVenta" />
-          <EntitySet Name="ProformaVenta" EntityType="BalancesModel.ProformaVenta" />
           <EntitySet Name="Venta" EntityType="BalancesModel.Venta" />
           <EntitySet Name="FormaPago" EntityType="BalancesModel.FormaPago" />
           <EntitySet Name="Bancos" EntityType="BalancesModel.Bancos" />
@@ -1240,6 +1239,24 @@
             <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
             <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="sp_AnularProformaVenta" ReturnType="Collection(BalancesModel.sp_AnularProformaVenta_Result)">
+            <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
+            <Parameter Name="P_Serie" Mode="In" Type="String" />
+            <Parameter Name="P_NoProforma" Mode="In" Type="String" />
+            <Parameter Name="P_CodBodega" Mode="In" Type="String" />
+            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
+            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_AnularProformaVenta_Web" ReturnType="Collection(BalancesModel.sp_AnularProformaVenta_Web_Result)">
+            <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
+            <Parameter Name="P_Serie" Mode="In" Type="String" />
+            <Parameter Name="P_NoProforma" Mode="In" Type="String" />
+            <Parameter Name="P_CodBodega" Mode="In" Type="String" />
+            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
+            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="FacturaVenta" EntityType="BalancesModel.FacturaVenta" />
+          <EntitySet Name="ProformaVenta" EntityType="BalancesModel.ProformaVenta" />
           <FunctionImport Name="sp_GrabarFactura" ReturnType="Collection(BalancesModel.sp_GrabarFactura_Result)">
             <Parameter Name="P_IdFactura" Mode="In" Type="Int32" />
             <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
@@ -1378,22 +1395,6 @@
             <Parameter Name="P_Longitud" Mode="In" Type="String" />
             <Parameter Name="P_Latitud" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="sp_AnularProformaVenta" ReturnType="Collection(BalancesModel.sp_AnularProformaVenta_Result)">
-            <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
-            <Parameter Name="P_Serie" Mode="In" Type="String" />
-            <Parameter Name="P_NoProforma" Mode="In" Type="String" />
-            <Parameter Name="P_CodBodega" Mode="In" Type="String" />
-            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
-            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_AnularProformaVenta_Web" ReturnType="Collection(BalancesModel.sp_AnularProformaVenta_Web_Result)">
-            <Parameter Name="P_IdProforma" Mode="In" Type="Int32" />
-            <Parameter Name="P_Serie" Mode="In" Type="String" />
-            <Parameter Name="P_NoProforma" Mode="In" Type="String" />
-            <Parameter Name="P_CodBodega" Mode="In" Type="String" />
-            <Parameter Name="P_MotivoAnulacion" Mode="In" Type="String" />
-            <Parameter Name="P_IdusuarioAnula" Mode="In" Type="Int32" />
-          </FunctionImport>
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -1462,6 +1463,7 @@
           <Property Name="CodTipoCliente" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="IdContribuyente" Type="Int32" />
           <NavigationProperty Name="DireccionCliente" Relationship="BalancesModel.FK_DireccionCliente_Cliente" FromRole="Cliente" ToRole="DireccionCliente" />
+          <Property Name="ClasificacionFinanciera" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Vendedor">
           <Key>
@@ -1855,99 +1857,6 @@
           <Property Name="FechaInactiva" Type="DateTime" Precision="7" />
           <Property Name="IdUsuarioInactiva" Type="Int32" />
         </EntityType>
-        <EntityType Name="FacturaVenta">
-          <Key>
-            <PropertyRef Name="IdFactura" />
-          </Key>
-          <Property Name="IdFactura" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdProforma" Type="Int32" />
-          <Property Name="IdBodega" Type="Int32" Nullable="false" />
-          <Property Name="IdSerie" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="NoFactura" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="CodCliente" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="NomCliente" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Ruc" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Celular" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Correo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IdVendedor" Type="Int32" Nullable="false" />
-          <Property Name="NomVendedor" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TipoVenta" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Plazo" Type="Int32" Nullable="false" />
-          <Property Name="Vence" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="DiasGracia" Type="Int32" Nullable="false" />
-          <Property Name="IdMoneda" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
-          <Property Name="TasaCambio" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
-          <Property Name="IdDireccion" Type="Int32" />
-          <Property Name="Total" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="TotalDolar" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="TotalCordoba" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="DireccionEntrega" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="Observaciones" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="Exportacion" Type="Boolean" Nullable="false" />
-          <Property Name="Exoneracion" Type="Boolean" Nullable="false" />
-          <Property Name="NoExoneracion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MotivoAnulacion" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
-          <Property Name="OrdenCompra" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ContraEntrega" Type="Boolean" Nullable="false" />
-          <Property Name="EsDelivery" Type="Boolean" Nullable="false" />
-          <Property Name="IdVendedorClave" Type="Int32" />
-          <Property Name="Estado" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
-          <Property Name="IdUsuarioAnula" Type="Int32" />
-          <Property Name="FechaAnulacion" Type="DateTime" Precision="7" />
-          <Property Name="IdUsuarioCaja" Type="Int32" />
-          <Property Name="Longitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Latitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EsCentralizacion" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="ProformaVenta">
-          <Key>
-            <PropertyRef Name="IdProforma" />
-          </Key>
-          <Property Name="IdProforma" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdBodega" Type="Int32" Nullable="false" />
-          <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="IdSerie" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="NoProforma" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="CodCliente" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="NomCliente" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Atencion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Ruc" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Cedula" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Celular" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Correo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IdVendedor" Type="Int32" Nullable="false" />
-          <Property Name="NomVendedor" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TipoVenta" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="IdPlazo" Type="Int32" Nullable="false" />
-          <Property Name="Plazo" Type="Int32" Nullable="false" />
-          <Property Name="Vence" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="IdMoneda" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
-          <Property Name="TasaCambio" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
-          <Property Name="IdDireccion" Type="Int32" />
-          <Property Name="Total" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="TotalDolar" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="TotalCordoba" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="DireccionEntrega" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="Observaciones" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="MotivoAnulacion" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
-          <Property Name="Exoneracion" Type="Boolean" Nullable="false" />
-          <Property Name="NoExoneracion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EsPublica" Type="Boolean" Nullable="false" />
-          <Property Name="Estado" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
-          <Property Name="IdUsuarioAnula" Type="Int32" />
-          <Property Name="FechaAnulacion" Type="DateTime" Precision="7" />
-          <Property Name="Longitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Latitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OrdenTaller" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Venta">
           <Key>
             <PropertyRef Name="IdVenta" />
@@ -1965,7 +1874,7 @@
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Cedula" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Ruc" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Correo" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Correo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Contacto" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Limite" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Disponible" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
@@ -2145,6 +2054,107 @@
           <Property Type="Int32" Name="ESTADO" Nullable="true" />
           <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
         </ComplexType>
+        <ComplexType Name="sp_AnularProformaVenta_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="sp_AnularProformaVenta_Web_Result">
+          <Property Type="Int32" Name="ESTADO" Nullable="true" />
+          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <EntityType Name="FacturaVenta">
+          <Key>
+            <PropertyRef Name="IdFactura" />
+          </Key>
+          <Property Name="IdFactura" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdProforma" Type="Int32" />
+          <Property Name="IdBodega" Type="Int32" Nullable="false" />
+          <Property Name="IdSerie" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NoFactura" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CodCliente" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="NomCliente" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Ruc" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Celular" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Correo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IdVendedor" Type="Int32" Nullable="false" />
+          <Property Name="NomVendedor" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TipoVenta" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Plazo" Type="Int32" Nullable="false" />
+          <Property Name="Vence" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DiasGracia" Type="Int32" Nullable="false" />
+          <Property Name="IdMoneda" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="TasaCambio" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <Property Name="IdDireccion" Type="Int32" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="TotalDolar" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="TotalCordoba" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DireccionEntrega" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="Observaciones" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Exportacion" Type="Boolean" Nullable="false" />
+          <Property Name="Exoneracion" Type="Boolean" Nullable="false" />
+          <Property Name="NoExoneracion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MotivoAnulacion" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="OrdenCompra" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContraEntrega" Type="Boolean" Nullable="false" />
+          <Property Name="EsDelivery" Type="Boolean" Nullable="false" />
+          <Property Name="IdVendedorClave" Type="Int32" />
+          <Property Name="Estado" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuarioAnula" Type="Int32" />
+          <Property Name="FechaAnulacion" Type="DateTime" Precision="7" />
+          <Property Name="IdUsuarioCaja" Type="Int32" />
+          <Property Name="Longitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EsCentralizacion" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="ProformaVenta">
+          <Key>
+            <PropertyRef Name="IdProforma" />
+          </Key>
+          <Property Name="IdProforma" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdBodega" Type="Int32" Nullable="false" />
+          <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IdSerie" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NoProforma" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CodCliente" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="NomCliente" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Atencion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Ruc" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cedula" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Celular" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Correo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IdVendedor" Type="Int32" Nullable="false" />
+          <Property Name="NomVendedor" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TipoVenta" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IdPlazo" Type="Int32" Nullable="false" />
+          <Property Name="Plazo" Type="Int32" Nullable="false" />
+          <Property Name="Vence" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IdMoneda" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="TasaCambio" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <Property Name="IdDireccion" Type="Int32" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="TotalDolar" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="TotalCordoba" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DireccionEntrega" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="Observaciones" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="MotivoAnulacion" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="Exoneracion" Type="Boolean" Nullable="false" />
+          <Property Name="NoExoneracion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EsPublica" Type="Boolean" Nullable="false" />
+          <Property Name="Estado" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuarioAnula" Type="Int32" />
+          <Property Name="FechaAnulacion" Type="DateTime" Precision="7" />
+          <Property Name="Longitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitud" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrdenTaller" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         <ComplexType Name="sp_GrabarFactura_Result">
           <Property Type="Int32" Name="ESTADO" Nullable="true" />
           <Property Type="String" Name="MENSAJE" Nullable="true" />
@@ -2166,14 +2176,6 @@
           <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
           <Property Type="Int32" Name="IdProforma" Nullable="true" />
           <Property Type="String" Name="NoProforma" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="sp_AnularProformaVenta_Result">
-          <Property Type="Int32" Name="ESTADO" Nullable="true" />
-          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
-        </ComplexType>
-        <ComplexType Name="sp_AnularProformaVenta_Web_Result">
-          <Property Type="Int32" Name="ESTADO" Nullable="true" />
-          <Property Type="String" Name="MENSAJE" Nullable="true" MaxLength="200" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2308,6 +2310,7 @@
           <EntitySetMapping Name="Cliente">
             <EntityTypeMapping TypeName="BalancesModel.Cliente">
               <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="ClasificacionFinanciera" ColumnName="ClasificacionFinanciera" />
                 <ScalarProperty Name="IdContribuyente" ColumnName="IdContribuyente" />
                 <ScalarProperty Name="CodTipoCliente" ColumnName="CodTipoCliente" />
                 <ScalarProperty Name="ReportarCentralRiesgo" ColumnName="ReportarCentralRiesgo" />
@@ -2707,101 +2710,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="FacturaVenta">
-            <EntityTypeMapping TypeName="BalancesModel.FacturaVenta">
-              <MappingFragment StoreEntitySet="FacturaVenta">
-                <ScalarProperty Name="EsCentralizacion" ColumnName="EsCentralizacion" />
-                <ScalarProperty Name="Latitud" ColumnName="Latitud" />
-                <ScalarProperty Name="Longitud" ColumnName="Longitud" />
-                <ScalarProperty Name="IdUsuarioCaja" ColumnName="IdUsuarioCaja" />
-                <ScalarProperty Name="FechaAnulacion" ColumnName="FechaAnulacion" />
-                <ScalarProperty Name="IdUsuarioAnula" ColumnName="IdUsuarioAnula" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="IdVendedorClave" ColumnName="IdVendedorClave" />
-                <ScalarProperty Name="EsDelivery" ColumnName="EsDelivery" />
-                <ScalarProperty Name="ContraEntrega" ColumnName="ContraEntrega" />
-                <ScalarProperty Name="OrdenCompra" ColumnName="OrdenCompra" />
-                <ScalarProperty Name="MotivoAnulacion" ColumnName="MotivoAnulacion" />
-                <ScalarProperty Name="NoExoneracion" ColumnName="NoExoneracion" />
-                <ScalarProperty Name="Exoneracion" ColumnName="Exoneracion" />
-                <ScalarProperty Name="Exportacion" ColumnName="Exportacion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="DireccionEntrega" ColumnName="DireccionEntrega" />
-                <ScalarProperty Name="TotalCordoba" ColumnName="TotalCordoba" />
-                <ScalarProperty Name="TotalDolar" ColumnName="TotalDolar" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
-                <ScalarProperty Name="TasaCambio" ColumnName="TasaCambio" />
-                <ScalarProperty Name="IdMoneda" ColumnName="IdMoneda" />
-                <ScalarProperty Name="DiasGracia" ColumnName="DiasGracia" />
-                <ScalarProperty Name="Vence" ColumnName="Vence" />
-                <ScalarProperty Name="Plazo" ColumnName="Plazo" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="TipoVenta" ColumnName="TipoVenta" />
-                <ScalarProperty Name="NomVendedor" ColumnName="NomVendedor" />
-                <ScalarProperty Name="IdVendedor" ColumnName="IdVendedor" />
-                <ScalarProperty Name="Correo" ColumnName="Correo" />
-                <ScalarProperty Name="Celular" ColumnName="Celular" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Ruc" ColumnName="Ruc" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="NomCliente" ColumnName="NomCliente" />
-                <ScalarProperty Name="CodCliente" ColumnName="CodCliente" />
-                <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
-                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
-                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
-                <ScalarProperty Name="IdProforma" ColumnName="IdProforma" />
-                <ScalarProperty Name="IdFactura" ColumnName="IdFactura" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProformaVenta">
-            <EntityTypeMapping TypeName="BalancesModel.ProformaVenta">
-              <MappingFragment StoreEntitySet="ProformaVenta">
-                <ScalarProperty Name="OrdenTaller" ColumnName="OrdenTaller" />
-                <ScalarProperty Name="Latitud" ColumnName="Latitud" />
-                <ScalarProperty Name="Longitud" ColumnName="Longitud" />
-                <ScalarProperty Name="FechaAnulacion" ColumnName="FechaAnulacion" />
-                <ScalarProperty Name="IdUsuarioAnula" ColumnName="IdUsuarioAnula" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="EsPublica" ColumnName="EsPublica" />
-                <ScalarProperty Name="NoExoneracion" ColumnName="NoExoneracion" />
-                <ScalarProperty Name="Exoneracion" ColumnName="Exoneracion" />
-                <ScalarProperty Name="MotivoAnulacion" ColumnName="MotivoAnulacion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="DireccionEntrega" ColumnName="DireccionEntrega" />
-                <ScalarProperty Name="TotalCordoba" ColumnName="TotalCordoba" />
-                <ScalarProperty Name="TotalDolar" ColumnName="TotalDolar" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
-                <ScalarProperty Name="TasaCambio" ColumnName="TasaCambio" />
-                <ScalarProperty Name="IdMoneda" ColumnName="IdMoneda" />
-                <ScalarProperty Name="Vence" ColumnName="Vence" />
-                <ScalarProperty Name="Plazo" ColumnName="Plazo" />
-                <ScalarProperty Name="IdPlazo" ColumnName="IdPlazo" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="TipoVenta" ColumnName="TipoVenta" />
-                <ScalarProperty Name="NomVendedor" ColumnName="NomVendedor" />
-                <ScalarProperty Name="IdVendedor" ColumnName="IdVendedor" />
-                <ScalarProperty Name="Correo" ColumnName="Correo" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Celular" ColumnName="Celular" />
-                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
-                <ScalarProperty Name="Ruc" ColumnName="Ruc" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Atencion" ColumnName="Atencion" />
-                <ScalarProperty Name="NomCliente" ColumnName="NomCliente" />
-                <ScalarProperty Name="CodCliente" ColumnName="CodCliente" />
-                <ScalarProperty Name="NoProforma" ColumnName="NoProforma" />
-                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
-                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
-                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
-                <ScalarProperty Name="IdProforma" ColumnName="IdProforma" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Venta">
             <EntityTypeMapping TypeName="BalancesModel.Venta">
               <MappingFragment StoreEntitySet="Venta">
@@ -2985,6 +2893,117 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_AnularProformaVenta" FunctionName="BalancesModel.Store.sp_AnularProformaVenta">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularProformaVenta_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_AnularProformaVenta_Web" FunctionName="BalancesModel.Store.sp_AnularProformaVenta_Web">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularProformaVenta_Web_Result">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="FacturaVenta">
+            <EntityTypeMapping TypeName="BalancesModel.FacturaVenta">
+              <MappingFragment StoreEntitySet="FacturaVenta">
+                <ScalarProperty Name="EsCentralizacion" ColumnName="EsCentralizacion" />
+                <ScalarProperty Name="Latitud" ColumnName="Latitud" />
+                <ScalarProperty Name="Longitud" ColumnName="Longitud" />
+                <ScalarProperty Name="IdUsuarioCaja" ColumnName="IdUsuarioCaja" />
+                <ScalarProperty Name="FechaAnulacion" ColumnName="FechaAnulacion" />
+                <ScalarProperty Name="IdUsuarioAnula" ColumnName="IdUsuarioAnula" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="IdVendedorClave" ColumnName="IdVendedorClave" />
+                <ScalarProperty Name="EsDelivery" ColumnName="EsDelivery" />
+                <ScalarProperty Name="ContraEntrega" ColumnName="ContraEntrega" />
+                <ScalarProperty Name="OrdenCompra" ColumnName="OrdenCompra" />
+                <ScalarProperty Name="MotivoAnulacion" ColumnName="MotivoAnulacion" />
+                <ScalarProperty Name="NoExoneracion" ColumnName="NoExoneracion" />
+                <ScalarProperty Name="Exoneracion" ColumnName="Exoneracion" />
+                <ScalarProperty Name="Exportacion" ColumnName="Exportacion" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="DireccionEntrega" ColumnName="DireccionEntrega" />
+                <ScalarProperty Name="TotalCordoba" ColumnName="TotalCordoba" />
+                <ScalarProperty Name="TotalDolar" ColumnName="TotalDolar" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+                <ScalarProperty Name="TasaCambio" ColumnName="TasaCambio" />
+                <ScalarProperty Name="IdMoneda" ColumnName="IdMoneda" />
+                <ScalarProperty Name="DiasGracia" ColumnName="DiasGracia" />
+                <ScalarProperty Name="Vence" ColumnName="Vence" />
+                <ScalarProperty Name="Plazo" ColumnName="Plazo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="TipoVenta" ColumnName="TipoVenta" />
+                <ScalarProperty Name="NomVendedor" ColumnName="NomVendedor" />
+                <ScalarProperty Name="IdVendedor" ColumnName="IdVendedor" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Ruc" ColumnName="Ruc" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="NomCliente" ColumnName="NomCliente" />
+                <ScalarProperty Name="CodCliente" ColumnName="CodCliente" />
+                <ScalarProperty Name="NoFactura" ColumnName="NoFactura" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
+                <ScalarProperty Name="IdProforma" ColumnName="IdProforma" />
+                <ScalarProperty Name="IdFactura" ColumnName="IdFactura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProformaVenta">
+            <EntityTypeMapping TypeName="BalancesModel.ProformaVenta">
+              <MappingFragment StoreEntitySet="ProformaVenta">
+                <ScalarProperty Name="OrdenTaller" ColumnName="OrdenTaller" />
+                <ScalarProperty Name="Latitud" ColumnName="Latitud" />
+                <ScalarProperty Name="Longitud" ColumnName="Longitud" />
+                <ScalarProperty Name="FechaAnulacion" ColumnName="FechaAnulacion" />
+                <ScalarProperty Name="IdUsuarioAnula" ColumnName="IdUsuarioAnula" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="EsPublica" ColumnName="EsPublica" />
+                <ScalarProperty Name="NoExoneracion" ColumnName="NoExoneracion" />
+                <ScalarProperty Name="Exoneracion" ColumnName="Exoneracion" />
+                <ScalarProperty Name="MotivoAnulacion" ColumnName="MotivoAnulacion" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="DireccionEntrega" ColumnName="DireccionEntrega" />
+                <ScalarProperty Name="TotalCordoba" ColumnName="TotalCordoba" />
+                <ScalarProperty Name="TotalDolar" ColumnName="TotalDolar" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+                <ScalarProperty Name="TasaCambio" ColumnName="TasaCambio" />
+                <ScalarProperty Name="IdMoneda" ColumnName="IdMoneda" />
+                <ScalarProperty Name="Vence" ColumnName="Vence" />
+                <ScalarProperty Name="Plazo" ColumnName="Plazo" />
+                <ScalarProperty Name="IdPlazo" ColumnName="IdPlazo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="TipoVenta" ColumnName="TipoVenta" />
+                <ScalarProperty Name="NomVendedor" ColumnName="NomVendedor" />
+                <ScalarProperty Name="IdVendedor" ColumnName="IdVendedor" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Ruc" ColumnName="Ruc" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Atencion" ColumnName="Atencion" />
+                <ScalarProperty Name="NomCliente" ColumnName="NomCliente" />
+                <ScalarProperty Name="CodCliente" ColumnName="CodCliente" />
+                <ScalarProperty Name="NoProforma" ColumnName="NoProforma" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
+                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
+                <ScalarProperty Name="IdProforma" ColumnName="IdProforma" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_GrabarFactura" FunctionName="BalancesModel.Store.sp_GrabarFactura">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BalancesModel.sp_GrabarFactura_Result">
@@ -3020,22 +3039,6 @@
                 <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
                 <ScalarProperty Name="IdProforma" ColumnName="IdProforma" />
                 <ScalarProperty Name="NoProforma" ColumnName="NoProforma" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_AnularProformaVenta" FunctionName="BalancesModel.Store.sp_AnularProformaVenta">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularProformaVenta_Result">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_AnularProformaVenta_Web" FunctionName="BalancesModel.Store.sp_AnularProformaVenta_Web">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BalancesModel.sp_AnularProformaVenta_Web_Result">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="MENSAJE" ColumnName="MENSAJE" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
