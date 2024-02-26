@@ -13,6 +13,8 @@ namespace FAC_api.Class.FACT
         public string Vendedor;
         public bool EsContraEntrega;
         public bool EsExportacion;
+        public bool EsDelivery;
+        public string Usuario;
         public string Key;
         public bool Facturar;
     }

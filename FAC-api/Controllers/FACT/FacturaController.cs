@@ -195,7 +195,7 @@ namespace FAC_api.Controllers.FACT
 
 
                     var qBodegas = (from _q in _Conexion.Bodegas
-                                    where ub.Contains(_q.Codigo)
+                                    //where ub.Contains(_q.Codigo)
                                     select new Cls_Bodega()
                                      {
                                         Codigo = _q.Codigo.TrimStart().TrimEnd(),
@@ -204,6 +204,8 @@ namespace FAC_api.Controllers.FACT
                                         Vendedor = _q.CodVendedor,
                                         EsContraEntrega = _q.BodegaContraEntrega,
                                         EsExportacion = _q.BodegaExportacion == null ? false : (bool)_q.BodegaExportacion,
+                                        EsDelivery = _q.BodegaDelivery == null ? false : (bool)_q.BodegaDelivery,
+                                        Usuario = (ub.Contains(_q.Codigo) ? user : string.Empty),
                                         Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.Bodega.TrimStart().TrimEnd())
                                     }).ToList();
 
