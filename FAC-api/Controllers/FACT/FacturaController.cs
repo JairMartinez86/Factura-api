@@ -1745,6 +1745,8 @@ namespace FAC_api.Controllers.FACT
                             foreach (string col in (new string[] { "Index", "IndexDet", "Codigo", "Ubicacion", "Cantidad", "NoLote", "Vence", "EsBonificado" }))
                             {
                                 DetalleLote += string.Concat(GetProperty(l, col) + "|");
+                                DetalleLote = DetalleLote.Replace("a.m.", string.Empty);
+                                DetalleLote = DetalleLote.Replace("p.m.", string.Empty);
                             }
                             DetalleLote = string.Concat( DetalleLote.Replace("/", "-"), "AGREGAR|");
                             DetalleLote += "@";
@@ -1811,9 +1813,8 @@ namespace FAC_api.Controllers.FACT
 
                         }
 
-                        
 
-
+                    
                         if (_v.TipoDocumento == "Factura")
                         {
                             json = AsignarConsecutivoFactura(_v, DetalleProd, DetalleLote, string.Empty, _Conexion, esNuevo);
@@ -1840,7 +1841,7 @@ namespace FAC_api.Controllers.FACT
                         }
 
 
-
+              
 
 
                         List<Cls_Datos> lstDatos = new List<Cls_Datos>();
