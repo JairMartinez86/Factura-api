@@ -2748,7 +2748,7 @@ namespace FAC_api.Controllers.FACT
                 HttpClient client = new HttpClient();
 
 
-                HttpResponseMessage response = await client.GetAsync($"http://192.168.0.118:140/api/INV/Kardex/ExistenciaUbicacion?CodProducto={CodProducto}&CodBodega={CodBodega}");
+                HttpResponseMessage response = await client.GetAsync($"{Cls_ConexionAPI_BD.Url}/INV/Kardex/ExistenciaUbicacion?CodProducto={CodProducto}&CodBodega={CodBodega}");
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
 

@@ -44,6 +44,14 @@
         <AssociationConnector Association="BalancesModel.FK_VentaLote_Venta" />
         <EntityTypeShape EntityType="BalancesModel.FacturaVenta" Width="1.5" PointX="17.75" PointY="0.75" />
         <EntityTypeShape EntityType="BalancesModel.ProformaVenta" Width="1.5" PointX="0.75" PointY="18.75" />
+        <EntityTypeShape EntityType="BalancesModel.Requisa" Width="1.5" PointX="7" PointY="27.75" />
+        <AssociationConnector Association="BalancesModel.FK_Requisa_UsuariosAnula" />
+        <AssociationConnector Association="BalancesModel.FK_Requisa_UsuariosCrea" />
+        <AssociationConnector Association="BalancesModel.FK_Requisa_UsuariosModifica" />
+        <EntityTypeShape EntityType="BalancesModel.RequisaDetalle" Width="1.5" PointX="9.25" PointY="28.25" />
+        <AssociationConnector Association="BalancesModel.FK_RequisaDetalle_Requisa" />
+        <EntityTypeShape EntityType="BalancesModel.RequisaAutorisaPermiso" Width="1.5" PointX="7" PointY="34.25" />
+        <AssociationConnector Association="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

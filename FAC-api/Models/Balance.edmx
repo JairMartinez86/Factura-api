@@ -360,6 +360,58 @@
           <Property Name="BodegaSolicita" Type="nvarchar" MaxLength="12" Nullable="false" />
           <Property Name="OT" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Requisa">
+          <Key>
+            <PropertyRef Name="IdRequisa" />
+          </Key>
+          <Property Name="IdRequisa" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Serie" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NoRequisa" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="NoPedido" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CodBodega" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="CodBodegaDestino" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="Observaciones" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaRegistro" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IdUsuarioModifica" Type="int" Nullable="false" />
+          <Property Name="FechaModifica" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="EnProceso" Type="bit" Nullable="false" />
+          <Property Name="Transito" Type="bit" Nullable="false" />
+          <Property Name="Anulado" Type="bit" Nullable="false" />
+          <Property Name="IdUsuarioAnula" Type="int" />
+          <Property Name="FechaAnulacion" Type="datetime2" Precision="7" />
+          <Property Name="MotivoAnulacion" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="RequisaAutorisaPermiso">
+          <Key>
+            <PropertyRef Name="IdPermisoRequisaAuto" />
+          </Key>
+          <Property Name="IdPermisoRequisaAuto" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="CodBodega" Type="nvarchar" MaxLength="12" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RequisaDetalle">
+          <Key>
+            <PropertyRef Name="IdRequisaDet" />
+          </Key>
+          <Property Name="IdRequisaDet" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IdRequisa" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Index" Type="int" Nullable="false" />
+          <Property Name="CodigoProducto" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Unidad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Ubicacion" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="CodBodega" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="Existencia" Type="int" Nullable="false" />
+          <Property Name="CodBodegaDestino" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="ExistenciaDestinoL" Type="int" Nullable="false" />
+          <Property Name="ExistenciaDestino" Type="int" Nullable="false" />
+          <Property Name="NoLote" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Vence" Type="date" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+          <Property Name="ControladoPorLote" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Bodegas">
           <Key>
             <PropertyRef Name="IdBodega" />
@@ -811,6 +863,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Requisa_UsuariosAnula">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="Requisa" Type="Self.Requisa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Requisa">
+              <PropertyRef Name="IdUsuarioAnula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisa_UsuariosCrea">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Requisa" Type="Self.Requisa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Requisa">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisa_UsuariosModifica">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Requisa" Type="Self.Requisa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Requisa">
+              <PropertyRef Name="IdUsuarioModifica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RequisaAutorisaPermiso_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="RequisaAutorisaPermiso" Type="Self.RequisaAutorisaPermiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="RequisaAutorisaPermiso">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RequisaDetalle_Requisa">
+          <End Role="Requisa" Type="Self.Requisa" Multiplicity="1" />
+          <End Role="RequisaDetalle" Type="Self.RequisaDetalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Requisa">
+              <PropertyRef Name="IdRequisa" />
+            </Principal>
+            <Dependent Role="RequisaDetalle">
+              <PropertyRef Name="IdRequisa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_VentaDetalle_Venta">
           <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
           <End Role="VentaDetalle" Type="Self.VentaDetalle" Multiplicity="*" />
@@ -1023,6 +1135,9 @@
           <EntitySet Name="PrecioVentaEscala" EntityType="Self.PrecioVentaEscala" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="ProformaVenta" EntityType="Self.ProformaVenta" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="Kardex" EntityType="Self.Kardex" Schema="INV" store:Type="Tables" />
+          <EntitySet Name="Requisa" EntityType="Self.Requisa" Schema="INV" store:Type="Tables" />
+          <EntitySet Name="RequisaAutorisaPermiso" EntityType="Self.RequisaAutorisaPermiso" Schema="INV" store:Type="Tables" />
+          <EntitySet Name="RequisaDetalle" EntityType="Self.RequisaDetalle" Schema="INV" store:Type="Tables" />
           <EntitySet Name="Bodegas" EntityType="Self.Bodegas" Schema="INVFAC" store:Type="Tables" />
           <EntitySet Name="Impuestos" EntityType="Self.Impuestos" Schema="INVFAC" store:Type="Tables" />
           <EntitySet Name="Productos" EntityType="Self.Productos" Schema="INVFAC" store:Type="Tables" />
@@ -1054,6 +1169,26 @@
           <AssociationSet Name="FK_PrecioVenta_ConceptoPrecio" Association="Self.FK_PrecioVenta_ConceptoPrecio">
             <End Role="ConceptoPrecio" EntitySet="ConceptoPrecio" />
             <End Role="PrecioVenta" EntitySet="PrecioVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisa_UsuariosAnula" Association="Self.FK_Requisa_UsuariosAnula">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Requisa" EntitySet="Requisa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisa_UsuariosCrea" Association="Self.FK_Requisa_UsuariosCrea">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Requisa" EntitySet="Requisa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisa_UsuariosModifica" Association="Self.FK_Requisa_UsuariosModifica">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Requisa" EntitySet="Requisa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RequisaAutorisaPermiso_Usuarios" Association="Self.FK_RequisaAutorisaPermiso_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="RequisaAutorisaPermiso" EntitySet="RequisaAutorisaPermiso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RequisaDetalle_Requisa" Association="Self.FK_RequisaDetalle_Requisa">
+            <End Role="Requisa" EntitySet="Requisa" />
+            <End Role="RequisaDetalle" EntitySet="RequisaDetalle" />
           </AssociationSet>
           <AssociationSet Name="FK_VentaDetalle_Venta" Association="Self.FK_VentaDetalle_Venta">
             <End Role="Venta" EntitySet="Venta" />
@@ -1154,6 +1289,10 @@
           <Property Name="IdEmpleado" Type="Int32" />
           <Property Name="Desconectar" Type="Boolean" Nullable="false" />
           <Property Name="Lotificar" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Requisa" Relationship="BalancesModel.FK_Requisa_UsuariosAnula" FromRole="Usuarios" ToRole="Requisa" />
+          <NavigationProperty Name="Requisa1" Relationship="BalancesModel.FK_Requisa_UsuariosCrea" FromRole="Usuarios" ToRole="Requisa" />
+          <NavigationProperty Name="Requisa2" Relationship="BalancesModel.FK_Requisa_UsuariosModifica" FromRole="Usuarios" ToRole="Requisa" />
+          <NavigationProperty Name="RequisaAutorisaPermiso" Relationship="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" FromRole="Usuarios" ToRole="RequisaAutorisaPermiso" />
         </EntityType>
         <EntityType Name="UsuariosBodegas">
           <Key>
@@ -1395,6 +1534,29 @@
             <Parameter Name="P_Longitud" Mode="In" Type="String" />
             <Parameter Name="P_Latitud" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Requisa" EntityType="BalancesModel.Requisa" />
+          <AssociationSet Name="FK_Requisa_UsuariosAnula" Association="BalancesModel.FK_Requisa_UsuariosAnula">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Requisa" EntitySet="Requisa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisa_UsuariosCrea" Association="BalancesModel.FK_Requisa_UsuariosCrea">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Requisa" EntitySet="Requisa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisa_UsuariosModifica" Association="BalancesModel.FK_Requisa_UsuariosModifica">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Requisa" EntitySet="Requisa" />
+          </AssociationSet>
+          <EntitySet Name="RequisaDetalle" EntityType="BalancesModel.RequisaDetalle" />
+          <AssociationSet Name="FK_RequisaDetalle_Requisa" Association="BalancesModel.FK_RequisaDetalle_Requisa">
+            <End Role="Requisa" EntitySet="Requisa" />
+            <End Role="RequisaDetalle" EntitySet="RequisaDetalle" />
+          </AssociationSet>
+          <EntitySet Name="RequisaAutorisaPermiso" EntityType="BalancesModel.RequisaAutorisaPermiso" />
+          <AssociationSet Name="FK_RequisaAutorisaPermiso_Usuarios" Association="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="RequisaAutorisaPermiso" EntitySet="RequisaAutorisaPermiso" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -2177,6 +2339,124 @@
           <Property Type="Int32" Name="IdProforma" Nullable="true" />
           <Property Type="String" Name="NoProforma" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="Requisa">
+          <Key>
+            <PropertyRef Name="IdRequisa" />
+          </Key>
+          <Property Name="IdRequisa" Type="Guid" Nullable="false" />
+          <Property Name="Serie" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NoRequisa" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NoPedido" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="CodBodegaDestino" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Observaciones" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaRegistro" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IdUsuarioModifica" Type="Int32" Nullable="false" />
+          <Property Name="FechaModifica" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="EnProceso" Type="Boolean" Nullable="false" />
+          <Property Name="Transito" Type="Boolean" Nullable="false" />
+          <Property Name="Anulado" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioAnula" Type="Int32" />
+          <Property Name="FechaAnulacion" Type="DateTime" Precision="7" />
+          <Property Name="MotivoAnulacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Usuarios" Relationship="BalancesModel.FK_Requisa_UsuariosAnula" FromRole="Requisa" ToRole="Usuarios" />
+          <NavigationProperty Name="Usuarios1" Relationship="BalancesModel.FK_Requisa_UsuariosCrea" FromRole="Requisa" ToRole="Usuarios" />
+          <NavigationProperty Name="Usuarios2" Relationship="BalancesModel.FK_Requisa_UsuariosModifica" FromRole="Requisa" ToRole="Usuarios" />
+          <NavigationProperty Name="RequisaDetalle" Relationship="BalancesModel.FK_RequisaDetalle_Requisa" FromRole="Requisa" ToRole="RequisaDetalle" />
+        </EntityType>
+        <Association Name="FK_Requisa_UsuariosAnula">
+          <End Type="BalancesModel.Usuarios" Role="Usuarios" Multiplicity="0..1" />
+          <End Type="BalancesModel.Requisa" Role="Requisa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Requisa">
+              <PropertyRef Name="IdUsuarioAnula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisa_UsuariosCrea">
+          <End Type="BalancesModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="BalancesModel.Requisa" Role="Requisa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Requisa">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisa_UsuariosModifica">
+          <End Type="BalancesModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="BalancesModel.Requisa" Role="Requisa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Requisa">
+              <PropertyRef Name="IdUsuarioModifica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RequisaDetalle">
+          <Key>
+            <PropertyRef Name="IdRequisaDet" />
+          </Key>
+          <Property Name="IdRequisaDet" Type="Guid" Nullable="false" />
+          <Property Name="IdRequisa" Type="Guid" Nullable="false" />
+          <Property Name="Index" Type="Int32" Nullable="false" />
+          <Property Name="CodigoProducto" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Unidad" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Ubicacion" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Existencia" Type="Int32" Nullable="false" />
+          <Property Name="CodBodegaDestino" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="ExistenciaDestinoL" Type="Int32" Nullable="false" />
+          <Property Name="ExistenciaDestino" Type="Int32" Nullable="false" />
+          <Property Name="NoLote" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Vence" Type="DateTime" Precision="0" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <Property Name="ControladoPorLote" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Requisa" Relationship="BalancesModel.FK_RequisaDetalle_Requisa" FromRole="RequisaDetalle" ToRole="Requisa" />
+        </EntityType>
+        <Association Name="FK_RequisaDetalle_Requisa">
+          <End Type="BalancesModel.Requisa" Role="Requisa" Multiplicity="1" />
+          <End Type="BalancesModel.RequisaDetalle" Role="RequisaDetalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Requisa">
+              <PropertyRef Name="IdRequisa" />
+            </Principal>
+            <Dependent Role="RequisaDetalle">
+              <PropertyRef Name="IdRequisa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RequisaAutorisaPermiso">
+          <Key>
+            <PropertyRef Name="IdPermisoRequisaAuto" />
+          </Key>
+          <Property Name="IdPermisoRequisaAuto" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Usuarios" Relationship="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" FromRole="RequisaAutorisaPermiso" ToRole="Usuarios" />
+        </EntityType>
+        <Association Name="FK_RequisaAutorisaPermiso_Usuarios">
+          <End Type="BalancesModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="BalancesModel.RequisaAutorisaPermiso" Role="RequisaAutorisaPermiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="RequisaAutorisaPermiso">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3042,6 +3322,61 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Requisa">
+            <EntityTypeMapping TypeName="BalancesModel.Requisa">
+              <MappingFragment StoreEntitySet="Requisa">
+                <ScalarProperty Name="MotivoAnulacion" ColumnName="MotivoAnulacion" />
+                <ScalarProperty Name="FechaAnulacion" ColumnName="FechaAnulacion" />
+                <ScalarProperty Name="IdUsuarioAnula" ColumnName="IdUsuarioAnula" />
+                <ScalarProperty Name="Anulado" ColumnName="Anulado" />
+                <ScalarProperty Name="Transito" ColumnName="Transito" />
+                <ScalarProperty Name="EnProceso" ColumnName="EnProceso" />
+                <ScalarProperty Name="FechaModifica" ColumnName="FechaModifica" />
+                <ScalarProperty Name="IdUsuarioModifica" ColumnName="IdUsuarioModifica" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="CodBodegaDestino" ColumnName="CodBodegaDestino" />
+                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
+                <ScalarProperty Name="NoPedido" ColumnName="NoPedido" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="NoRequisa" ColumnName="NoRequisa" />
+                <ScalarProperty Name="Serie" ColumnName="Serie" />
+                <ScalarProperty Name="IdRequisa" ColumnName="IdRequisa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequisaDetalle">
+            <EntityTypeMapping TypeName="BalancesModel.RequisaDetalle">
+              <MappingFragment StoreEntitySet="RequisaDetalle">
+                <ScalarProperty Name="ControladoPorLote" ColumnName="ControladoPorLote" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Vence" ColumnName="Vence" />
+                <ScalarProperty Name="NoLote" ColumnName="NoLote" />
+                <ScalarProperty Name="ExistenciaDestino" ColumnName="ExistenciaDestino" />
+                <ScalarProperty Name="ExistenciaDestinoL" ColumnName="ExistenciaDestinoL" />
+                <ScalarProperty Name="CodBodegaDestino" ColumnName="CodBodegaDestino" />
+                <ScalarProperty Name="Existencia" ColumnName="Existencia" />
+                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
+                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="CodigoProducto" ColumnName="CodigoProducto" />
+                <ScalarProperty Name="Index" ColumnName="Index" />
+                <ScalarProperty Name="IdRequisa" ColumnName="IdRequisa" />
+                <ScalarProperty Name="IdRequisaDet" ColumnName="IdRequisaDet" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequisaAutorisaPermiso">
+            <EntityTypeMapping TypeName="BalancesModel.RequisaAutorisaPermiso">
+              <MappingFragment StoreEntitySet="RequisaAutorisaPermiso">
+                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdPermisoRequisaAuto" ColumnName="IdPermisoRequisaAuto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

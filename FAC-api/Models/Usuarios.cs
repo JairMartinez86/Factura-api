@@ -14,6 +14,15 @@ namespace FAC_api.Models
     
     public partial class Usuarios
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Usuarios()
+        {
+            this.Requisa = new HashSet<Requisa>();
+            this.Requisa1 = new HashSet<Requisa>();
+            this.Requisa2 = new HashSet<Requisa>();
+            this.RequisaAutorisaPermiso = new HashSet<RequisaAutorisaPermiso>();
+        }
+    
         public int IdUsuario { get; set; }
         public string Usuario { get; set; }
         public string Nombres { get; set; }
@@ -29,5 +38,14 @@ namespace FAC_api.Models
         public Nullable<int> IdEmpleado { get; set; }
         public bool Desconectar { get; set; }
         public bool Lotificar { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requisa> Requisa { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requisa> Requisa1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requisa> Requisa2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RequisaAutorisaPermiso> RequisaAutorisaPermiso { get; set; }
     }
 }

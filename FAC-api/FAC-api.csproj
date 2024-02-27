@@ -315,6 +315,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Class\Cls_ConexionAPI_BD.cs" />
     <Compile Include="Class\Cls_Datos.cs" />
     <Compile Include="Class\Cls_Mensaje.cs" />
     <Compile Include="Class\FACT\Cls_Bodega.cs" />
@@ -323,10 +324,12 @@
     <Compile Include="Class\FACT\Cls_Pago_Factura.cs" />
     <Compile Include="Class\FACT\Cls_Precio.cs" />
     <Compile Include="Class\FACT\Cls_Productos_Liberados_INVESCASAN.cs" />
+    <Compile Include="Class\INV\Cls_AutorizaRequisa.cs" />
     <Compile Include="Class\INV\Cls_E_Response.cs" />
     <Compile Include="Class\INV\ExistenciaUbicacion.cs" />
     <Compile Include="Class\SIS\Cls_Letras.cs" />
     <Compile Include="Class\SIS\Cls_ListToDataTableConverter.cs" />
+    <Compile Include="Controllers\INV\RequisaController.cs" />
     <Compile Include="Controllers\SIS\ServerController.cs" />
     <Compile Include="Controllers\FACT\FacturaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -425,6 +428,15 @@
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProformaVenta.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Requisa.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RequisaAutorisaPermiso.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RequisaDetalle.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Serie.cs">
@@ -565,6 +577,7 @@
     <Folder Include="Reporte\FAC\" />
     <Folder Include="Views\Default\" />
     <Folder Include="Views\Factura\" />
+    <Folder Include="Views\Requisa\" />
     <Folder Include="Views\Server\" />
   </ItemGroup>
   <ItemGroup>
