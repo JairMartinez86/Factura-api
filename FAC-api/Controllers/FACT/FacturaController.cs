@@ -1121,7 +1121,7 @@ namespace FAC_api.Controllers.FACT
                         else
                         {
                             var qDoc = (from _q in _Conexion.Venta
-                                        where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && _q.NoFactura != string.Empty && (_q.Estado == "Anulado" ||  _q.Estado == "Facturada")
+                                        where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && _q.NoFactura != string.Empty && (_q.Estado == "Anulado" ||  _q.Estado == "Facturada" || _q.Estado == "Impresa")
                                         orderby _q.Fecha descending
                                         select new
                                         {
