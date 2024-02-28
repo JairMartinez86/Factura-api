@@ -892,8 +892,9 @@ namespace FAC_api.Controllers.FACT
 
                     var qBonificacionLibre = (from _q in _Conexion.LiberarBonificacion
                                               join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
-                                              join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
-                                              where _q.Activo && _q.CantMax >= 1 && _b.Codigo == CodBodega && (((_q.IdCliente == 0 ? cl.IdCliente : _q.IdCliente) == cl.IdCliente))
+                                              join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega into _union
+                                              from _u in _union.DefaultIfEmpty()
+                                              where _q.Activo && _q.CantMax >= 1 && (_u.Codigo == null ? CodBodega : _u.Codigo) == CodBodega && (((_q.IdCliente == 0 ? cl.IdCliente : _q.IdCliente) == cl.IdCliente))
                                               orderby _p.Codigo
                                               select new
                                               {
@@ -2818,6 +2819,60 @@ namespace FAC_api.Controllers.FACT
 
             throw new ArgumentException($"Invalid key {key}");
         }
+
+
+
+
+        [Route("api/Factura/ImprimirA4")]
+        [HttpGet]
+        public string ImprimirA4(Guid IdVenta)
+        {
+            return v_ImprimirA4(IdVenta);
+        }
+
+        private string v_ImprimirA4(Guid IdVenta)
+        {
+            string json = string.Empty;
+
+            try
+            {
+
+                using (BalancesEntities _Conexion = new BalancesEntities())
+                {
+                    cFactura cFactura = new cFactura();
+
+                    Venta _v = _Conexion.Venta.Find(IdVenta);
+
+                    object[] ob = cFactura.FormatoA4((int)_v.IdFactura, _v.TotalCordoba, _Conexion.Database.Connection);
+
+
+                    if (ob[0].ToString() != string.Empty)
+                    {
+                        json = Cls_Mensaje.Tojson(null, 0, "1", ob[0].ToString(), 1);
+                        return json;
+                    }
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "A4";
+                    datos.d = ob[2];
+
+                    json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+                }
+
+               
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+
+
+     
 
 
     }
