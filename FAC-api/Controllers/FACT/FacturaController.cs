@@ -1304,7 +1304,7 @@ namespace FAC_api.Controllers.FACT
 
                         Venta _v = _Conexion.Venta.Find(d.IdVenta);
 
-
+                        d.PedirAutorizacion = false;
 
                         if (d.TipoDocumento == "Proforma")
                         {
@@ -1515,8 +1515,11 @@ namespace FAC_api.Controllers.FACT
                             {
                                 esNuevoDet = true;
                                 _vDet = new VentaDetalle();
-                            } 
+                            }
 
+                           
+                            det.PedirAutorizado = false;
+                      
 
                             _vDet.IdVentaDetalle = Guid.NewGuid();
                             _vDet.IdVenta = _v.IdVenta;
@@ -2406,7 +2409,7 @@ namespace FAC_api.Controllers.FACT
                 if (_v.Estado != "Anulado" && _v.Estado != "Facturada")
                 {
 
-
+                    
                     if (_v.PedirAutorizacion)
                     {
 
