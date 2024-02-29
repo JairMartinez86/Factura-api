@@ -315,7 +315,7 @@ namespace FAC_api.Controllers.FACT
                                          Gracia = _q.DiasG,
                                          Moneda = _q.IdMoneda,
                                          Disponible = Disponible,
-                                         FacturarVencido = _q.FacturarVencido,
+                                         FacturarVencido = _q.FactVencido,
                                          SaldoVencido = Saldo
                                      }).ToList();
 
