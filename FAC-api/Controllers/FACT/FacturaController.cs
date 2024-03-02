@@ -357,23 +357,46 @@ namespace FAC_api.Controllers.FACT
 
                     Cls_Datos datos = new Cls_Datos();
 
-                    var qClienteClave = (from _q in _Conexion.Cliente
-                                         join _v in _Conexion.Vendedor on _q.Vendedor equals _v.Codigo into _q_v
-                                         from _c in _q_v.DefaultIfEmpty()
-                                         where _q.Codigo == CodCliente
-                                         select new
-                                         {
-                                             CodVendedor = (_c == null ? string.Empty : _c.Codigo),
-                                             Vendedor = (_c == null? string.Empty : string.Concat(_c.Codigo, " ", _c.Nombre.TrimStart().TrimEnd())),
-                                             EsClave = (_c == null ? false : true)
-                                         }).ToList();
+                    var qClave = (from _q in _Conexion.ClienteClave
+                                        join _v in _Conexion.Vendedor on _q.IdVendedor equals _v.IdVendedor
+                                        where _q.CodigoCliente == CodCliente
+                                        select new
+                                        {
+                                            CodVendedor = _v.Codigo,
+                                            Vendedor = string.Concat(_v.Codigo, " ", _v.Nombre.TrimStart().TrimEnd()),
+                                            EsClave = true
+                                        }).ToList();
+
+                    if(qClave.Count > 0)
+                    {
+                        datos.Nombre = "ESCALVE";
+                        datos.d = qClave;
+                        lstDatos.Add(datos);
+
+
+                    }
+                    else
+                    {
+
+                        var qCliente = (from _q in _Conexion.Cliente
+                                              where _q.Codigo == CodCliente
+                                              select new
+                                              {
+                                                  CodVendedor = string.Empty,
+                                                  Vendedor = string.Empty,
+                                                  EsClave = false
+                                              }).ToList();
+
+
+                        datos.Nombre = "ESCALVE";
+                        datos.d = qCliente;
+                        lstDatos.Add(datos);
+                    }
 
 
 
-                    datos.Nombre = "ESCALVE";
-                    datos.d = qClienteClave;
-                    lstDatos.Add(datos);
 
+                    
                     json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
                 }
 

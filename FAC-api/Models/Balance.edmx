@@ -13,6 +13,8 @@
           <Property Name="Banco" Type="nvarchar" MaxLength="50" />
           <Property Name="CuentaC" Type="nvarchar" MaxLength="50" />
           <Property Name="CuentaD" Type="nvarchar" MaxLength="50" />
+          <Property Name="CuentaNuevaC" Type="nvarchar" MaxLength="50" />
+          <Property Name="CuentaNuevaD" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Cliente">
           <Key>
@@ -61,6 +63,19 @@
           <Property Name="CodTipoCliente" Type="nvarchar" MaxLength="10" />
           <Property Name="IdContribuyente" Type="int" />
           <Property Name="ClasificacionFinanciera" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="ClienteClave">
+          <Key>
+            <PropertyRef Name="IdClienteClave" />
+          </Key>
+          <Property Name="IdClienteClave" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoCliente" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="IdVendedor" Type="int" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="FechaCierre" Type="datetime2" Precision="7" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="IdUsuarioCrea" Type="int" Nullable="false" />
+          <Property Name="IdUsuarioInactiva" Type="int" />
         </EntityType>
         <EntityType Name="Departamento">
           <Key>
@@ -1120,6 +1135,7 @@
         <EntityContainer Name="BalancesModelStoreContainer">
           <EntitySet Name="Bancos" EntityType="Self.Bancos" Schema="BAN" store:Type="Tables" />
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="CXC" store:Type="Tables" />
+          <EntitySet Name="ClienteClave" EntityType="Self.ClienteClave" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Departamento" EntityType="Self.Departamento" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="DireccionCliente" EntityType="Self.DireccionCliente" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="CXC" store:Type="Tables" />
@@ -1557,6 +1573,7 @@
             <End Role="Usuarios" EntitySet="Usuarios" />
             <End Role="RequisaAutorisaPermiso" EntitySet="RequisaAutorisaPermiso" />
           </AssociationSet>
+          <EntitySet Name="ClienteClave" EntityType="BalancesModel.ClienteClave" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -2092,6 +2109,8 @@
           <Property Name="Banco" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CuentaC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CuentaD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CuentaNuevaC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CuentaNuevaD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Monedas">
           <Key>
@@ -2457,6 +2476,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ClienteClave">
+          <Key>
+            <PropertyRef Name="IdClienteClave" />
+          </Key>
+          <Property Name="IdClienteClave" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoCliente" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IdVendedor" Type="Int32" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="FechaCierre" Type="DateTime" Precision="7" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioCrea" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuarioInactiva" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3058,6 +3090,8 @@
           <EntitySetMapping Name="Bancos">
             <EntityTypeMapping TypeName="BalancesModel.Bancos">
               <MappingFragment StoreEntitySet="Bancos">
+                <ScalarProperty Name="CuentaNuevaD" ColumnName="CuentaNuevaD" />
+                <ScalarProperty Name="CuentaNuevaC" ColumnName="CuentaNuevaC" />
                 <ScalarProperty Name="CuentaD" ColumnName="CuentaD" />
                 <ScalarProperty Name="CuentaC" ColumnName="CuentaC" />
                 <ScalarProperty Name="Banco" ColumnName="Banco" />
@@ -3374,6 +3408,20 @@
                 <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdPermisoRequisaAuto" ColumnName="IdPermisoRequisaAuto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClienteClave">
+            <EntityTypeMapping TypeName="BalancesModel.ClienteClave">
+              <MappingFragment StoreEntitySet="ClienteClave">
+                <ScalarProperty Name="IdUsuarioInactiva" ColumnName="IdUsuarioInactiva" />
+                <ScalarProperty Name="IdUsuarioCrea" ColumnName="IdUsuarioCrea" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="FechaCierre" ColumnName="FechaCierre" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="IdVendedor" ColumnName="IdVendedor" />
+                <ScalarProperty Name="CodigoCliente" ColumnName="CodigoCliente" />
+                <ScalarProperty Name="IdClienteClave" ColumnName="IdClienteClave" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

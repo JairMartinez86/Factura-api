@@ -12,13 +12,15 @@ namespace FAC_api.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Bancos
+    public partial class ClienteClave
     {
-        public int IdBanco { get; set; }
-        public string Banco { get; set; }
-        public string CuentaC { get; set; }
-        public string CuentaD { get; set; }
-        public string CuentaNuevaC { get; set; }
-        public string CuentaNuevaD { get; set; }
+        public int IdClienteClave { get; set; }
+        public string CodigoCliente { get; set; }
+        public int IdVendedor { get; set; }
+        public System.DateTime FechaAsignacion { get; set; }
+        public Nullable<System.DateTime> FechaCierre { get; set; }
+        public bool Activo { get; set; }
+        public int IdUsuarioCrea { get; set; }
+        public Nullable<int> IdUsuarioInactiva { get; set; }
     }
 }
