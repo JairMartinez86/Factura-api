@@ -131,7 +131,7 @@ namespace FAC_api.Controllers.INV
                 HttpClient aClient = new HttpClient();
                 StringContent storeHttpContent;
                 storeHttpContent = new StringContent(JsonConvert.SerializeObject(d), System.Text.Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await aClient.PostAsync($"{Cls_ConexionAPI_BD.Url}/api/" + "INV/Requisa/Autoriza", storeHttpContent);
+                HttpResponseMessage response = await aClient.PostAsync($"{Cls_ConexionAPI_BD.Url}/INV/Requisa/Autoriza", storeHttpContent);
                 response.EnsureSuccessStatusCode();
 
                 string responseBody = await response.Content.ReadAsStringAsync();
