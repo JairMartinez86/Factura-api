@@ -7,6 +7,7 @@ namespace FAC_api.Class.FACT
 {
     public class Cls_Bodega
     {
+        public int IdBodega;
         public string Codigo;
         public string Bodega;
         public string ClienteContado;

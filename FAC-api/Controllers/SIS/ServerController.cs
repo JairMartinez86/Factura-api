@@ -156,7 +156,14 @@ namespace FAC_api.Class.SIS
             datos3.d = u.Lotificar;
 
 
-            return new Cls_Datos[] { datos, datos2, datos3 };
+            var Perfil = _Conexion.AccesoWeb.Where(w => w.Usuario == user && w.Modulo == "FACT" && w.Activo).ToList();
+
+            Cls_Datos datos4 = new Cls_Datos();
+            datos4.Nombre = "PERFIL";
+            datos4.d = Perfil;
+
+
+            return new Cls_Datos[] { datos, datos2, datos3, datos4 };
         }
     }
 }

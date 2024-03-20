@@ -326,6 +326,8 @@
     <Compile Include="Class\FACT\Cls_Productos_Liberados_INVESCASAN.cs" />
     <Compile Include="Class\INV\Cls_AutorizaRequisa.cs" />
     <Compile Include="Class\INV\Cls_E_Response.cs" />
+    <Compile Include="Class\INV\Cls_LiberarExistencia.cs" />
+    <Compile Include="Class\INV\Cls_LiberarPrecios.cs" />
     <Compile Include="Class\INV\ExistenciaUbicacion.cs" />
     <Compile Include="Class\SIS\Cls_Letras.cs" />
     <Compile Include="Class\SIS\Cls_ListToDataTableConverter.cs" />
@@ -336,6 +338,9 @@
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccesoWeb.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Balance.Context.cs">
       <AutoGen>True</AutoGen>
@@ -406,7 +411,13 @@
     <Compile Include="Models\LiberarBonificacion.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LiberarBonificacionHistorico.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LiberarPrecio.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LiberarPrecioHistorico.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Monedas.cs">

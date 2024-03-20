@@ -19,6 +19,7 @@ using ReporteBalance;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.Entity.Core.Objects;
 using System.Drawing.Printing;
@@ -32,6 +33,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Web;
@@ -167,6 +169,7 @@ namespace FAC_api.Controllers.FACT
                     var qClientes = (from _q in _Conexion.Cliente
                                  select new
                                  {
+                                     IdCliente = _q.IdCliente,
                                      Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                      Cliente = _q.Nombre.TrimStart().TrimEnd(),
                                      Ruc = _q.NoCedula.TrimStart().TrimEnd(),
@@ -198,6 +201,7 @@ namespace FAC_api.Controllers.FACT
                                     //where ub.Contains(_q.Codigo)
                                     select new Cls_Bodega()
                                      {
+                                        IdBodega = _q.IdBodega,
                                         Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                         Bodega = _q.Bodega.TrimStart().TrimEnd(),
                                         ClienteContado = _q.CodCliente,
@@ -294,7 +298,7 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                    string Sql = $"DECLARE @SaldoVencido DECIMAL(18,2),\r\n\t\t@Saldo DECIMAL(18,2)\r\n\t\t,@P_Fecha AS DATETIME = GETDATE()\r\n\t\t, @dResultado MONEY\r\n\r\n\r\n\r\n\t\tEXEC INVESCASAN.[dbo].[RetornaSaldoVencidoAmbasMonedas] {CodCliente}, @P_Fecha, 15, @dResultado OUT\r\n\r\n\t\tSET @dResultado = ISNULL(@dResultado, 0)\r\n\r\n\t\tIF @dResultado < 5 \r\n\t\tBEGIN\r\n\t\t\tSET @dResultado = 0\r\n\t\tEND\r\n\r\n\r\n\r\n\t\tEXEC [INVESCASAN].dbo.[RetornaSaldoAmbasMonedas] {CodCliente},  @P_Fecha, 30, @Saldo OUT\r\n\r\n\t\tSET @Saldo = ISNULL(@Saldo, 0)\r\n\r\n\t\tSELECT @Saldo";
+                    string Sql = $"DECLARE @P_Fecha AS DATETIME = GETDATE()\r\n\t\t, @SaldoVencido MONEY\r\n\r\n\r\n\r\n\t\tEXEC INVESCASAN.[dbo].[RetornaSaldoVencidoAmbasMonedas] {CodCliente}, @P_Fecha, 15, @SaldoVencido OUT\r\n\r\n\t\tSET @dResultado = ISNULL(@SaldoVencido, 0)\r\n\r\n\t\tIF @SaldoVencido < 5 \r\n\t\tBEGIN\r\n\t\t\tSET @SaldoVencido = 0\r\n\t\tEND\r\n\r\n\t\tSELECT @SaldoVencido";
 
 
 
@@ -822,7 +826,7 @@ namespace FAC_api.Controllers.FACT
 
                             if(des == null)
                             {
-                                des = lstDes.FirstOrDefault(w => ((w.CodBodega == null ? CodBodega : w.CodBodega) == CodBodega) && w.FechaInicio.Date == (new DateTime(1900,1,1).Date) );
+                                des = lstDes.LastOrDefault(w => ((w.CodBodega == null ? CodBodega : w.CodBodega) == CodBodega) && (w.FechaInicio.Date == (new DateTime(1900,1,1).Date) || w.FechaInicio.Date >= ( bo.FechaFacturacion == null ? DateTime.Now.Date: bo.FechaFacturacion.Value)) );
 
                             }
 
@@ -1065,13 +1069,13 @@ namespace FAC_api.Controllers.FACT
 
         [Route("api/Factura/Get")]
         [HttpGet]
-        public string Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola)
+        public string Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola, string usuario)
         {
-            return v_Get(Fecha1, Fecha2, Tipo, esCola);
+            return v_Get(Fecha1, Fecha2, Tipo, esCola, usuario);
         }
 
 
-        private string v_Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola)
+        private string v_Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola, string usuario)
         {
             string json = string.Empty;
 
@@ -1080,13 +1084,22 @@ namespace FAC_api.Controllers.FACT
                 using (BalancesEntities _Conexion = new BalancesEntities())
                 {
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+                    Usuarios U = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == usuario);
 
-                    if(Tipo == "Factura")
+                    List<string> ub = (from _q in _Conexion.UsuariosBodegas
+                                       join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
+                                       where _q.IdUsuario == U.IdUsuario
+                                       select _b.Codigo).ToList();
+
+
+
+                    if (Tipo == "Factura")
                     {
                         if(esCola)
                         {
                             var qDoc = (from _q in _Conexion.Venta
-                                        where  _q.TipoDocumento == Tipo && (_q.Estado == "Solicitado" || _q.Estado == "Impresa"  || (_q.Estado == "Autorizado" && _q.NoFactura == string.Empty))
+                                        where   ub.Contains(_q.CodBodega) &&  _q.TipoDocumento == Tipo && (_q.Estado == "Solicitado" || _q.Estado == "Impresa"  || (_q.Estado == "Autorizado" && _q.NoFactura == string.Empty))
+                                       
                                         orderby _q.CodBodega descending, _q.Fecha descending
                                         select new
                                         {
@@ -1144,7 +1157,7 @@ namespace FAC_api.Controllers.FACT
                         else
                         {
                             var qDoc = (from _q in _Conexion.Venta
-                                        where _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && _q.NoFactura != string.Empty && (_q.Estado == "Anulado" ||  _q.Estado == "Facturada" || _q.Estado == "Impresa")
+                                        where ub.Contains(_q.CodBodega) &&  _q.Fecha >= Fecha1 && _q.Fecha <= Fecha2 && _q.TipoDocumento == Tipo && _q.NoFactura != string.Empty && (_q.Estado == "Anulado" ||  _q.Estado == "Facturada" || _q.Estado == "Impresa")
                                         orderby _q.Fecha descending
                                         select new
                                         {
@@ -2898,7 +2911,310 @@ namespace FAC_api.Controllers.FACT
 
 
 
-     
+        [Route("api/Factura/GetDatosLiberacion")]
+        [HttpGet]
+        public string GetDatosLiberacion()
+        {
+            return V_GetDatosLiberacion();
+        }
+
+
+        private string V_GetDatosLiberacion()
+        {
+            string json = string.Empty;
+
+            try
+            {
+                using (BalancesEntities _Conexion = new BalancesEntities())
+                {
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+                    var qProductos = (from _q in _Conexion.Productos
+                                      where _q.Activo == true
+                                      select new
+                                      {
+                                          IdProducto = _q.IdProducto,
+                                          Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                          Producto = _q.Producto.TrimStart().TrimEnd(),
+                                          Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
+                                      }).ToList();
+
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "PRODUCTOS";
+                    datos.d = qProductos;
+                    lstDatos.Add(datos);
+
+                    var qClientes = (from _q in _Conexion.Cliente
+                                     where _q.Estado == "Activo" || _q.Estado == "Temporal"
+                                     select new
+                                     {
+                                         IdCliente = _q.IdCliente,
+                                         Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                         Cliente = _q.Nombre.TrimStart().TrimEnd(),
+                                         Key = string.Concat(_q.Codigo, " ", _q.Nombre.TrimStart().TrimEnd())
+                                     }).ToList();
+
+
+
+
+                     datos = new Cls_Datos();
+                    datos.Nombre = "CLIENTES";
+                    datos.d = qClientes;
+                    lstDatos.Add(datos);
+
+
+                    var qBodegas = (from _q in _Conexion.Bodegas
+                                    select new Cls_Bodega()
+                                    {
+                                        IdBodega = _q.IdBodega,
+                                        Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                        Bodega = _q.Bodega.TrimStart().TrimEnd(),
+                                        Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.Bodega.TrimStart().TrimEnd())
+                                    }).ToList();
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "BODEGAS";
+                    datos.d = qBodegas;
+                    lstDatos.Add(datos);
+
+
+                    List<Cls_LiberarPrecios> qLiberacion = (from _q in _Conexion.LiberarPrecio
+                                       join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
+                                       join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
+                                       join _c in _Conexion.Cliente on _q.IdCliente equals _c.IdCliente
+                                       where _q.Activo
+                                       select new Cls_LiberarPrecios()
+                                       {
+                                           IdLiberarPrecio = _q.IdLiberarPrecio,
+                                           IdBodega = _q.IdBodega,
+                                           Bodega = string.Concat(_b.Codigo, " - ", _b.Bodega),
+                                           IdProducto = _q.IdProducto,
+                                           CodProducto = _p.Codigo,
+                                           Producto = string.Concat(_p.Codigo, " - ", _p.Producto),
+                                           IdCliente = _q.IdCliente,
+                                           Cliente = string.Concat(_c.Codigo, " - ", _c.Nombre),
+                                           Motivo = _q.Motivo,
+                                           FechaAsignacion = _q.FechaAsignacion,
+                                           Activo = _q.Activo
+                                       }).ToList();
+
+                    foreach(var i in qLiberacion)
+                    {
+                        PrecioVenta pv = _Conexion.PrecioVenta.FirstOrDefault(f => f.CodigoProducto == i.CodProducto && f.IdConceptoPrecio == 8);
+
+                        if (pv != null) i.PrecioD = pv.Precio;
+
+                         pv = _Conexion.PrecioVenta.FirstOrDefault(f => f.CodigoProducto == i.CodProducto && f.IdConceptoPrecio == 18);
+
+                        if (pv != null) i.PrecioP = pv.Precio;
+
+
+
+                    }
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "LIBERACION";
+                    datos.d = qLiberacion;
+                    lstDatos.Add(datos);
+
+
+                    json = Cls_Mensaje.Tojson(lstDatos, 1, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+
+
+
+        [Route("api/Factura/LiberarExistencia")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult LiberarExistencia(Cls_LiberarExistencia d)
+        {
+            if (ModelState.IsValid)
+            {
+
+                return Ok(V_LiberarExistencia(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string V_LiberarExistencia(Cls_LiberarExistencia d)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (BalancesEntities _Conexion = new BalancesEntities())
+                    {
+
+   
+
+                        foreach (Productos p in _Conexion.Productos.Where(w => d.Prod.Contains(w.Codigo)))
+                        {
+                            p.FacturaNegativo = true;
+                            
+                        }
+
+
+                        _Conexion.SaveChanges();
+
+
+                        scope.Complete();
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "LIBERAR";
+                        datos.d = "<b>Existencia Liberadas<b/>";
+
+
+
+
+                        json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
+
+
+
+        [Route("api/Factura/LiberarPrecios")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult LiberarPrecios(List<Cls_LiberarPrecios> d)
+        {
+            if (ModelState.IsValid)
+            {
+
+                return Ok(V_LiberarPrecios(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string V_LiberarPrecios(List<Cls_LiberarPrecios> d)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (BalancesEntities _Conexion = new BalancesEntities())
+                    {
+
+                        Usuarios U = null;
+                        Cliente Cl = null;
+
+                        foreach (Cls_LiberarPrecios p in d)
+                        {
+                            LiberarPrecio pr = _Conexion.LiberarPrecio.FirstOrDefault(f => f.IdLiberarPrecio == p.IdLiberarPrecio);
+                            bool esNuevo = false;
+
+                            if (U == null) U = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == p.Usuario);
+                            if (Cl == null) Cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == p.Cliente);
+
+                            if (pr == null)
+                            {
+                                pr = new LiberarPrecio();
+                                esNuevo = true;
+                                pr.IdBodega = p.IdBodega;
+                                pr.IdProducto = p.IdProducto;
+                                pr.IdCliente = p.IdCliente;
+                                pr.IdConceptoPrecio = Cl.IdConceptoPrecio;
+                                pr.IdMoneda = Cl.IdMoneda;
+                                pr.Precio = 0;
+                                pr.Motivo = p.Motivo;
+                                pr.FechaAsignacion = DateTime.Now;
+                                pr.IdUsuarioCrea = U.IdUsuario;
+                            }
+
+                            pr.Activo = p.Activo;
+
+                            if (!p.Activo)
+                            {
+                                pr.IdUsuarioInactiva = U.IdUsuario;
+                                pr.FechaInactiva = DateTime.Now;
+                            }
+
+                            if (esNuevo) _Conexion.LiberarPrecio.Add(pr);
+
+
+
+
+
+                            _Conexion.SaveChanges();
+
+
+
+                        }
+
+
+
+
+                        scope.Complete();
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "LIBERAR";
+                        datos.d = "<b>Precios Liberados<b/>";
+
+
+
+
+                        json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
+
+
 
 
     }

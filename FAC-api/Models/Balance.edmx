@@ -251,6 +251,23 @@
           <Property Name="FechaInactiva" Type="datetime2" Precision="7" />
           <Property Name="IdUsuarioInactiva" Type="int" />
         </EntityType>
+        <EntityType Name="LiberarBonificacionHistorico">
+          <Key>
+            <PropertyRef Name="IdLiberarBonificacion" />
+          </Key>
+          <Property Name="IdLiberarBonificacionHistorico" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLiberarBonificacion" Type="int" Nullable="false" />
+          <Property Name="IdBodega" Type="int" />
+          <Property Name="IdProducto" Type="int" Nullable="false" />
+          <Property Name="IdCliente" Type="int" Nullable="false" />
+          <Property Name="CantMax" Type="int" Nullable="false" />
+          <Property Name="Facturada" Type="int" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IdUsuarioCrea" Type="int" Nullable="false" />
+          <Property Name="FechaInactiva" Type="datetime2" Precision="7" />
+          <Property Name="IdUsuarioInactiva" Type="int" />
+        </EntityType>
         <EntityType Name="LiberarPrecio">
           <Key>
             <PropertyRef Name="IdLiberarPrecio" />
@@ -263,6 +280,25 @@
           <Property Name="IdMoneda" Type="nvarchar" MaxLength="3" Nullable="false" />
           <Property Name="Precio" Type="decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="Motivo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IdUsuarioCrea" Type="int" Nullable="false" />
+          <Property Name="FechaInactiva" Type="datetime2" Precision="7" />
+          <Property Name="IdUsuarioInactiva" Type="int" />
+        </EntityType>
+        <EntityType Name="LiberarPrecioHistorico">
+          <Key>
+            <PropertyRef Name="IdLiberarPrecioHistorico" />
+          </Key>
+          <Property Name="IdLiberarPrecioHistorico" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLiberarPrecio" Type="int" Nullable="false" />
+          <Property Name="IdBodega" Type="int" Nullable="false" />
+          <Property Name="IdProducto" Type="int" Nullable="false" />
+          <Property Name="IdCliente" Type="int" Nullable="false" />
+          <Property Name="IdConceptoPrecio" Type="int" Nullable="false" />
+          <Property Name="IdMoneda" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="Precio" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Motivo" Type="nvarchar" MaxLength="1000" Nullable="false" />
           <Property Name="Activo" Type="bit" Nullable="false" />
           <Property Name="FechaAsignacion" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="IdUsuarioCrea" Type="int" Nullable="false" />
@@ -542,6 +578,20 @@
           <Property Name="AplicarPagoComision" Type="bit" />
           <Property Name="PrintManifiesto" Type="nvarchar" MaxLength="50" />
           <Property Name="Promotoria" Type="bit" />
+        </EntityType>
+        <EntityType Name="AccesoWeb">
+          <Key>
+            <PropertyRef Name="IdAccedo" />
+          </Key>
+          <Property Name="IdAccedo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EsMenu" Type="bit" Nullable="false" />
+          <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Caption" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MenuPadre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Clase" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Usuario" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Modulo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="BodegaLaboratorioKardex">
           <Key>
@@ -1146,7 +1196,9 @@
           <EntitySet Name="FacturaVenta" EntityType="Self.FacturaVenta" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="FormaPago" EntityType="Self.FormaPago" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="LiberarBonificacion" EntityType="Self.LiberarBonificacion" Schema="FAC" store:Type="Tables" />
+          <EntitySet Name="LiberarBonificacionHistorico" EntityType="Self.LiberarBonificacionHistorico" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="LiberarPrecio" EntityType="Self.LiberarPrecio" Schema="FAC" store:Type="Tables" />
+          <EntitySet Name="LiberarPrecioHistorico" EntityType="Self.LiberarPrecioHistorico" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="PrecioVenta" EntityType="Self.PrecioVenta" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="PrecioVentaEscala" EntityType="Self.PrecioVentaEscala" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="ProformaVenta" EntityType="Self.ProformaVenta" Schema="FAC" store:Type="Tables" />
@@ -1157,6 +1209,7 @@
           <EntitySet Name="Bodegas" EntityType="Self.Bodegas" Schema="INVFAC" store:Type="Tables" />
           <EntitySet Name="Impuestos" EntityType="Self.Impuestos" Schema="INVFAC" store:Type="Tables" />
           <EntitySet Name="Productos" EntityType="Self.Productos" Schema="INVFAC" store:Type="Tables" />
+          <EntitySet Name="AccesoWeb" EntityType="Self.AccesoWeb" Schema="SIS" store:Type="Tables" />
           <EntitySet Name="BodegaLaboratorioKardex" EntityType="Self.BodegaLaboratorioKardex" Schema="SIS" store:Type="Tables" />
           <EntitySet Name="BodegaSerie" EntityType="Self.BodegaSerie" Schema="SIS" store:Type="Tables" />
           <EntitySet Name="Estaciones" EntityType="Self.Estaciones" Schema="SIS" store:Type="Tables" />
@@ -1574,6 +1627,9 @@
             <End Role="RequisaAutorisaPermiso" EntitySet="RequisaAutorisaPermiso" />
           </AssociationSet>
           <EntitySet Name="ClienteClave" EntityType="BalancesModel.ClienteClave" />
+          <EntitySet Name="LiberarBonificacionHistorico" EntityType="BalancesModel.LiberarBonificacionHistorico" />
+          <EntitySet Name="LiberarPrecioHistorico" EntityType="BalancesModel.LiberarPrecioHistorico" />
+          <EntitySet Name="AccesoWeb" EntityType="BalancesModel.AccesoWeb" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -2488,6 +2544,56 @@
           <Property Name="Activo" Type="Boolean" Nullable="false" />
           <Property Name="IdUsuarioCrea" Type="Int32" Nullable="false" />
           <Property Name="IdUsuarioInactiva" Type="Int32" />
+        </EntityType>
+        <EntityType Name="LiberarBonificacionHistorico">
+          <Key>
+            <PropertyRef Name="IdLiberarBonificacion" />
+          </Key>
+          <Property Name="IdLiberarBonificacionHistorico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdLiberarBonificacion" Type="Int32" Nullable="false" />
+          <Property Name="IdBodega" Type="Int32" />
+          <Property Name="IdProducto" Type="Int32" Nullable="false" />
+          <Property Name="IdCliente" Type="Int32" Nullable="false" />
+          <Property Name="CantMax" Type="Int32" Nullable="false" />
+          <Property Name="Facturada" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IdUsuarioCrea" Type="Int32" Nullable="false" />
+          <Property Name="FechaInactiva" Type="DateTime" Precision="7" />
+          <Property Name="IdUsuarioInactiva" Type="Int32" />
+        </EntityType>
+        <EntityType Name="LiberarPrecioHistorico">
+          <Key>
+            <PropertyRef Name="IdLiberarPrecioHistorico" />
+          </Key>
+          <Property Name="IdLiberarPrecioHistorico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdLiberarPrecio" Type="Int32" Nullable="false" />
+          <Property Name="IdBodega" Type="Int32" Nullable="false" />
+          <Property Name="IdProducto" Type="Int32" Nullable="false" />
+          <Property Name="IdCliente" Type="Int32" Nullable="false" />
+          <Property Name="IdConceptoPrecio" Type="Int32" Nullable="false" />
+          <Property Name="IdMoneda" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Motivo" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IdUsuarioCrea" Type="Int32" Nullable="false" />
+          <Property Name="FechaInactiva" Type="DateTime" Precision="7" />
+          <Property Name="IdUsuarioInactiva" Type="Int32" />
+        </EntityType>
+        <EntityType Name="AccesoWeb">
+          <Key>
+            <PropertyRef Name="IdAccedo" />
+          </Key>
+          <Property Name="IdAccedo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EsMenu" Type="Boolean" Nullable="false" />
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Caption" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MenuPadre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Clase" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Modulo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3422,6 +3528,59 @@
                 <ScalarProperty Name="IdVendedor" ColumnName="IdVendedor" />
                 <ScalarProperty Name="CodigoCliente" ColumnName="CodigoCliente" />
                 <ScalarProperty Name="IdClienteClave" ColumnName="IdClienteClave" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LiberarBonificacionHistorico">
+            <EntityTypeMapping TypeName="BalancesModel.LiberarBonificacionHistorico">
+              <MappingFragment StoreEntitySet="LiberarBonificacionHistorico">
+                <ScalarProperty Name="IdUsuarioInactiva" ColumnName="IdUsuarioInactiva" />
+                <ScalarProperty Name="FechaInactiva" ColumnName="FechaInactiva" />
+                <ScalarProperty Name="IdUsuarioCrea" ColumnName="IdUsuarioCrea" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Facturada" ColumnName="Facturada" />
+                <ScalarProperty Name="CantMax" ColumnName="CantMax" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
+                <ScalarProperty Name="IdLiberarBonificacion" ColumnName="IdLiberarBonificacion" />
+                <ScalarProperty Name="IdLiberarBonificacionHistorico" ColumnName="IdLiberarBonificacionHistorico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LiberarPrecioHistorico">
+            <EntityTypeMapping TypeName="BalancesModel.LiberarPrecioHistorico">
+              <MappingFragment StoreEntitySet="LiberarPrecioHistorico">
+                <ScalarProperty Name="IdUsuarioInactiva" ColumnName="IdUsuarioInactiva" />
+                <ScalarProperty Name="FechaInactiva" ColumnName="FechaInactiva" />
+                <ScalarProperty Name="IdUsuarioCrea" ColumnName="IdUsuarioCrea" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Motivo" ColumnName="Motivo" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="IdMoneda" ColumnName="IdMoneda" />
+                <ScalarProperty Name="IdConceptoPrecio" ColumnName="IdConceptoPrecio" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
+                <ScalarProperty Name="IdLiberarPrecio" ColumnName="IdLiberarPrecio" />
+                <ScalarProperty Name="IdLiberarPrecioHistorico" ColumnName="IdLiberarPrecioHistorico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccesoWeb">
+            <EntityTypeMapping TypeName="BalancesModel.AccesoWeb">
+              <MappingFragment StoreEntitySet="AccesoWeb">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Modulo" ColumnName="Modulo" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Clase" ColumnName="Clase" />
+                <ScalarProperty Name="MenuPadre" ColumnName="MenuPadre" />
+                <ScalarProperty Name="Caption" ColumnName="Caption" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EsMenu" ColumnName="EsMenu" />
+                <ScalarProperty Name="IdAccedo" ColumnName="IdAccedo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
