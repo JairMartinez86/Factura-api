@@ -1217,8 +1217,10 @@ namespace FAC_api.Controllers.FACT
                     }
                     else
                     {
+                        DateTime FechaServidor = DateTime.Now;
+
                         var qDoc = (from _q in _Conexion.Venta
-                                    where (_q.Estado == "Solicitado" || _q.Estado == "Autorizado") && _q.TipoDocumento == Tipo
+                                    where (_q.Estado == "Solicitado" || _q.Estado == "Autorizado") && _q.TipoDocumento == Tipo && _q.Vence >= FechaServidor.Date
                                     orderby  _q.FechaRegistro descending
                                     select new
                                     {

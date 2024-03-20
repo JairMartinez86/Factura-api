@@ -156,7 +156,7 @@ namespace FAC_api.Class.SIS
             datos3.d = u.Lotificar;
 
 
-            var Perfil = _Conexion.AccesoWeb.Where(w => w.Usuario == user && w.Modulo == "FACT" && w.Activo).ToList();
+            var Perfil = _Conexion.AccesoWeb.Where(w => w.Usuario == user && w.Activo).ToList();
 
             Cls_Datos datos4 = new Cls_Datos();
             datos4.Nombre = "PERFIL";
