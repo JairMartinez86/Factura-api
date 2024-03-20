@@ -1069,13 +1069,13 @@ namespace FAC_api.Controllers.FACT
 
         [Route("api/Factura/Get")]
         [HttpGet]
-        public string Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola, string usuario)
+        public string Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola, bool ProformaVencida, string usuario)
         {
-            return v_Get(Fecha1, Fecha2, Tipo, esCola, usuario);
+            return v_Get(Fecha1, Fecha2, Tipo, esCola, ProformaVencida, usuario);
         }
 
 
-        private string v_Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola, string usuario)
+        private string v_Get(DateTime Fecha1, DateTime Fecha2, string Tipo, bool esCola, bool ProformaVencida, string usuario)
         {
             string json = string.Empty;
 
@@ -1220,7 +1220,7 @@ namespace FAC_api.Controllers.FACT
                         DateTime FechaServidor = DateTime.Now;
 
                         var qDoc = (from _q in _Conexion.Venta
-                                    where (_q.Estado == "Solicitado" || _q.Estado == "Autorizado") && _q.TipoDocumento == Tipo && _q.Vence >= FechaServidor.Date
+                                    where (_q.Estado == "Solicitado" || _q.Estado == "Autorizado") && _q.TipoDocumento == Tipo && (ProformaVencida? FechaServidor.Date : _q.Vence) >= (ProformaVencida ? _q.Vence : FechaServidor.Date)
                                     orderby  _q.FechaRegistro descending
                                     select new
                                     {
