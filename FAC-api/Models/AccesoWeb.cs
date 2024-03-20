@@ -14,7 +14,7 @@ namespace FAC_api.Models
     
     public partial class AccesoWeb
     {
-        public int IdAccedo { get; set; }
+        public int IdAcceso { get; set; }
         public bool EsMenu { get; set; }
         public string Id { get; set; }
         public string Caption { get; set; }

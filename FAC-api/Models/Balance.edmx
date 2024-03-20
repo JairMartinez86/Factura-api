@@ -581,9 +581,9 @@
         </EntityType>
         <EntityType Name="AccesoWeb">
           <Key>
-            <PropertyRef Name="IdAccedo" />
+            <PropertyRef Name="IdAcceso" />
           </Key>
-          <Property Name="IdAccedo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdAcceso" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EsMenu" Type="bit" Nullable="false" />
           <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Caption" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -2583,9 +2583,9 @@
         </EntityType>
         <EntityType Name="AccesoWeb">
           <Key>
-            <PropertyRef Name="IdAccedo" />
+            <PropertyRef Name="IdAcceso" />
           </Key>
-          <Property Name="IdAccedo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdAcceso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EsMenu" Type="Boolean" Nullable="false" />
           <Property Name="Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Caption" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3580,7 +3580,7 @@
                 <ScalarProperty Name="Caption" ColumnName="Caption" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="EsMenu" ColumnName="EsMenu" />
-                <ScalarProperty Name="IdAccedo" ColumnName="IdAccedo" />
+                <ScalarProperty Name="IdAcceso" ColumnName="IdAcceso" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
