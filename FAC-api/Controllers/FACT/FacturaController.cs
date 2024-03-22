@@ -2913,15 +2913,15 @@ namespace FAC_api.Controllers.FACT
 
 
 
-        [Route("api/Factura/GetDatosLiberacion")]
+        [Route("api/Factura/GetDatosLiberacionPrecio")]
         [HttpGet]
-        public string GetDatosLiberacion()
+        public string GetDatosLiberacionPrecio()
         {
-            return V_GetDatosLiberacion();
+            return V_GetDatosLiberacionPrecio();
         }
 
 
-        private string V_GetDatosLiberacion()
+        private string V_GetDatosLiberacionPrecio()
         {
             string json = string.Empty;
 
@@ -3197,6 +3197,296 @@ namespace FAC_api.Controllers.FACT
                         Cls_Datos datos = new Cls_Datos();
                         datos.Nombre = "LIBERAR";
                         datos.d = "<b>Precios Liberados<b/>";
+
+
+
+
+                        json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
+
+
+
+
+
+        [Route("api/Factura/GetDatosLiberacionBonif")]
+        [HttpGet]
+        public string GetDatosLiberacionBonif()
+        {
+            return V_GetDatosLiberacionBonif();
+        }
+
+
+        private string V_GetDatosLiberacionBonif()
+        {
+            string json = string.Empty;
+
+            try
+            {
+                using (BalancesEntities _Conexion = new BalancesEntities())
+                {
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+                    var qProductos = (from _q in _Conexion.Productos
+                                      where _q.Activo == true
+                                      select new
+                                      {
+                                          IdProducto = _q.IdProducto,
+                                          Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                          Producto = _q.Producto.TrimStart().TrimEnd(),
+                                          Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
+                                      }).ToList();
+
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "PRODUCTOS";
+                    datos.d = qProductos;
+                    lstDatos.Add(datos);
+
+                    var qClientes = (from _q in _Conexion.Cliente
+                                     where _q.Estado == "Activo" || _q.Estado == "Temporal"
+                                     select new
+                                     {
+                                         IdCliente = _q.IdCliente,
+                                         Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                         Cliente = _q.Nombre.TrimStart().TrimEnd(),
+                                         Key = string.Concat(_q.Codigo, " ", _q.Nombre.TrimStart().TrimEnd())
+                                     }).ToList();
+
+
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "CLIENTES";
+                    datos.d = qClientes;
+                    lstDatos.Add(datos);
+
+
+                    var qBodegas = (from _q in _Conexion.Bodegas
+                                    select new Cls_Bodega()
+                                    {
+                                        IdBodega = _q.IdBodega,
+                                        Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                        Bodega = _q.Bodega.TrimStart().TrimEnd(),
+                                        Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.Bodega.TrimStart().TrimEnd())
+                                    }).ToList();
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "BODEGAS";
+                    datos.d = qBodegas;
+                    lstDatos.Add(datos);
+
+
+                    List<Cls_LiberarBonif> qLiberacion = (from _q in _Conexion.LiberarBonificacion
+                                                            join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
+                                                            join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
+                                                            join _c in _Conexion.Cliente on _q.IdCliente equals _c.IdCliente
+                                                            where _q.Activo
+                                                            select new Cls_LiberarBonif()
+                                                            {
+                                                                IdLiberarBonificacion = _q.IdLiberarBonificacion,
+                                                                IdBodega = (int)_q.IdBodega,
+                                                                Bodega = string.Concat(_b.Codigo, " - ", _b.Bodega),
+                                                                IdProducto = _q.IdProducto,
+                                                                CodProducto = _p.Codigo,
+                                                                Producto = string.Concat(_p.Codigo, " - ", _p.Producto),
+                                                                IdCliente = _q.IdCliente,
+                                                                Cliente = string.Concat(_c.Codigo, " - ", _c.Nombre),
+                                                                CantMax = _q.CantMax,
+                                                                Facturada = _q.Facturada,
+                                                                FechaAsignacion = _q.FechaAsignacion,
+                                                                Activo = _q.Activo
+                                                            }).Union(
+
+                        from _q in _Conexion.LiberarBonificacion
+                        join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
+                        join _c in _Conexion.Cliente on _q.IdCliente equals _c.IdCliente
+                        where _q.Activo && _q.IdBodega  == null
+                        select new Cls_LiberarBonif()
+                        {
+                            IdLiberarBonificacion = _q.IdLiberarBonificacion,
+                            IdBodega = (int)_q.IdBodega,
+                            Bodega = "TODAS LAS BODEGAS",
+                            IdProducto = _q.IdProducto,
+                            CodProducto = _p.Codigo,
+                            Producto = string.Concat(_p.Codigo, " - ", _p.Producto),
+                            IdCliente = _q.IdCliente,
+                            Cliente = string.Concat(_c.Codigo, " - ", _c.Nombre),
+                            CantMax = _q.CantMax,
+                            Facturada = _q.Facturada,
+                            FechaAsignacion = _q.FechaAsignacion,
+                            Activo = _q.Activo
+                        }
+
+
+                        ).Union(
+
+                        from _q in _Conexion.LiberarBonificacion
+                        join _b in _Conexion.Bodegas on _q.IdBodega equals _b.IdBodega
+                        join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
+                        where _q.Activo && _q.IdCliente == 0 && _q.IdBodega != null
+                        select new Cls_LiberarBonif()
+                        {
+                            IdLiberarBonificacion = _q.IdLiberarBonificacion,
+                            IdBodega = (int)_q.IdBodega,
+                            Bodega = string.Concat(_b.Codigo, " - ", _b.Bodega),
+                            IdProducto = _q.IdProducto,
+                            CodProducto = _p.Codigo,
+                            Producto = string.Concat(_p.Codigo, " - ", _p.Producto),
+                            IdCliente = 0,
+                            Cliente = "TODOS LOS CLIENTES",
+                            CantMax = _q.CantMax,
+                            Facturada = _q.Facturada,
+                            FechaAsignacion = _q.FechaAsignacion,
+                            Activo = _q.Activo
+                        }
+
+
+                        ).Union(
+
+                        from _q in _Conexion.LiberarBonificacion
+                        join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
+                        where _q.Activo && _q.IdCliente == 0 && _q.IdBodega == null
+                        select new Cls_LiberarBonif()
+                        {
+                            IdLiberarBonificacion = _q.IdLiberarBonificacion,
+                            IdBodega = null,
+                            Bodega = "TODAS LAS BODEGAS",
+                            IdProducto = _q.IdProducto,
+                            CodProducto = _p.Codigo,
+                            Producto = string.Concat(_p.Codigo, " - ", _p.Producto),
+                            IdCliente = 0,
+                            Cliente = "TODOS LOS CLIENTES",
+                            CantMax = _q.CantMax,
+                            Facturada = _q.Facturada,
+                            FechaAsignacion = _q.FechaAsignacion,
+                            Activo = _q.Activo
+                        }
+
+
+                        ).ToList();
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "LIBERACION";
+                    datos.d = qLiberacion;
+                    lstDatos.Add(datos);
+
+
+                    json = Cls_Mensaje.Tojson(lstDatos, 1, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+
+
+        [Route("api/Factura/LiberarBonificacion")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult LiberarBonificacion(List<Cls_LiberarBonif> d)
+        {
+            if (ModelState.IsValid)
+            {
+
+                return Ok(V_LiberarBonificacion(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string V_LiberarBonificacion(List<Cls_LiberarBonif> d)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (BalancesEntities _Conexion = new BalancesEntities())
+                    {
+
+                        Usuarios U = null;
+                        Cliente Cl = null;
+
+                        foreach (Cls_LiberarBonif p in d)
+                        {
+                            LiberarBonificacion pr = _Conexion.LiberarBonificacion.FirstOrDefault(f => f.IdLiberarBonificacion == p.IdLiberarBonificacion);
+                            bool esNuevo = false;
+
+                            if (U == null) U = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == p.Usuario);
+                            if (Cl == null) Cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == p.Cliente);
+
+                            if (pr == null)
+                            {
+                                pr = new LiberarBonificacion();
+                                esNuevo = true;
+                                pr.IdBodega = p.IdBodega;
+                                pr.IdProducto = p.IdProducto;
+                                pr.IdCliente =0;
+                                if (p.IdCliente != null) pr.IdCliente = (int)p.IdCliente;
+                                pr.CantMax = p.CantMax;
+                                pr.Facturada = 0;
+                                pr.FechaAsignacion = DateTime.Now;
+                                pr.IdUsuarioCrea = U.IdUsuario;
+                            }
+
+                            pr.Activo = p.Activo;
+
+                            if (!p.Activo)
+                            {
+                                pr.IdUsuarioInactiva = U.IdUsuario;
+                                pr.FechaInactiva = DateTime.Now;
+                            }
+
+                            if (esNuevo) _Conexion.LiberarBonificacion.Add(pr);
+
+
+
+
+
+                            _Conexion.SaveChanges();
+
+
+
+                        }
+
+
+
+
+                        scope.Complete();
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "LIBERAR";
+                        datos.d = "<b>Liberacion Completada<b/>";
 
 
 

@@ -326,6 +326,7 @@
     <Compile Include="Class\FACT\Cls_Productos_Liberados_INVESCASAN.cs" />
     <Compile Include="Class\INV\Cls_AutorizaRequisa.cs" />
     <Compile Include="Class\INV\Cls_E_Response.cs" />
+    <Compile Include="Class\INV\Cls_LiberarBonif.cs" />
     <Compile Include="Class\INV\Cls_LiberarExistencia.cs" />
     <Compile Include="Class\INV\Cls_LiberarPrecios.cs" />
     <Compile Include="Class\INV\ExistenciaUbicacion.cs" />
