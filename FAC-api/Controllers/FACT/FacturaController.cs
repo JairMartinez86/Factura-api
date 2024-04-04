@@ -2988,6 +2988,7 @@ namespace FAC_api.Controllers.FACT
                                        join _p in _Conexion.Productos on _q.IdProducto equals _p.IdProducto
                                        join _c in _Conexion.Cliente on _q.IdCliente equals _c.IdCliente
                                        where _q.Activo
+                                       orderby _q.FechaAsignacion descending
                                        select new Cls_LiberarPrecios()
                                        {
                                            IdLiberarPrecio = _q.IdLiberarPrecio,
@@ -3379,6 +3380,8 @@ namespace FAC_api.Controllers.FACT
 
                         ).ToList();
 
+
+                    qLiberacion = qLiberacion.OrderByDescending(o => o.FechaAsignacion).ToList();
 
                     datos = new Cls_Datos();
                     datos.Nombre = "LIBERACION";

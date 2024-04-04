@@ -6,15 +6,19 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Transactions;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
+using Microsoft.Ajax.Utilities;
 
 namespace FAC_api.Class.SIS
 {
@@ -165,5 +169,171 @@ namespace FAC_api.Class.SIS
 
             return new Cls_Datos[] { datos, datos2, datos3, datos4 };
         }
+
+
+        [Route("api/SIS/AccesoWeb")]
+        [HttpGet]
+        public string AccesoWeb(string user)
+        {
+            return V_AccesoWeb(user);
+        }
+
+        private string V_AccesoWeb(string user)
+        {
+            string json = string.Empty;
+            try
+            {
+                using (BalancesEntities _Conexion = new BalancesEntities())
+                {
+
+                    Usuarios Usuario = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == user && f.IdRol == 1 & f.AccesoWeb);
+
+                    if (Usuario == null)
+                    {
+                        json = Cls_Mensaje.Tojson(null, 0, "1", "No tiene permiso para acceder a la inforacion solicitada.", 1);
+                        return json;
+                    }
+
+
+
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+
+                    var qUsuario = (from _q in _Conexion.Usuarios
+                                    where _q.AccesoWeb
+                                    select new
+                                    {
+                                        _q.Usuario,
+                                        Nombre = string.Concat(_q.Nombres, " ", _q.Apellidos)
+                                    }).ToList();
+
+
+
+
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "USUARIO";
+                    datos.d = qUsuario;
+                    lstDatos.Add(datos);
+
+
+
+                    var qAccesoWeb = _Conexion.AccesoWeb.ToList();
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "ACCESO WEB";
+                    datos.d = qAccesoWeb;
+                    lstDatos.Add(datos);
+
+
+                  
+
+                    json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+
+        [Route("api/SIS/GuardarAcceso")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult GuardarAcceso(AccesoWeb[] d)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                return Ok(V_GuardarAcceso(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string V_GuardarAcceso(AccesoWeb[] d)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (BalancesEntities _Conexion = new BalancesEntities())
+                    {
+
+                        d.ForEach(f => {
+
+                            bool esNuevo = false;
+                            AccesoWeb a = _Conexion.AccesoWeb.Find(f.IdAcceso);
+
+                            if (a == null)
+                            {
+                                a = new AccesoWeb();
+                                esNuevo = true;
+                            }
+
+                            a.EsMenu = f.EsMenu;
+                            a.Id = f.Id;
+                            a.Caption = f.Caption;
+                            a.MenuPadre = f.MenuPadre;
+                            a.Clase = f.Clase;
+                            a.Usuario = f.Usuario;
+                            a.Modulo = "FACT";
+                            a.Activo = f.Activo;
+
+                            if (esNuevo) _Conexion.AccesoWeb.Add(a);
+                            _Conexion.SaveChanges();
+
+
+
+                        });
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "ACCESO WEB";
+                        datos.d = "Registro Guardado";
+                  
+
+
+
+                        scope.Complete();
+
+
+
+                        json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
+
+
+
     }
 }
