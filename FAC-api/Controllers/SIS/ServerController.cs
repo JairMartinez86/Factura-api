@@ -204,7 +204,7 @@ namespace FAC_api.Class.SIS
                                     select new
                                     {
                                         _q.Usuario,
-                                        Nombre = string.Concat(_q.Nombres, " ", _q.Apellidos)
+                                        Nombre = string.Concat(_q.Usuario, " --> " ,_q.Nombres, " ", _q.Apellidos)
                                     }).ToList();
 
 

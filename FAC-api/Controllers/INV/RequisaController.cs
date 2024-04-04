@@ -18,6 +18,9 @@ using FAC_api.Class.INV;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
+using IsolationLevel = System.Transactions.IsolationLevel;
 
 namespace FAC_api.Controllers.INV
 {
@@ -158,6 +161,196 @@ namespace FAC_api.Controllers.INV
         }
 
 
+
+
+        [Route("api/INV/Requisa/GetPermiso")]
+        [HttpGet]
+        public string GetPermiso()
+        {
+            return V_GetPermiso();
+        }
+
+        private string V_GetPermiso()
+        {
+            string json = string.Empty;
+            try
+            {
+                using (BalancesEntities _Conexion = new BalancesEntities())
+                {
+
+    
+
+
+                    List<Cls_Datos> lstDatos = new List<Cls_Datos>();
+
+
+                    var qUsuario = (from _q in _Conexion.Usuarios
+                                    where _q.Activo
+                                    select new
+                                    {
+                                        _q.Usuario,
+                                        Nombre = string.Concat(_q.Usuario, " --> ", _q.Nombres, " ", _q.Apellidos)
+                                    }).ToList();
+
+
+
+
+
+
+                    Cls_Datos datos = new Cls_Datos();
+                    datos.Nombre = "USUARIO";
+                    datos.d = qUsuario;
+                    lstDatos.Add(datos);
+
+
+
+                    var qBodega = (from _q in _Conexion.Bodegas
+                                    select new
+                                    {
+                                        IdPermisoRequisaAuto = -1,
+                                        CodBodega = _q.Codigo,
+                                        Nombre = string.Concat( _q.Codigo, " --> ", _q.Bodega),
+                                        Usuario = string.Empty,
+                                        Activo = true
+                                    }).ToList();
+
+
+
+
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "BODEGA";
+                    datos.d = qBodega;
+                    lstDatos.Add(datos);
+
+
+
+
+                    var qPermisos = (from _q in _Conexion.RequisaAutorisaPermiso
+                                     select new
+                                     {
+                                         _q.IdPermisoRequisaAuto,
+                                         _q.CodBodega,
+                                         _q.Usuarios.Usuario
+                                     }).ToList();
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "PERMISO REQUISA";
+                    datos.d = qPermisos;
+                    lstDatos.Add(datos);
+
+
+
+
+                    json = Cls_Mensaje.Tojson(lstDatos, lstDatos.Count, string.Empty, string.Empty, 0);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+        }
+
+
+        [Route("api/INV/Requisa/AutorizarPermiso")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult AutorizarPermiso(Cls_RequisaAutorisaPermiso[] d)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                return Ok(V_AutorizarPermiso(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string V_AutorizarPermiso(Cls_RequisaAutorisaPermiso[] d)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (BalancesEntities _Conexion = new BalancesEntities())
+                    {
+
+                        int IdUsuario = 0;
+
+
+                        d.ForEach(f =>
+                        {
+                            bool esNuevo = false;
+                            RequisaAutorisaPermiso a = _Conexion.RequisaAutorisaPermiso.Find(f.IdPermisoRequisaAuto);
+
+
+                            if (a == null)
+                            {
+                                a = new RequisaAutorisaPermiso();
+                                esNuevo = true;
+                            }
+
+                            if (IdUsuario == 0) IdUsuario = _Conexion.Usuarios.First(w => w.Usuario == f.Usuario).IdUsuario;
+
+                            a.IdUsuario = IdUsuario;
+                            a.CodBodega = f.CodBodega;
+                
+         
+
+                            if (esNuevo && f.Activo) _Conexion.RequisaAutorisaPermiso.Add(a);
+                            if(!f.Activo && !esNuevo) _Conexion.RequisaAutorisaPermiso.Remove(a);
+
+
+                            _Conexion.SaveChanges();
+                        });
+
+
+
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "PERMISO REQUISA";
+                        datos.d = "Registro Guardado";
+
+
+
+
+
+                        scope.Complete();
+
+                        json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+
+                    }
+                }
+
+
+     
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
 
 
     }

@@ -329,6 +329,7 @@
     <Compile Include="Class\INV\Cls_LiberarBonif.cs" />
     <Compile Include="Class\INV\Cls_LiberarExistencia.cs" />
     <Compile Include="Class\INV\Cls_LiberarPrecios.cs" />
+    <Compile Include="Class\INV\Cls_RequisaAutorisaPermiso.cs" />
     <Compile Include="Class\INV\ExistenciaUbicacion.cs" />
     <Compile Include="Class\SIS\Cls_Letras.cs" />
     <Compile Include="Class\SIS\Cls_ListToDataTableConverter.cs" />

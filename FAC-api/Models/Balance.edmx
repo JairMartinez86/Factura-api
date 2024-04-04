@@ -438,7 +438,7 @@
           <Key>
             <PropertyRef Name="IdPermisoRequisaAuto" />
           </Key>
-          <Property Name="IdPermisoRequisaAuto" Type="int" Nullable="false" />
+          <Property Name="IdPermisoRequisaAuto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdUsuario" Type="int" Nullable="false" />
           <Property Name="CodBodega" Type="nvarchar" MaxLength="12" Nullable="false" />
         </EntityType>
@@ -1621,15 +1621,15 @@
             <End Role="Requisa" EntitySet="Requisa" />
             <End Role="RequisaDetalle" EntitySet="RequisaDetalle" />
           </AssociationSet>
+          <EntitySet Name="ClienteClave" EntityType="BalancesModel.ClienteClave" />
+          <EntitySet Name="LiberarBonificacionHistorico" EntityType="BalancesModel.LiberarBonificacionHistorico" />
+          <EntitySet Name="LiberarPrecioHistorico" EntityType="BalancesModel.LiberarPrecioHistorico" />
+          <EntitySet Name="AccesoWeb" EntityType="BalancesModel.AccesoWeb" />
           <EntitySet Name="RequisaAutorisaPermiso" EntityType="BalancesModel.RequisaAutorisaPermiso" />
           <AssociationSet Name="FK_RequisaAutorisaPermiso_Usuarios" Association="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios">
             <End Role="Usuarios" EntitySet="Usuarios" />
             <End Role="RequisaAutorisaPermiso" EntitySet="RequisaAutorisaPermiso" />
           </AssociationSet>
-          <EntitySet Name="ClienteClave" EntityType="BalancesModel.ClienteClave" />
-          <EntitySet Name="LiberarBonificacionHistorico" EntityType="BalancesModel.LiberarBonificacionHistorico" />
-          <EntitySet Name="LiberarPrecioHistorico" EntityType="BalancesModel.LiberarPrecioHistorico" />
-          <EntitySet Name="AccesoWeb" EntityType="BalancesModel.AccesoWeb" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -2511,27 +2511,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="RequisaAutorisaPermiso">
-          <Key>
-            <PropertyRef Name="IdPermisoRequisaAuto" />
-          </Key>
-          <Property Name="IdPermisoRequisaAuto" Type="Int32" Nullable="false" />
-          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
-          <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Usuarios" Relationship="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" FromRole="RequisaAutorisaPermiso" ToRole="Usuarios" />
-        </EntityType>
-        <Association Name="FK_RequisaAutorisaPermiso_Usuarios">
-          <End Type="BalancesModel.Usuarios" Role="Usuarios" Multiplicity="1" />
-          <End Type="BalancesModel.RequisaAutorisaPermiso" Role="RequisaAutorisaPermiso" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuarios">
-              <PropertyRef Name="IdUsuario" />
-            </Principal>
-            <Dependent Role="RequisaAutorisaPermiso">
-              <PropertyRef Name="IdUsuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="ClienteClave">
           <Key>
             <PropertyRef Name="IdClienteClave" />
@@ -2595,6 +2574,27 @@
           <Property Name="Modulo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Activo" Type="Boolean" Nullable="false" />
         </EntityType>
+        <EntityType Name="RequisaAutorisaPermiso">
+          <Key>
+            <PropertyRef Name="IdPermisoRequisaAuto" />
+          </Key>
+          <Property Name="IdPermisoRequisaAuto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Usuarios" Relationship="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" FromRole="RequisaAutorisaPermiso" ToRole="Usuarios" />
+        </EntityType>
+        <Association Name="FK_RequisaAutorisaPermiso_Usuarios">
+          <End Type="BalancesModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="BalancesModel.RequisaAutorisaPermiso" Role="RequisaAutorisaPermiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="RequisaAutorisaPermiso">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3508,15 +3508,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="RequisaAutorisaPermiso">
-            <EntityTypeMapping TypeName="BalancesModel.RequisaAutorisaPermiso">
-              <MappingFragment StoreEntitySet="RequisaAutorisaPermiso">
-                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="IdPermisoRequisaAuto" ColumnName="IdPermisoRequisaAuto" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ClienteClave">
             <EntityTypeMapping TypeName="BalancesModel.ClienteClave">
               <MappingFragment StoreEntitySet="ClienteClave">
@@ -3581,6 +3572,15 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="EsMenu" ColumnName="EsMenu" />
                 <ScalarProperty Name="IdAcceso" ColumnName="IdAcceso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequisaAutorisaPermiso">
+            <EntityTypeMapping TypeName="BalancesModel.RequisaAutorisaPermiso">
+              <MappingFragment StoreEntitySet="RequisaAutorisaPermiso">
+                <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdPermisoRequisaAuto" ColumnName="IdPermisoRequisaAuto" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -50,12 +50,12 @@
         <AssociationConnector Association="BalancesModel.FK_Requisa_UsuariosModifica" />
         <EntityTypeShape EntityType="BalancesModel.RequisaDetalle" Width="1.5" PointX="9.25" PointY="28.25" />
         <AssociationConnector Association="BalancesModel.FK_RequisaDetalle_Requisa" />
-        <EntityTypeShape EntityType="BalancesModel.RequisaAutorisaPermiso" Width="1.5" PointX="7" PointY="34.25" />
-        <AssociationConnector Association="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" />
         <EntityTypeShape EntityType="BalancesModel.ClienteClave" Width="1.5" PointX="18.375" PointY="17.75" />
         <EntityTypeShape EntityType="BalancesModel.LiberarBonificacionHistorico" Width="1.5" PointX="20.375" PointY="0.75" />
         <EntityTypeShape EntityType="BalancesModel.LiberarPrecioHistorico" Width="1.5" PointX="20.375" PointY="5.75" />
         <EntityTypeShape EntityType="BalancesModel.AccesoWeb" Width="1.5" PointX="20.375" PointY="10.75" />
+        <EntityTypeShape EntityType="BalancesModel.RequisaAutorisaPermiso" Width="1.5" PointX="7" PointY="34.25" />
+        <AssociationConnector Association="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
