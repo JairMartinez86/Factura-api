@@ -298,7 +298,7 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                    string Sql = $"DECLARE @P_Fecha AS DATETIME = GETDATE()\r\n\t\t, @SaldoVencido MONEY\r\n\r\n\r\n\r\n\t\tEXEC INVESCASAN.[dbo].[RetornaSaldoVencidoAmbasMonedas] {CodCliente}, @P_Fecha, 15, @SaldoVencido OUT\r\n\r\n\t\tSET @dResultado = ISNULL(@SaldoVencido, 0)\r\n\r\n\t\tIF @SaldoVencido < 5 \r\n\t\tBEGIN\r\n\t\t\tSET @SaldoVencido = 0\r\n\t\tEND\r\n\r\n\t\tSELECT @SaldoVencido";
+                    string Sql = $"DECLARE @P_Fecha AS DATETIME = GETDATE()\r\n\t\t, @dResultado MONEY, @SaldoVencido MONEY\r\n\r\n\r\n\r\n\t\tEXEC INVESCASAN.[dbo].[RetornaSaldoVencidoAmbasMonedas] {CodCliente}, @P_Fecha, 15, @SaldoVencido OUT\r\n\r\n\t\tSET @dResultado = ISNULL(@SaldoVencido, 0)\r\n\r\n\t\tIF @SaldoVencido < 5 \r\n\t\tBEGIN\r\n\t\t\tSET @SaldoVencido = 0\r\n\t\tEND\r\n\r\n\t\tSELECT @SaldoVencido";
 
 
 
