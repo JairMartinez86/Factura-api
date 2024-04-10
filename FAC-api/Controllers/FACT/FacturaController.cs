@@ -1421,7 +1421,7 @@ namespace FAC_api.Controllers.FACT
 
                             if (vta != null && prof == null)
                             {
-                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b>El proforma genera duplicado.</>", 1);
+                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b>El proforma genera duplicado.</b>", 1);
                                 return json;
 
                             }
@@ -1461,7 +1461,7 @@ namespace FAC_api.Controllers.FACT
 
                         if( (_v.NoFactura != string.Empty || _v.Estado != "Solicitado") && _v.TipoDocumento != "Proforma" && _v.NoFactura != string.Empty)
                         {
-                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No se permite modificacion del documento.</>", 1);
+                            json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No se permite modificacion del documento.</b>", 1);
                             return json;
 
                         }
@@ -1816,7 +1816,7 @@ namespace FAC_api.Controllers.FACT
 
                             if(per == null)
                             {
-                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No tiene permiso para autorizar.</>", 1);
+                                json = Cls_Mensaje.Tojson(null, 0, "1", "<b>No tiene permiso para autorizar.</b>", 1);
                                 return json;
                             }
 
@@ -2514,7 +2514,7 @@ namespace FAC_api.Controllers.FACT
 
                     if (vta != null && !esNuevo && DetatallePago == string.Empty)
                     {
-                        json = Cls_Mensaje.Tojson(null, 0, "1", "<b>La factura genera duplicado.</>", 1);
+                        json = Cls_Mensaje.Tojson(null, 0, "1", "<b>La factura genera duplicado.</b>", 1);
                         return json;
 
                     }
@@ -3148,6 +3148,9 @@ namespace FAC_api.Controllers.FACT
 
                         foreach (Cls_LiberarPrecios p in d)
                         {
+
+
+                       
                             LiberarPrecio pr = _Conexion.LiberarPrecio.FirstOrDefault(f => f.IdLiberarPrecio == p.IdLiberarPrecio);
                             bool esNuevo = false;
 
@@ -3177,7 +3180,21 @@ namespace FAC_api.Controllers.FACT
                                 pr.FechaInactiva = DateTime.Now;
                             }
 
-                            if (esNuevo) _Conexion.LiberarPrecio.Add(pr);
+                            if (esNuevo)
+                            {
+
+                                LiberarPrecio pr2 = _Conexion.LiberarPrecio.FirstOrDefault(f => f.IdProducto == p.IdProducto && f.IdBodega == p.IdBodega && f.IdCliente == p.IdCliente);
+
+                                if (pr2 != null)
+                                {
+                                    json = Cls_Mensaje.Tojson(null, 0, "1", $"<span>El precio del producto ya se encuentra liberado. <b>{p.CodProducto}</b> </span>", 1);
+                                    return json;
+
+                                }
+
+                                _Conexion.LiberarPrecio.Add(pr);
+                            }
+                           
 
 
 
@@ -3441,6 +3458,10 @@ namespace FAC_api.Controllers.FACT
 
                         foreach (Cls_LiberarBonif p in d)
                         {
+
+                           
+
+
                             LiberarBonificacion pr = _Conexion.LiberarBonificacion.FirstOrDefault(f => f.IdLiberarBonificacion == p.IdLiberarBonificacion);
                             bool esNuevo = false;
 
@@ -3454,7 +3475,8 @@ namespace FAC_api.Controllers.FACT
                                 pr.IdBodega = p.IdBodega;
                                 pr.IdProducto = p.IdProducto;
                                 pr.IdCliente =0;
-                                if (p.IdCliente != null) pr.IdCliente = (int)p.IdCliente;
+                                if (p.IdCliente == null) p.IdCliente = 0;
+                                pr.IdCliente = (int)p.IdCliente;
                                 pr.CantMax = p.CantMax;
                                 pr.Facturada = 0;
                                 pr.FechaAsignacion = DateTime.Now;
@@ -3463,14 +3485,32 @@ namespace FAC_api.Controllers.FACT
 
                             pr.Activo = p.Activo;
 
+
+
                             if (!p.Activo)
                             {
                                 pr.IdUsuarioInactiva = U.IdUsuario;
                                 pr.FechaInactiva = DateTime.Now;
                             }
 
-                            if (esNuevo) _Conexion.LiberarBonificacion.Add(pr);
+                            if (esNuevo)
+                            {
+                                LiberarBonificacion pr2 = _Conexion.LiberarBonificacion.FirstOrDefault(f => f.IdProducto == p.IdProducto && f.IdBodega == p.IdBodega && f.IdCliente == p.IdCliente);
 
+                                if (pr2 != null)
+                                {
+
+                                    json = Cls_Mensaje.Tojson(null, 0, "1", $"<span>La Bonificacion ya se encuentra registrada. <b>{p.CodProducto}</b> </span>", 1);
+                                    return json;
+
+                                }
+
+                                _Conexion.LiberarBonificacion.Add(pr);
+                            }
+
+
+
+                          
 
 
 
