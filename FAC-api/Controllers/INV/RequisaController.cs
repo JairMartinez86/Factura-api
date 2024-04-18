@@ -292,6 +292,7 @@ namespace FAC_api.Controllers.INV
                     {
 
                         int IdUsuario = 0;
+                        int IdUsuarioRegistra = 0;
 
 
                         d.ForEach(f =>
@@ -307,10 +308,11 @@ namespace FAC_api.Controllers.INV
                             }
 
                             if (IdUsuario == 0) IdUsuario = _Conexion.Usuarios.First(w => w.Usuario == f.Usuario).IdUsuario;
+                            if (IdUsuarioRegistra == 0) IdUsuarioRegistra = _Conexion.Usuarios.First(w => w.Usuario == f.UsuarioRegistra).IdUsuario;
 
                             a.IdUsuario = IdUsuario;
                             a.CodBodega = f.CodBodega;
-                            a.IdUsuarioRegistra = f.IdUsuarioRegistra;
+                            a.IdUsuarioRegistra = IdUsuarioRegistra;
 
 
 
