@@ -441,6 +441,7 @@
           <Property Name="IdPermisoRequisaAuto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdUsuario" Type="int" Nullable="false" />
           <Property Name="CodBodega" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="IdUsuarioRegistra" Type="int" />
         </EntityType>
         <EntityType Name="RequisaDetalle">
           <Key>
@@ -2581,6 +2582,7 @@
           <Property Name="IdPermisoRequisaAuto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdUsuario" Type="Int32" Nullable="false" />
           <Property Name="CodBodega" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="IdUsuarioRegistra" Type="Int32" />
           <NavigationProperty Name="Usuarios" Relationship="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" FromRole="RequisaAutorisaPermiso" ToRole="Usuarios" />
         </EntityType>
         <Association Name="FK_RequisaAutorisaPermiso_Usuarios">
@@ -3578,6 +3580,7 @@
           <EntitySetMapping Name="RequisaAutorisaPermiso">
             <EntityTypeMapping TypeName="BalancesModel.RequisaAutorisaPermiso">
               <MappingFragment StoreEntitySet="RequisaAutorisaPermiso">
+                <ScalarProperty Name="IdUsuarioRegistra" ColumnName="IdUsuarioRegistra" />
                 <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdPermisoRequisaAuto" ColumnName="IdPermisoRequisaAuto" />

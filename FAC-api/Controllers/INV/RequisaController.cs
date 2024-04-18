@@ -309,8 +309,10 @@ namespace FAC_api.Controllers.INV
 
                             a.IdUsuario = IdUsuario;
                             a.CodBodega = f.CodBodega;
-                
-         
+                            a.IdUsuarioRegistra = f.IdUsuarioRegistra;
+
+
+
 
                             if (esNuevo && f.Activo) _Conexion.RequisaAutorisaPermiso.Add(a);
                             if(!f.Activo && !esNuevo) _Conexion.RequisaAutorisaPermiso.Remove(a);

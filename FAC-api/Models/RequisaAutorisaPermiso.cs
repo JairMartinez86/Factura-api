@@ -17,6 +17,7 @@ namespace FAC_api.Models
         public int IdPermisoRequisaAuto { get; set; }
         public int IdUsuario { get; set; }
         public string CodBodega { get; set; }
+        public Nullable<int> IdUsuarioRegistra { get; set; }
     
         public virtual Usuarios Usuarios { get; set; }
     }
