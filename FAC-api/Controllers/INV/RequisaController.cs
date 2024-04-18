@@ -232,7 +232,8 @@ namespace FAC_api.Controllers.INV
                                      {
                                          _q.IdPermisoRequisaAuto,
                                          _q.CodBodega,
-                                         _q.Usuarios.Usuario
+                                         _q.Usuarios.Usuario,
+                                         _q.IdUsuarioRegistra
                                      }).ToList();
 
 
