@@ -12,6 +12,6 @@ namespace FAC_api.Class.INV
         public string Nombre = string.Empty;
         public string Usuario = string.Empty;
         public bool Activo = false;
-        public int IdUsuarioRegistra = 0;
+        public string UsuarioRegistra = 0;
     }
 }
