@@ -482,6 +482,9 @@
     <Compile Include="Models\sp_GrabarProforma_Web_Result.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TipoDescuento.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Usuarios.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>

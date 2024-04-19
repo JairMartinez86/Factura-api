@@ -794,6 +794,7 @@ namespace FAC_api.Controllers.FACT
 
                     List<Descuentos> lstDes = _Conexion.Descuentos.Where(f => f.CodigoProducto == CodProducto).ToList();
                     List<Cls_Descuento> C_Descuento = new List<Cls_Descuento>() { new Cls_Descuento()  , new Cls_Descuento() } ;
+                   
 
                     C_Descuento[0].Index = 0;
                     C_Descuento[0].CodProducto = CodProducto;
@@ -815,6 +816,7 @@ namespace FAC_api.Controllers.FACT
 
                         if (des != null)//DESCUENTO POR CLIENTE
                         {
+
                             C_Descuento[0].PorcDescuento = des.PorcDesc;
                             C_Descuento[1].PorcDescuento = des.PorcDescA;
                             C_Descuento[0].IdDescuentoDet = des.IdDescuento;
@@ -833,7 +835,10 @@ namespace FAC_api.Controllers.FACT
 
                             if (des != null)//DESCUENTO BODEGA NULL (GENERAL)
                             {
-                                C_Descuento[0].PorcDescuento = des.PorcDesc;
+
+                                TipoDescuento tpd = _Conexion.TipoDescuento.FirstOrDefault(w => w.IdTipoDesc == des.IdTipoDesc);
+
+                                C_Descuento[0].PorcDescuento = (tpd.IdConceptoPrecio == cl.IdConceptoPrecio ? des.PorcDesc : 0);
                                 C_Descuento[1].PorcDescuento = des.PorcDescA;
                                 C_Descuento[0].IdDescuentoDet = des.IdDescuento;
                                 C_Descuento[1].IdDescuentoDet = des.IdDescuento;
@@ -849,7 +854,7 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                    if(C_Descuento.FindIndex(f => f.Descripcion == "GENERAL" && f.PorcDescuento == 0m) != -1)
+                    if(C_Descuento.FindIndex(f => f.Descripcion == "GENERAL" && f.PorcDescuento == 0m) != -1 && cl.IdConceptoPrecio == 18)
                     {
 
                         decimal PorcDescMargen = 0;

@@ -383,6 +383,17 @@
           <Property Name="Latitud" Type="nvarchar" MaxLength="50" />
           <Property Name="OrdenTaller" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="TipoDescuento">
+          <Key>
+            <PropertyRef Name="IdTipoDesc" />
+          </Key>
+          <Property Name="IdTipoDesc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdConceptoPrecio" Type="int" Nullable="false" />
+          <Property Name="NoExpira" Type="bit" Nullable="false" />
+          <Property Name="PorRango" Type="bit" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Kardex">
           <Key>
             <PropertyRef Name="IdKardex" />
@@ -1203,6 +1214,7 @@
           <EntitySet Name="PrecioVenta" EntityType="Self.PrecioVenta" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="PrecioVentaEscala" EntityType="Self.PrecioVentaEscala" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="ProformaVenta" EntityType="Self.ProformaVenta" Schema="FAC" store:Type="Tables" />
+          <EntitySet Name="TipoDescuento" EntityType="Self.TipoDescuento" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="Kardex" EntityType="Self.Kardex" Schema="INV" store:Type="Tables" />
           <EntitySet Name="Requisa" EntityType="Self.Requisa" Schema="INV" store:Type="Tables" />
           <EntitySet Name="RequisaAutorisaPermiso" EntityType="Self.RequisaAutorisaPermiso" Schema="INV" store:Type="Tables" />
@@ -1631,6 +1643,7 @@
             <End Role="Usuarios" EntitySet="Usuarios" />
             <End Role="RequisaAutorisaPermiso" EntitySet="RequisaAutorisaPermiso" />
           </AssociationSet>
+          <EntitySet Name="TipoDescuento" EntityType="BalancesModel.TipoDescuento" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -2597,6 +2610,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TipoDescuento">
+          <Key>
+            <PropertyRef Name="IdTipoDesc" />
+          </Key>
+          <Property Name="IdTipoDesc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdConceptoPrecio" Type="Int32" Nullable="false" />
+          <Property Name="NoExpira" Type="Boolean" Nullable="false" />
+          <Property Name="PorRango" Type="Boolean" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3584,6 +3608,18 @@
                 <ScalarProperty Name="CodBodega" ColumnName="CodBodega" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdPermisoRequisaAuto" ColumnName="IdPermisoRequisaAuto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoDescuento">
+            <EntityTypeMapping TypeName="BalancesModel.TipoDescuento">
+              <MappingFragment StoreEntitySet="TipoDescuento">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="PorRango" ColumnName="PorRango" />
+                <ScalarProperty Name="NoExpira" ColumnName="NoExpira" />
+                <ScalarProperty Name="IdConceptoPrecio" ColumnName="IdConceptoPrecio" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdTipoDesc" ColumnName="IdTipoDesc" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
