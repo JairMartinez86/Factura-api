@@ -374,6 +374,9 @@
     <Compile Include="Models\Bonificaciones.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BonificacionExcluirLab.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Cliente.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>

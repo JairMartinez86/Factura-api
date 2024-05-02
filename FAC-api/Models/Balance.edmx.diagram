@@ -57,6 +57,7 @@
         <EntityTypeShape EntityType="BalancesModel.RequisaAutorisaPermiso" Width="1.5" PointX="7" PointY="34.125" />
         <AssociationConnector Association="BalancesModel.FK_RequisaAutorisaPermiso_Usuarios" />
         <EntityTypeShape EntityType="BalancesModel.TipoDescuento" Width="1.5" PointX="20.375" PointY="14.75" />
+        <EntityTypeShape EntityType="BalancesModel.BonificacionExcluirLab" Width="1.5" PointX="20.375" PointY="17.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

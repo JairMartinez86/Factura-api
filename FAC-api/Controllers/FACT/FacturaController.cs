@@ -506,6 +506,7 @@ namespace FAC_api.Controllers.FACT
                     ConceptoPrecio cp = _Conexion.ConceptoPrecio.FirstOrDefault(f => f.IdConceptoPrecio == cl.IdConceptoPrecio);
                     List<Parametros> lstParametro = _Conexion.Parametros.ToList();
                     Usuarios U = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == User);
+                    Productos Produc = _Conexion.Productos.FirstOrDefault(f => f.Codigo == CodProducto);
                     string str_MonedaLocal = lstParametro[0].MonedaLocal;
           
 
@@ -662,6 +663,9 @@ namespace FAC_api.Controllers.FACT
                                                             }).ToList();
 
 
+                   
+
+                        
                     foreach (var b in qBonificacion.OrderBy(o => o.Desde))
                     {
                         int max = 9999;
@@ -675,6 +679,29 @@ namespace FAC_api.Controllers.FACT
 
                         x++;
                     }
+
+
+                    List<BonificacionExcluirLab> ExcluirBonnif = _Conexion.BonificacionExcluirLab.Where(w => w.CodProveedor == Produc.CodProveedorEscasan).ToList();
+
+                    if (ExcluirBonnif.Count > 0)
+                    {
+                        if (cp.Descripcion == "Publico")
+                        {
+                            if (ExcluirBonnif.FirstOrDefault(w => (bool)w.EsPublico) != null) qBonificacion.Clear();
+                        }
+
+
+                        if (cp.Descripcion == "Distribuidor")
+                        {
+                            if (ExcluirBonnif.FirstOrDefault(w => (bool)w.Esditribuidor) != null) qBonificacion.Clear();
+                        }
+
+                        if (cp.Descripcion != "Distribuidor" && cp.Descripcion != "Publico")
+                        {
+                            if (ExcluirBonnif.FirstOrDefault(w => (bool)w.EsEspecial) != null) qBonificacion.Clear();
+                        }
+                    }
+
 
 
 

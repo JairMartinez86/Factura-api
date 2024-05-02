@@ -147,6 +147,16 @@
           <Property Name="IdUsuarioInactiva" Type="int" />
           <Property Name="FechaInactivo" Type="datetime2" Precision="7" />
         </EntityType>
+        <EntityType Name="BonificacionExcluirLab">
+          <Key>
+            <PropertyRef Name="IdExcBonif" />
+          </Key>
+          <Property Name="IdExcBonif" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodProveedor" Type="nvarchar" MaxLength="50" />
+          <Property Name="EsPublico" Type="bit" />
+          <Property Name="Esditribuidor" Type="bit" />
+          <Property Name="EsEspecial" Type="bit" />
+        </EntityType>
         <EntityType Name="ConceptoPrecio">
           <Key>
             <PropertyRef Name="IdConceptoPrecio" />
@@ -1203,6 +1213,7 @@
           <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Vendedor" EntityType="Self.Vendedor" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Bonificaciones" EntityType="Self.Bonificaciones" Schema="FAC" store:Type="Tables" />
+          <EntitySet Name="BonificacionExcluirLab" EntityType="Self.BonificacionExcluirLab" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="ConceptoPrecio" EntityType="Self.ConceptoPrecio" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="Descuentos" EntityType="Self.Descuentos" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="FacturaVenta" EntityType="Self.FacturaVenta" Schema="FAC" store:Type="Tables" />
@@ -1644,6 +1655,7 @@
             <End Role="RequisaAutorisaPermiso" EntitySet="RequisaAutorisaPermiso" />
           </AssociationSet>
           <EntitySet Name="TipoDescuento" EntityType="BalancesModel.TipoDescuento" />
+          <EntitySet Name="BonificacionExcluirLab" EntityType="BalancesModel.BonificacionExcluirLab" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -2620,6 +2632,16 @@
           <Property Name="NoExpira" Type="Boolean" Nullable="false" />
           <Property Name="PorRango" Type="Boolean" Nullable="false" />
           <Property Name="Activo" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BonificacionExcluirLab">
+          <Key>
+            <PropertyRef Name="IdExcBonif" />
+          </Key>
+          <Property Name="IdExcBonif" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodProveedor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EsPublico" Type="Boolean" />
+          <Property Name="Esditribuidor" Type="Boolean" />
+          <Property Name="EsEspecial" Type="Boolean" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3620,6 +3642,17 @@
                 <ScalarProperty Name="IdConceptoPrecio" ColumnName="IdConceptoPrecio" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="IdTipoDesc" ColumnName="IdTipoDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BonificacionExcluirLab">
+            <EntityTypeMapping TypeName="BalancesModel.BonificacionExcluirLab">
+              <MappingFragment StoreEntitySet="BonificacionExcluirLab">
+                <ScalarProperty Name="EsEspecial" ColumnName="EsEspecial" />
+                <ScalarProperty Name="Esditribuidor" ColumnName="Esditribuidor" />
+                <ScalarProperty Name="EsPublico" ColumnName="EsPublico" />
+                <ScalarProperty Name="CodProveedor" ColumnName="CodProveedor" />
+                <ScalarProperty Name="IdExcBonif" ColumnName="IdExcBonif" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

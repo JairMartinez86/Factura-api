@@ -68,6 +68,7 @@ namespace FAC_api.Models
         public virtual DbSet<AccesoWeb> AccesoWeb { get; set; }
         public virtual DbSet<RequisaAutorisaPermiso> RequisaAutorisaPermiso { get; set; }
         public virtual DbSet<TipoDescuento> TipoDescuento { get; set; }
+        public virtual DbSet<BonificacionExcluirLab> BonificacionExcluirLab { get; set; }
     
         public virtual ObjectResult<sp_AnularFacturaVenta_Result> sp_AnularFacturaVenta(Nullable<int> p_IdFactura, string p_Serie, string p_NoFactura, Nullable<int> p_IdBodega, string p_MotivoAnulacion, Nullable<int> p_IdusuarioAnula)
         {
