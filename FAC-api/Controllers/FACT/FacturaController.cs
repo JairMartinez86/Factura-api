@@ -452,7 +452,7 @@ namespace FAC_api.Controllers.FACT
                                           ConImpuesto = (_T == null ? true : _T.Impuesto == "NO IVA" ? false : true),
                                           _q.IdUnidad,
                                           _q.NoParte,
-                                          Proveedor = u.Proveedor1,
+                                          Proveedor = u.Proveedor1.TrimStart().TrimEnd(),
                                           Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd(), " ", _q.NoParte.TrimStart().TrimEnd(), " ", u.Proveedor1.TrimStart().TrimEnd()),
                                           Bonificable = _q.AplicarBonificacion,
                                           Servicios = _q.Servicios == null ? false : _q.Servicios,
