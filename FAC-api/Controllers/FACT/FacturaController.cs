@@ -453,7 +453,7 @@ namespace FAC_api.Controllers.FACT
                                           _q.IdUnidad,
                                           _q.NoParte,
                                           Proveedor = u.Proveedor1,
-                                          Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
+                                          Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd(), " ", _q.NoParte.TrimStart().TrimEnd(), " ", u.Proveedor1.TrimStart().TrimEnd()),
                                           Bonificable = _q.AplicarBonificacion,
                                           Servicios = _q.Servicios == null ? false : _q.Servicios,
                                           FacturaNegativo = (_q.Servicios == null ? (_q.FacturaNegativo == null ? false : _q.FacturaNegativo) : ((bool)!_q.Servicios ? (_q.FacturaNegativo == null ? false : _q.FacturaNegativo) : false))
@@ -2978,7 +2978,7 @@ namespace FAC_api.Controllers.FACT
                                           Producto = _q.Producto.TrimStart().TrimEnd(),
                                           NoParte = _q.NoParte.TrimStart().TrimEnd(),
                                           Proveedor = u.Proveedor1.TrimStart().TrimEnd(),
-                                          Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
+                                          Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd(), " ", _q.NoParte.TrimStart().TrimEnd(), " ", u.Proveedor1.TrimStart().TrimEnd())
                                       }).ToList();
 
 
@@ -3307,7 +3307,7 @@ namespace FAC_api.Controllers.FACT
                                           Producto = _q.Producto.TrimStart().TrimEnd(),
                                           NoParte = _q.NoParte.TrimStart().TrimEnd(),
                                           Proveedor = u.Proveedor1.TrimStart().TrimEnd(),
-                                          Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
+                                          Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd(), " ", _q.NoParte.TrimStart().TrimEnd(), " ", u.Proveedor1.TrimStart().TrimEnd())
                                       }).ToList();
 
 
