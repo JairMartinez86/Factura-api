@@ -445,10 +445,11 @@ namespace FAC_api.Controllers.FACT
                                          {
                                              _q.IdProducto,
                                              Codigo = _q.Codigo.TrimStart().TrimEnd(),
-                                             Producto = _q.Producto.TrimStart().TrimEnd(),
-                                             _q.IdImpuesto,
+                                          Producto = string.Concat(_q.Producto.TrimStart().TrimEnd(), " ( ", (_q.NoParte == string.Empty ? string.Empty : string.Concat("-->  NoPart: ", _q.NoParte, " <--")), " ** Prov: ", u.Proveedor1, " ** )"),
+                                          _q.IdImpuesto,
                                              ConImpuesto = (_T == null ? true :  _T.Impuesto == "NO IVA"? false : true),
                                              _q.IdUnidad,
+                                             _q.NoParte,
                                              Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
                                              Bonificable = _q.AplicarBonificacion,
                                              Servicios = _q.Servicios == null ? false : _q.Servicios,
