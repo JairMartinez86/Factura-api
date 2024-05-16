@@ -3297,12 +3297,16 @@ namespace FAC_api.Controllers.FACT
                     List<Cls_Datos> lstDatos = new List<Cls_Datos>();
 
                     var qProductos = (from _q in _Conexion.Productos
+                                      join _p in _Conexion.Proveedor on _q.CodProveedorEscasan equals _p.Codigo into u_q_p
+                                      from u in u_q_p.DefaultIfEmpty()
                                       where _q.Activo == true
                                       select new
                                       {
                                           IdProducto = _q.IdProducto,
                                           Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                           Producto = _q.Producto.TrimStart().TrimEnd(),
+                                          NoParte = _q.NoParte.TrimStart().TrimEnd(),
+                                          Proveedor = u.Proveedor1.TrimStart().TrimEnd(),
                                           Key = string.Concat(_q.Codigo, " ", _q.Producto.TrimStart().TrimEnd()),
                                       }).ToList();
 
