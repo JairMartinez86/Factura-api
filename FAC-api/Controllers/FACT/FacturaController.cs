@@ -440,6 +440,8 @@ namespace FAC_api.Controllers.FACT
                     var qProductos = (from _q in _Conexion.Productos
                                       join _i in _Conexion.Impuestos on _q.IdImpuesto equals _i.IdImpuesto into _q_i
                                       from _T in _q_i.DefaultIfEmpty()
+                                      join _p in _Conexion.Proveedor on _q.CodProveedorEscasan equals _p.Codigo into u_q_p
+                                      from u in u_q_p.DefaultIfEmpty()
                                       where _q.Activo == true
                                       select new
                                          {

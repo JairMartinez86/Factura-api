@@ -122,6 +122,68 @@
           <Property Name="EsExportacion" Type="bit" />
           <Property Name="Activo" Type="bit" />
         </EntityType>
+        <EntityType Name="Proveedor">
+          <Key>
+            <PropertyRef Name="IdProveedor" />
+          </Key>
+          <Property Name="IdProveedor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoProveedor" Type="nvarchar" MaxLength="50" />
+          <Property Name="IdCategoria" Type="int" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Proveedor" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="NombreComercial" Type="nvarchar" MaxLength="1000" />
+          <Property Name="RUC" Type="nvarchar" MaxLength="100" />
+          <Property Name="Beneficiario" Type="nvarchar" MaxLength="2000" />
+          <Property Name="Nacionalidad" Type="int" />
+          <Property Name="IdPais" Type="int" />
+          <Property Name="Ciudad" Type="nvarchar" MaxLength="50" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="3350" />
+          <Property Name="MonedaID" Type="int" />
+          <Property Name="LimiteCredito" Type="int" Nullable="false" />
+          <Property Name="CongelarPago" Type="bit" Nullable="false" />
+          <Property Name="IR" Type="bit" Nullable="false" />
+          <Property Name="IMI" Type="bit" Nullable="false" />
+          <Property Name="IVA" Type="bit" Nullable="false" />
+          <Property Name="TextoCK" Type="nvarchar" MaxLength="300" />
+          <Property Name="Transito" Type="int" />
+          <Property Name="TiempoMinInv" Type="int" />
+          <Property Name="CUENTAXPAGAR" Type="nvarchar" MaxLength="50" />
+          <Property Name="CUENTAANTICIPO" Type="nvarchar" MaxLength="50" />
+          <Property Name="CUENTAVARIOS" Type="nvarchar" MaxLength="50" />
+          <Property Name="CUENTACONTADO" Type="nvarchar" MaxLength="50" />
+          <Property Name="CuentaBonificaciones" Type="nvarchar" MaxLength="50" />
+          <Property Name="CuentaIngresoDiferencial" Type="nvarchar" MaxLength="50" />
+          <Property Name="CuentaEgresoDiferencial" Type="nvarchar" MaxLength="50" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="100" />
+          <Property Name="Correo" Type="varchar" MaxLength="100" />
+          <Property Name="IDIR" Type="int" />
+          <Property Name="CREFCH" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="Tipo" Type="int" />
+          <Property Name="WebSite" Type="nvarchar" MaxLength="500" />
+          <Property Name="IdCiudad" Type="nvarchar" MaxLength="50" />
+          <Property Name="CONTACTO" Type="varchar" MaxLength="100" />
+          <Property Name="CARGO" Type="varchar" MaxLength="100" />
+          <Property Name="CONVENCIONALCONTACTO" Type="varchar" MaxLength="100" />
+          <Property Name="MOVILCONTACTO" Type="varchar" MaxLength="100" />
+          <Property Name="EMAILCONTACTO" Type="varchar" MaxLength="100" />
+          <Property Name="CIUDADCONTACTO" Type="varchar" MaxLength="100" />
+          <Property Name="PAISCONTACTO" Type="int" />
+          <Property Name="CONTACTO2" Type="nchar" MaxLength="100" />
+          <Property Name="CARGOCONTACTO2" Type="varchar" MaxLength="100" />
+          <Property Name="CONVENCIONALCONTACTO2" Type="varchar" MaxLength="100" />
+          <Property Name="MOVILCONTACTO2" Type="varchar" MaxLength="100" />
+          <Property Name="EMAILCONTACTO2" Type="varchar" MaxLength="100" />
+          <Property Name="CIUDADCONTACTO2" Type="varchar" MaxLength="100" />
+          <Property Name="PAISCONTACTO2" Type="int" />
+          <Property Name="CONTACTO3" Type="nchar" MaxLength="100" />
+          <Property Name="CARGOCONTACTO3" Type="varchar" MaxLength="100" />
+          <Property Name="CONVENCIONALCONTACTO3" Type="varchar" MaxLength="100" />
+          <Property Name="MOVILCONTACTO3" Type="varchar" MaxLength="100" />
+          <Property Name="EMAILCONTACTO3" Type="varchar" MaxLength="100" />
+          <Property Name="CIUDADCONTACTO3" Type="varchar" MaxLength="100" />
+          <Property Name="PAISCONTACTO3" Type="int" />
+        </EntityType>
         <EntityType Name="Bonificaciones">
           <Key>
             <PropertyRef Name="IdEscala" />
@@ -1212,6 +1274,7 @@
           <EntitySet Name="DireccionCliente" EntityType="Self.DireccionCliente" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Vendedor" EntityType="Self.Vendedor" Schema="CXC" store:Type="Tables" />
+          <EntitySet Name="Proveedor" EntityType="Self.Proveedor" Schema="CXP" store:Type="Tables" />
           <EntitySet Name="Bonificaciones" EntityType="Self.Bonificaciones" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="BonificacionExcluirLab" EntityType="Self.BonificacionExcluirLab" Schema="FAC" store:Type="Tables" />
           <EntitySet Name="ConceptoPrecio" EntityType="Self.ConceptoPrecio" Schema="FAC" store:Type="Tables" />
@@ -1656,6 +1719,7 @@
           </AssociationSet>
           <EntitySet Name="TipoDescuento" EntityType="BalancesModel.TipoDescuento" />
           <EntitySet Name="BonificacionExcluirLab" EntityType="BalancesModel.BonificacionExcluirLab" />
+          <EntitySet Name="Proveedor" EntityType="BalancesModel.Proveedor" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -2642,6 +2706,68 @@
           <Property Name="EsPublico" Type="Boolean" />
           <Property Name="Esditribuidor" Type="Boolean" />
           <Property Name="EsEspecial" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Proveedor">
+          <Key>
+            <PropertyRef Name="IdProveedor" />
+          </Key>
+          <Property Name="IdProveedor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipoProveedor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdCategoria" Type="Int32" Nullable="false" />
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Proveedor1" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="NombreComercial" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="RUC" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Beneficiario" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="Nacionalidad" Type="Int32" />
+          <Property Name="IdPais" Type="Int32" />
+          <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Direccion" Type="String" MaxLength="3350" FixedLength="false" Unicode="true" />
+          <Property Name="MonedaID" Type="Int32" />
+          <Property Name="LimiteCredito" Type="Int32" Nullable="false" />
+          <Property Name="CongelarPago" Type="Boolean" Nullable="false" />
+          <Property Name="IR" Type="Boolean" Nullable="false" />
+          <Property Name="IMI" Type="Boolean" Nullable="false" />
+          <Property Name="IVA" Type="Boolean" Nullable="false" />
+          <Property Name="TextoCK" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Transito" Type="Int32" />
+          <Property Name="TiempoMinInv" Type="Int32" />
+          <Property Name="CUENTAXPAGAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CUENTAANTICIPO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CUENTAVARIOS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CUENTACONTADO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CuentaBonificaciones" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CuentaIngresoDiferencial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CuentaEgresoDiferencial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IDIR" Type="Int32" />
+          <Property Name="CREFCH" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Tipo" Type="Int32" />
+          <Property Name="WebSite" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IdCiudad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CONTACTO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CARGO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CONVENCIONALCONTACTO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MOVILCONTACTO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EMAILCONTACTO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CIUDADCONTACTO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PAISCONTACTO" Type="Int32" />
+          <Property Name="CONTACTO2" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="CARGOCONTACTO2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CONVENCIONALCONTACTO2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MOVILCONTACTO2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EMAILCONTACTO2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CIUDADCONTACTO2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PAISCONTACTO2" Type="Int32" />
+          <Property Name="CONTACTO3" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="CARGOCONTACTO3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CONVENCIONALCONTACTO3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MOVILCONTACTO3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EMAILCONTACTO3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CIUDADCONTACTO3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PAISCONTACTO3" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3653,6 +3779,69 @@
                 <ScalarProperty Name="EsPublico" ColumnName="EsPublico" />
                 <ScalarProperty Name="CodProveedor" ColumnName="CodProveedor" />
                 <ScalarProperty Name="IdExcBonif" ColumnName="IdExcBonif" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proveedor">
+            <EntityTypeMapping TypeName="BalancesModel.Proveedor">
+              <MappingFragment StoreEntitySet="Proveedor">
+                <ScalarProperty Name="PAISCONTACTO3" ColumnName="PAISCONTACTO3" />
+                <ScalarProperty Name="CIUDADCONTACTO3" ColumnName="CIUDADCONTACTO3" />
+                <ScalarProperty Name="EMAILCONTACTO3" ColumnName="EMAILCONTACTO3" />
+                <ScalarProperty Name="MOVILCONTACTO3" ColumnName="MOVILCONTACTO3" />
+                <ScalarProperty Name="CONVENCIONALCONTACTO3" ColumnName="CONVENCIONALCONTACTO3" />
+                <ScalarProperty Name="CARGOCONTACTO3" ColumnName="CARGOCONTACTO3" />
+                <ScalarProperty Name="CONTACTO3" ColumnName="CONTACTO3" />
+                <ScalarProperty Name="PAISCONTACTO2" ColumnName="PAISCONTACTO2" />
+                <ScalarProperty Name="CIUDADCONTACTO2" ColumnName="CIUDADCONTACTO2" />
+                <ScalarProperty Name="EMAILCONTACTO2" ColumnName="EMAILCONTACTO2" />
+                <ScalarProperty Name="MOVILCONTACTO2" ColumnName="MOVILCONTACTO2" />
+                <ScalarProperty Name="CONVENCIONALCONTACTO2" ColumnName="CONVENCIONALCONTACTO2" />
+                <ScalarProperty Name="CARGOCONTACTO2" ColumnName="CARGOCONTACTO2" />
+                <ScalarProperty Name="CONTACTO2" ColumnName="CONTACTO2" />
+                <ScalarProperty Name="PAISCONTACTO" ColumnName="PAISCONTACTO" />
+                <ScalarProperty Name="CIUDADCONTACTO" ColumnName="CIUDADCONTACTO" />
+                <ScalarProperty Name="EMAILCONTACTO" ColumnName="EMAILCONTACTO" />
+                <ScalarProperty Name="MOVILCONTACTO" ColumnName="MOVILCONTACTO" />
+                <ScalarProperty Name="CONVENCIONALCONTACTO" ColumnName="CONVENCIONALCONTACTO" />
+                <ScalarProperty Name="CARGO" ColumnName="CARGO" />
+                <ScalarProperty Name="CONTACTO" ColumnName="CONTACTO" />
+                <ScalarProperty Name="IdCiudad" ColumnName="IdCiudad" />
+                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="CREFCH" ColumnName="CREFCH" />
+                <ScalarProperty Name="IDIR" ColumnName="IDIR" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="CuentaEgresoDiferencial" ColumnName="CuentaEgresoDiferencial" />
+                <ScalarProperty Name="CuentaIngresoDiferencial" ColumnName="CuentaIngresoDiferencial" />
+                <ScalarProperty Name="CuentaBonificaciones" ColumnName="CuentaBonificaciones" />
+                <ScalarProperty Name="CUENTACONTADO" ColumnName="CUENTACONTADO" />
+                <ScalarProperty Name="CUENTAVARIOS" ColumnName="CUENTAVARIOS" />
+                <ScalarProperty Name="CUENTAANTICIPO" ColumnName="CUENTAANTICIPO" />
+                <ScalarProperty Name="CUENTAXPAGAR" ColumnName="CUENTAXPAGAR" />
+                <ScalarProperty Name="TiempoMinInv" ColumnName="TiempoMinInv" />
+                <ScalarProperty Name="Transito" ColumnName="Transito" />
+                <ScalarProperty Name="TextoCK" ColumnName="TextoCK" />
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
+                <ScalarProperty Name="IMI" ColumnName="IMI" />
+                <ScalarProperty Name="IR" ColumnName="IR" />
+                <ScalarProperty Name="CongelarPago" ColumnName="CongelarPago" />
+                <ScalarProperty Name="LimiteCredito" ColumnName="LimiteCredito" />
+                <ScalarProperty Name="MonedaID" ColumnName="MonedaID" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="IdPais" ColumnName="IdPais" />
+                <ScalarProperty Name="Nacionalidad" ColumnName="Nacionalidad" />
+                <ScalarProperty Name="Beneficiario" ColumnName="Beneficiario" />
+                <ScalarProperty Name="RUC" ColumnName="RUC" />
+                <ScalarProperty Name="NombreComercial" ColumnName="NombreComercial" />
+                <ScalarProperty Name="Proveedor1" ColumnName="Proveedor" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="TipoProveedor" ColumnName="TipoProveedor" />
+                <ScalarProperty Name="IdProveedor" ColumnName="IdProveedor" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -449,6 +449,9 @@
     <Compile Include="Models\ProformaVenta.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Proveedor.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Requisa.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
