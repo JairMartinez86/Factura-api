@@ -493,6 +493,7 @@
           <Property Name="Anulado" Type="bit" Nullable="false" />
           <Property Name="BodegaSolicita" Type="nvarchar" MaxLength="12" Nullable="false" />
           <Property Name="OT" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Observaciones" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Requisa">
           <Key>
@@ -547,6 +548,15 @@
           <Property Name="Cantidad" Type="int" Nullable="false" />
           <Property Name="ControladoPorLote" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="TipoMov">
+          <Key>
+            <PropertyRef Name="IdTipoMov" />
+          </Key>
+          <Property Name="IdTipoMov" Type="int" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="3" />
+          <Property Name="TipoMov" Type="nvarchar" MaxLength="50" />
+          <Property Name="Tipo" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Bodegas">
           <Key>
             <PropertyRef Name="IdBodega" />
@@ -583,6 +593,22 @@
           <Property Name="BodSumConsignacion" Type="int" />
           <Property Name="CuentaInventario" Type="nvarchar" MaxLength="50" />
           <Property Name="ImpresoraFact" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="GrupoPresupuestarios">
+          <Key>
+            <PropertyRef Name="IdGrupoPresupuestario" />
+          </Key>
+          <Property Name="IdGrupoPresupuestario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GrupoPresupuestario" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="3" />
+        </EntityType>
+        <EntityType Name="Grupos">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdGrupo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="20" />
+          <Property Name="Grupo" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Impuestos">
           <Key>
@@ -663,6 +689,15 @@
           <Property Name="PrintManifiesto" Type="nvarchar" MaxLength="50" />
           <Property Name="Promotoria" Type="bit" />
         </EntityType>
+        <EntityType Name="SubGrupos">
+          <Key>
+            <PropertyRef Name="IdSubGrupo" />
+          </Key>
+          <Property Name="IdSubGrupo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdGrupo" Type="int" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="SubGrupo" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="AccesoWeb">
           <Key>
             <PropertyRef Name="IdAcceso" />
@@ -695,7 +730,7 @@
           <Property Name="CodUnion" Type="nvarchar" MaxLength="50" />
           <Property Name="SerieUnion" Type="nvarchar" MaxLength="50" />
           <Property Name="EsFact" Type="bit" Nullable="false" />
-          <Property Name="EsColector" Type="bit" />
+          <Property Name="EsColector" Type="bit" Nullable="false" />
           <Property Name="EsPedido" Type="bit" Nullable="false" />
           <Property Name="EsCaja" Type="bit" Nullable="false" />
           <Property Name="EsRequisa" Type="bit" Nullable="false" />
@@ -1293,9 +1328,13 @@
           <EntitySet Name="Requisa" EntityType="Self.Requisa" Schema="INV" store:Type="Tables" />
           <EntitySet Name="RequisaAutorisaPermiso" EntityType="Self.RequisaAutorisaPermiso" Schema="INV" store:Type="Tables" />
           <EntitySet Name="RequisaDetalle" EntityType="Self.RequisaDetalle" Schema="INV" store:Type="Tables" />
+          <EntitySet Name="TipoMov" EntityType="Self.TipoMov" Schema="INV" store:Type="Tables" />
           <EntitySet Name="Bodegas" EntityType="Self.Bodegas" Schema="INVFAC" store:Type="Tables" />
+          <EntitySet Name="GrupoPresupuestarios" EntityType="Self.GrupoPresupuestarios" Schema="INVFAC" store:Type="Tables" />
+          <EntitySet Name="Grupos" EntityType="Self.Grupos" Schema="INVFAC" store:Type="Tables" />
           <EntitySet Name="Impuestos" EntityType="Self.Impuestos" Schema="INVFAC" store:Type="Tables" />
           <EntitySet Name="Productos" EntityType="Self.Productos" Schema="INVFAC" store:Type="Tables" />
+          <EntitySet Name="SubGrupos" EntityType="Self.SubGrupos" Schema="INVFAC" store:Type="Tables" />
           <EntitySet Name="AccesoWeb" EntityType="Self.AccesoWeb" Schema="SIS" store:Type="Tables" />
           <EntitySet Name="BodegaLaboratorioKardex" EntityType="Self.BodegaLaboratorioKardex" Schema="SIS" store:Type="Tables" />
           <EntitySet Name="BodegaSerie" EntityType="Self.BodegaSerie" Schema="SIS" store:Type="Tables" />
@@ -1720,6 +1759,10 @@
           <EntitySet Name="TipoDescuento" EntityType="BalancesModel.TipoDescuento" />
           <EntitySet Name="BonificacionExcluirLab" EntityType="BalancesModel.BonificacionExcluirLab" />
           <EntitySet Name="Proveedor" EntityType="BalancesModel.Proveedor" />
+          <EntitySet Name="GrupoPresupuestarios" EntityType="BalancesModel.GrupoPresupuestarios" />
+          <EntitySet Name="Grupos" EntityType="BalancesModel.Grupos" />
+          <EntitySet Name="TipoMov" EntityType="BalancesModel.TipoMov" />
+          <EntitySet Name="SubGrupos" EntityType="BalancesModel.SubGrupos" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -1731,7 +1774,7 @@
           <Property Name="CodUnion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SerieUnion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EsFact" Type="Boolean" Nullable="false" />
-          <Property Name="EsColector" Type="Boolean" />
+          <Property Name="EsColector" Type="Boolean" Nullable="false" />
           <Property Name="EsPedido" Type="Boolean" Nullable="false" />
           <Property Name="EsCaja" Type="Boolean" Nullable="false" />
           <Property Name="EsRequisa" Type="Boolean" Nullable="false" />
@@ -1946,6 +1989,7 @@
           <Property Name="Anulado" Type="Boolean" Nullable="false" />
           <Property Name="BodegaSolicita" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
           <Property Name="OT" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Bonificaciones">
           <Key>
@@ -2769,6 +2813,40 @@
           <Property Name="CIUDADCONTACTO3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="PAISCONTACTO3" Type="Int32" />
         </EntityType>
+        <EntityType Name="GrupoPresupuestarios">
+          <Key>
+            <PropertyRef Name="IdGrupoPresupuestario" />
+          </Key>
+          <Property Name="IdGrupoPresupuestario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GrupoPresupuestario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Codigo" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Grupos">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdGrupo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Codigo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Grupo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TipoMov">
+          <Key>
+            <PropertyRef Name="IdTipoMov" />
+          </Key>
+          <Property Name="IdTipoMov" Type="Int32" Nullable="false" />
+          <Property Name="Codigo" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="TipoMov1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Tipo" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubGrupos">
+          <Key>
+            <PropertyRef Name="IdSubGrupo" />
+          </Key>
+          <Property Name="IdSubGrupo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdGrupo" Type="Int32" />
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SubGrupo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3082,6 +3160,7 @@
           <EntitySetMapping Name="Kardex">
             <EntityTypeMapping TypeName="BalancesModel.Kardex">
               <MappingFragment StoreEntitySet="Kardex">
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
                 <ScalarProperty Name="OT" ColumnName="OT" />
                 <ScalarProperty Name="BodegaSolicita" ColumnName="BodegaSolicita" />
                 <ScalarProperty Name="Anulado" ColumnName="Anulado" />
@@ -3842,6 +3921,44 @@
                 <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
                 <ScalarProperty Name="TipoProveedor" ColumnName="TipoProveedor" />
                 <ScalarProperty Name="IdProveedor" ColumnName="IdProveedor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GrupoPresupuestarios">
+            <EntityTypeMapping TypeName="BalancesModel.GrupoPresupuestarios">
+              <MappingFragment StoreEntitySet="GrupoPresupuestarios">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="GrupoPresupuestario" ColumnName="GrupoPresupuestario" />
+                <ScalarProperty Name="IdGrupoPresupuestario" ColumnName="IdGrupoPresupuestario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Grupos">
+            <EntityTypeMapping TypeName="BalancesModel.Grupos">
+              <MappingFragment StoreEntitySet="Grupos">
+                <ScalarProperty Name="Grupo" ColumnName="Grupo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoMov">
+            <EntityTypeMapping TypeName="BalancesModel.TipoMov">
+              <MappingFragment StoreEntitySet="TipoMov">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="TipoMov1" ColumnName="TipoMov" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="IdTipoMov" ColumnName="IdTipoMov" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubGrupos">
+            <EntityTypeMapping TypeName="BalancesModel.SubGrupos">
+              <MappingFragment StoreEntitySet="SubGrupos">
+                <ScalarProperty Name="SubGrupo" ColumnName="SubGrupo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+                <ScalarProperty Name="IdSubGrupo" ColumnName="IdSubGrupo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -198,7 +198,8 @@ namespace FAC_api.Controllers.FACT
 
 
                     var qBodegas = (from _q in _Conexion.Bodegas
-                                    //where ub.Contains(_q.Codigo)
+                                        //where ub.Contains(_q.Codigo)
+                                    orderby _q.Codigo
                                     select new Cls_Bodega()
                                      {
                                         IdBodega = _q.IdBodega,

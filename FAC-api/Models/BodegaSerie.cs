@@ -20,7 +20,7 @@ namespace FAC_api.Models
         public string CodUnion { get; set; }
         public string SerieUnion { get; set; }
         public bool EsFact { get; set; }
-        public Nullable<bool> EsColector { get; set; }
+        public bool EsColector { get; set; }
         public bool EsPedido { get; set; }
         public bool EsCaja { get; set; }
         public bool EsRequisa { get; set; }

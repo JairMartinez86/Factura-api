@@ -70,6 +70,10 @@ namespace FAC_api.Models
         public virtual DbSet<TipoDescuento> TipoDescuento { get; set; }
         public virtual DbSet<BonificacionExcluirLab> BonificacionExcluirLab { get; set; }
         public virtual DbSet<Proveedor> Proveedor { get; set; }
+        public virtual DbSet<GrupoPresupuestarios> GrupoPresupuestarios { get; set; }
+        public virtual DbSet<Grupos> Grupos { get; set; }
+        public virtual DbSet<TipoMov> TipoMov { get; set; }
+        public virtual DbSet<SubGrupos> SubGrupos { get; set; }
     
         public virtual ObjectResult<sp_AnularFacturaVenta_Result> sp_AnularFacturaVenta(Nullable<int> p_IdFactura, string p_Serie, string p_NoFactura, Nullable<int> p_IdBodega, string p_MotivoAnulacion, Nullable<int> p_IdusuarioAnula)
         {

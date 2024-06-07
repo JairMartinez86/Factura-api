@@ -37,5 +37,6 @@ namespace FAC_api.Models
         public bool Anulado { get; set; }
         public string BodegaSolicita { get; set; }
         public string OT { get; set; }
+        public string Observaciones { get; set; }
     }
 }

@@ -61,7 +61,10 @@
     <Reference Include="DevExpress.RichEdit.v21.2.Core, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.RichEdit.v21.2.Export, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Sparkline.v21.2.Core, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v21.2, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraBars.v21.2, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraCharts.v21.2, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v21.2, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraGauges.v21.2.Core, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraReports.v21.2, Version=21.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -318,6 +321,7 @@
     <Compile Include="Class\Cls_ConexionAPI_BD.cs" />
     <Compile Include="Class\Cls_Datos.cs" />
     <Compile Include="Class\Cls_Mensaje.cs" />
+    <Compile Include="Class\CXP\Cls_Proveedor.cs" />
     <Compile Include="Class\FACT\Cls_Bodega.cs" />
     <Compile Include="Class\FACT\Cls_Bonificacion.cs" />
     <Compile Include="Class\FACT\Cls_Descuento.cs" />
@@ -329,10 +333,15 @@
     <Compile Include="Class\INV\Cls_LiberarBonif.cs" />
     <Compile Include="Class\INV\Cls_LiberarExistencia.cs" />
     <Compile Include="Class\INV\Cls_LiberarPrecios.cs" />
+    <Compile Include="Class\INV\Cls_ParamReporte.cs" />
     <Compile Include="Class\INV\Cls_RequisaAutorisaPermiso.cs" />
     <Compile Include="Class\INV\ExistenciaUbicacion.cs" />
+    <Compile Include="Class\PRE\Cls_Grupo.cs" />
+    <Compile Include="Class\PRE\Cls_GrupoPresupuesto.cs" />
+    <Compile Include="Class\PRE\Cls_SubGrupo.cs" />
     <Compile Include="Class\SIS\Cls_Letras.cs" />
     <Compile Include="Class\SIS\Cls_ListToDataTableConverter.cs" />
+    <Compile Include="Controllers\INV\ReporteInvController.cs" />
     <Compile Include="Controllers\INV\RequisaController.cs" />
     <Compile Include="Controllers\SIS\ServerController.cs" />
     <Compile Include="Controllers\FACT\FacturaController.cs" />
@@ -405,6 +414,12 @@
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FormaPago.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GrupoPresupuestarios.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Grupos.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Impuestos.cs">
@@ -488,7 +503,13 @@
     <Compile Include="Models\sp_GrabarProforma_Web_Result.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SubGrupos.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TipoDescuento.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TipoMov.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Usuarios.cs">
@@ -510,6 +531,22 @@
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Reporte\INV\DsetInventario.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DsetInventario.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reporte\INV\xrDetTransaccDiarias.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrDetTransaccDiarias.Designer.cs">
+      <DependentUpon>xrDetTransaccDiarias.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -576,6 +613,21 @@
     <Content Include="Models\Balance.edmx.diagram">
       <DependentUpon>Balance.edmx</DependentUpon>
     </Content>
+    <Content Include="Reporte\INV\DsetInventario.xsc">
+      <DependentUpon>DsetInventario.xsd</DependentUpon>
+    </Content>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reporte\INV\DsetInventario.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DsetInventario.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reporte\INV\DsetInventario.xss">
+      <DependentUpon>DsetInventario.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -602,6 +654,7 @@
     <Folder Include="Reporte\FAC\" />
     <Folder Include="Views\Default\" />
     <Folder Include="Views\Factura\" />
+    <Folder Include="Views\ReporteInv\" />
     <Folder Include="Views\Requisa\" />
     <Folder Include="Views\Server\" />
   </ItemGroup>
@@ -681,6 +734,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Reporte\INV\xrDetTransaccDiarias.resx">
+      <DependentUpon>xrDetTransaccDiarias.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
