@@ -201,14 +201,14 @@
             // 
             // TopMargin
             // 
-            this.TopMargin.HeightF = 15.83333F;
+            this.TopMargin.HeightF = 16F;
             this.TopMargin.Name = "TopMargin";
             this.TopMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.TopMargin.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
             // 
             // BottomMargin
             // 
-            this.BottomMargin.HeightF = 8.333332F;
+            this.BottomMargin.HeightF = 8F;
             this.BottomMargin.Name = "BottomMargin";
             this.BottomMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.BottomMargin.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
@@ -224,7 +224,7 @@
             // 
             // xrTable1
             // 
-            this.xrTable1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 194.1667F);
+            this.xrTable1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 109.7917F);
             this.xrTable1.Name = "xrTable1";
             this.xrTable1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 96F);
             this.xrTable1.Rows.AddRange(new DevExpress.XtraReports.UI.XRTableRow[] {
@@ -332,11 +332,11 @@
             // xrLabel1
             // 
             this.xrLabel1.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Bold);
-            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 22.5F);
+            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 22.49999F);
             this.xrLabel1.Multiline = true;
             this.xrLabel1.Name = "xrLabel1";
             this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel1.SizeF = new System.Drawing.SizeF(814.9999F, 23F);
+            this.xrLabel1.SizeF = new System.Drawing.SizeF(736.2499F, 23F);
             this.xrLabel1.StylePriority.UseFont = false;
             this.xrLabel1.StylePriority.UseTextAlignment = false;
             this.xrLabel1.Text = "Escalante Sanchez Alvarado, S.A";
@@ -349,12 +349,12 @@
             // PageHeader
             // 
             this.PageHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
-            this.xrTable1,
-            this.xrLabel3,
             this.xrLabel2,
             this.xrLabel1,
+            this.xrTable1,
+            this.xrLabel3,
             this.xrPageInfo2});
-            this.PageHeader.HeightF = 219.1667F;
+            this.PageHeader.HeightF = 145F;
             this.PageHeader.Name = "PageHeader";
             // 
             // xrLabel3
@@ -375,11 +375,11 @@
             // xrLabel2
             // 
             this.xrLabel2.Font = new System.Drawing.Font("Times New Roman", 12F);
-            this.xrLabel2.LocationFloat = new DevExpress.Utils.PointFloat(6.103516E-05F, 45.5F);
+            this.xrLabel2.LocationFloat = new DevExpress.Utils.PointFloat(6.357829E-05F, 45.50001F);
             this.xrLabel2.Multiline = true;
             this.xrLabel2.Name = "xrLabel2";
             this.xrLabel2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel2.SizeF = new System.Drawing.SizeF(814.9999F, 23F);
+            this.xrLabel2.SizeF = new System.Drawing.SizeF(736.2499F, 23F);
             this.xrLabel2.StylePriority.UseFont = false;
             this.xrLabel2.StylePriority.UseTextAlignment = false;
             this.xrLabel2.Text = "Detalle Transacciones Diarias de Inventarios";
@@ -387,11 +387,11 @@
             // 
             // xrPageInfo2
             // 
-            this.xrPageInfo2.LocationFloat = new DevExpress.Utils.PointFloat(736.25F, 22.5F);
+            this.xrPageInfo2.LocationFloat = new DevExpress.Utils.PointFloat(736.2499F, 22.49999F);
             this.xrPageInfo2.Name = "xrPageInfo2";
             this.xrPageInfo2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrPageInfo2.PageInfo = DevExpress.XtraPrinting.PageInfo.DateTime;
-            this.xrPageInfo2.SizeF = new System.Drawing.SizeF(78.75003F, 35.50001F);
+            this.xrPageInfo2.SizeF = new System.Drawing.SizeF(78.75F, 45.99999F);
             this.xrPageInfo2.StylePriority.UseTextAlignment = false;
             this.xrPageInfo2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
             this.xrPageInfo2.TextFormatString = "{0:dd-MMM-yyyy hh:mm tt}";
@@ -649,7 +649,7 @@
             this.PageFooter.HeightF = 59.25637F;
             this.PageFooter.Name = "PageFooter";
             // 
-            // xrDetTransaccDiarias
+            // xrDetTransaccDiariasPDF
             // 
             this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
             this.Detail,
