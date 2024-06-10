@@ -499,7 +499,7 @@ namespace FAC_api.Reporte.INV {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RPT_DetTransaccDiariasRow AddRPT_DetTransaccDiariasRow(string NoDocumento, string TipoDocumento, string TipoMov, System.DateTime Fecha, string CodProducto, string CodBodega, string Producto, decimal Cantidad, decimal Costo, decimal Entrada, decimal Salida, int Orden, string Bodega, string Observacion, bool Anulado) {
+            public RPT_DetTransaccDiariasRow AddRPT_DetTransaccDiariasRow(string NoDocumento, string TipoDocumento, string TipoMov, System.DateTime Fecha, string CodProducto, string CodBodega, string Producto, decimal Cantidad, decimal Costo, decimal Entrada, decimal Salida, string Orden, string Bodega, string Observacion, bool Anulado) {
                 RPT_DetTransaccDiariasRow rowRPT_DetTransaccDiariasRow = ((RPT_DetTransaccDiariasRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         NoDocumento,
@@ -581,7 +581,7 @@ namespace FAC_api.Reporte.INV {
                 base.Columns.Add(this.columnEntrada);
                 this.columnSalida = new global::System.Data.DataColumn("Salida", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSalida);
-                this.columnOrden = new global::System.Data.DataColumn("Orden", typeof(int), null, global::System.Data.MappingType.Element);
+                this.columnOrden = new global::System.Data.DataColumn("Orden", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnOrden);
                 this.columnBodega = new global::System.Data.DataColumn("Bodega", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBodega);
@@ -921,10 +921,10 @@ namespace FAC_api.Reporte.INV {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public int Orden {
+            public string Orden {
                 get {
                     try {
-                        return ((int)(this[this.tableRPT_DetTransaccDiarias.OrdenColumn]));
+                        return ((string)(this[this.tableRPT_DetTransaccDiarias.OrdenColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("El valor de la columna \'Orden\' de la tabla \'RPT_DetTransaccDiarias\' es DBNull.", e);
