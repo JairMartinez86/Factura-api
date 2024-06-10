@@ -255,7 +255,7 @@ namespace FAC_api.Controllers.INV
 
                             if (d.Param[0] == null) d.Param[0] = string.Empty;
                             if (d.Param[1] == null) d.Param[1] = string.Empty;
-                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+                            if (d.Param[2] == null) d.Param[2] = "TODAS";
                             if (d.Param[3] == null) d.Param[3] = string.Empty;
 
                             RPT_DetTransaccDiariasTableAdapter adpTransaccInv = new RPT_DetTransaccDiariasTableAdapter();
