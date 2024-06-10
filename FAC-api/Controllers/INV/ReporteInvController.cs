@@ -301,6 +301,8 @@ namespace FAC_api.Controllers.INV
                                 workbook.BeginUpdate();
                                 
                                 CellRange range = worksheet["A6:L6"];
+                                worksheet["A6:L6"].Style.Font.Bold = true;
+                                //workbook.Worksheets[0].Range.Parse("K8:M11").Style.Font.Color = Color.Red;
                                 worksheet.AutoFilter.Apply(range);
                                 workbook.EndUpdate();
 
