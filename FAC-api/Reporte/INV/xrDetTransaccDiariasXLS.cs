@@ -6,9 +6,9 @@ using System.Drawing;
 
 namespace FAC_api.Reporte.INV
 {
-    public partial class xrDetTransaccDiarias : DevExpress.XtraReports.UI.XtraReport
+    public partial class xrDetTransaccDiariasXLS : DevExpress.XtraReports.UI.XtraReport
     {
-        public xrDetTransaccDiarias()
+        public xrDetTransaccDiariasXLS()
         {
             InitializeComponent();
         }

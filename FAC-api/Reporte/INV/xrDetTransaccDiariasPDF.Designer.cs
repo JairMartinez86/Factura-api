@@ -1,6 +1,6 @@
 ﻿namespace FAC_api.Reporte.INV
 {
-    partial class xrDetTransaccDiarias
+    partial class xrDetTransaccDiariasPDF
     {
         /// <summary>
         /// Required designer variable.

@@ -15,6 +15,10 @@ using System.Web.Http;
 using System.Web.Mvc;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
+using DevExpress.Spreadsheet;
+using DevExpress.XtraSpreadsheet;
+using System.Drawing;
+using Azure;
 
 namespace FAC_api.Controllers.INV
 {
@@ -254,23 +258,65 @@ namespace FAC_api.Controllers.INV
                             if (d.Param[2] == null) d.Param[2] = string.Empty;
                             if (d.Param[3] == null) d.Param[3] = string.Empty;
 
-
-
-                            xrDetTransaccDiarias xrpTransaccInv = new xrDetTransaccDiarias();
                             RPT_DetTransaccDiariasTableAdapter adpTransaccInv = new RPT_DetTransaccDiariasTableAdapter();
                             adpTransaccInv.Fill(DsetReporte.RPT_DetTransaccDiarias, d.Param[0].ToString(), d.Param[1].ToString(), d.Param[2].ToString(), d.Param[3].ToString(), Convert.ToDateTime(d.Param[4]), Convert.ToDateTime(d.Param[5]));
-                            xrpTransaccInv.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[4]);
-                            xrpTransaccInv.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[5]);
-                            xrpTransaccInv.DataSource = DsetReporte;
+
+                            if (!d.Exportar)
+                            {
+                                xrDetTransaccDiariasPDF xrpTransaccInvPDF = new xrDetTransaccDiariasPDF();
+                                xrpTransaccInvPDF.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[4]);
+                                xrpTransaccInvPDF.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[5]);
+                                xrpTransaccInvPDF.DataSource = DsetReporte;
+                                xrpTransaccInvPDF.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
 
 
-                            xrpTransaccInv.ShowPrintMarginsWarning = false;
-                            xrpTransaccInv.ExportToPdf(stream, null);
+                                xrpTransaccInvPDF.ShowPrintMarginsWarning = false;
+                                xrpTransaccInvPDF.ExportToPdf(stream, null);
 
-                             stream.Seek(0, SeekOrigin.Begin);
+                                stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+                            }
+                            else
+                            {
+                                xrDetTransaccDiariasXLS xrpTransaccInvXLS = new xrDetTransaccDiariasXLS();
+                                xrpTransaccInvXLS.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[4]);
+                                xrpTransaccInvXLS.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[5]);
+                                xrpTransaccInvXLS.DataSource = DsetReporte;
+                                xrpTransaccInvXLS.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
 
-                             DatosReporte.d = stream.ToArray();
-                             DatosReporte.Nombre = d.TipoReporte;
+                                xrpTransaccInvXLS.ShowPrintMarginsWarning = false;
+                                xrpTransaccInvXLS.ExportToXlsx(stream, null);
+
+                                stream.Seek(0, SeekOrigin.Begin);
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Transacciones Diarias";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                                workbook.BeginUpdate();
+                                
+                                CellRange range = worksheet["A6:L6"];
+                                worksheet.AutoFilter.Apply(range);
+                                workbook.EndUpdate();
+
+                                stream = new MemoryStream();
+                                
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+                            }
+
+
+
+
+
+                            
+                             
                              break;
 
                          case "2":
