@@ -46,7 +46,6 @@
             this.TopMargin = new DevExpress.XtraReports.UI.TopMarginBand();
             this.BottomMargin = new DevExpress.XtraReports.UI.BottomMarginBand();
             this.dsetInventario1 = new FAC_api.Reporte.INV.DsetInventario();
-            this.rPT_DetTransaccDiariasTableAdapter = new FAC_api.Reporte.INV.DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter();
             this.xrTable1 = new DevExpress.XtraReports.UI.XRTable();
             this.xrTableRow1 = new DevExpress.XtraReports.UI.XRTableRow();
             this.xrTableCell1 = new DevExpress.XtraReports.UI.XRTableCell();
@@ -59,8 +58,8 @@
             this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             this.xtraTabbedMdiManager1 = new DevExpress.XtraTabbedMdi.XtraTabbedMdiManager(this.components);
             this.PageHeader = new DevExpress.XtraReports.UI.PageHeaderBand();
-            this.xrLabel3 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel2 = new DevExpress.XtraReports.UI.XRLabel();
+            this.xrLabel3 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrPageInfo2 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.P_Fecha1 = new DevExpress.XtraReports.Parameters.Parameter();
             this.P_Fecha2 = new DevExpress.XtraReports.Parameters.Parameter();
@@ -218,10 +217,6 @@
             this.dsetInventario1.DataSetName = "DsetInventario";
             this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // rPT_DetTransaccDiariasTableAdapter
-            // 
-            this.rPT_DetTransaccDiariasTableAdapter.ClearBeforeFill = true;
-            // 
             // xrTable1
             // 
             this.xrTable1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 109.7917F);
@@ -357,6 +352,19 @@
             this.PageHeader.HeightF = 145F;
             this.PageHeader.Name = "PageHeader";
             // 
+            // xrLabel2
+            // 
+            this.xrLabel2.Font = new System.Drawing.Font("Times New Roman", 12F);
+            this.xrLabel2.LocationFloat = new DevExpress.Utils.PointFloat(6.357829E-05F, 45.50001F);
+            this.xrLabel2.Multiline = true;
+            this.xrLabel2.Name = "xrLabel2";
+            this.xrLabel2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.xrLabel2.SizeF = new System.Drawing.SizeF(736.2499F, 23F);
+            this.xrLabel2.StylePriority.UseFont = false;
+            this.xrLabel2.StylePriority.UseTextAlignment = false;
+            this.xrLabel2.Text = "Detalle Transacciones Diarias de Inventarios";
+            this.xrLabel2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
+            // 
             // xrLabel3
             // 
             this.xrLabel3.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
@@ -371,19 +379,6 @@
             this.xrLabel3.StylePriority.UseFont = false;
             this.xrLabel3.StylePriority.UseTextAlignment = false;
             this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
-            // 
-            // xrLabel2
-            // 
-            this.xrLabel2.Font = new System.Drawing.Font("Times New Roman", 12F);
-            this.xrLabel2.LocationFloat = new DevExpress.Utils.PointFloat(6.357829E-05F, 45.50001F);
-            this.xrLabel2.Multiline = true;
-            this.xrLabel2.Name = "xrLabel2";
-            this.xrLabel2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel2.SizeF = new System.Drawing.SizeF(736.2499F, 23F);
-            this.xrLabel2.StylePriority.UseFont = false;
-            this.xrLabel2.StylePriority.UseTextAlignment = false;
-            this.xrLabel2.Text = "Detalle Transacciones Diarias de Inventarios";
-            this.xrLabel2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
             // 
             // xrPageInfo2
             // 
@@ -663,7 +658,6 @@
             this.PageFooter});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
             this.dsetInventario1});
-            this.DataAdapter = this.rPT_DetTransaccDiariasTableAdapter;
             this.DataMember = "RPT_DetTransaccDiarias";
             this.DataSource = this.dsetInventario1;
             this.Margins = new System.Drawing.Printing.Margins(21, 14, 16, 8);
@@ -687,7 +681,6 @@
         private DevExpress.XtraReports.UI.TopMarginBand TopMargin;
         private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
         private DsetInventario dsetInventario1;
-        private DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter rPT_DetTransaccDiariasTableAdapter;
         private DevExpress.XtraReports.UI.XRTable xrTable1;
         private DevExpress.XtraReports.UI.XRTableRow xrTableRow1;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell1;

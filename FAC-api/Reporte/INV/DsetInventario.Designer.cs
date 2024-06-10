@@ -595,6 +595,7 @@ namespace FAC_api.Reporte.INV {
                 this.columnCodProducto.MaxLength = 50;
                 this.columnCodBodega.MaxLength = 50;
                 this.columnProducto.MaxLength = 2147483647;
+                this.columnOrden.MaxLength = 50;
                 this.columnBodega.MaxLength = 100;
                 this.columnObservacion.MaxLength = 2147483647;
             }
