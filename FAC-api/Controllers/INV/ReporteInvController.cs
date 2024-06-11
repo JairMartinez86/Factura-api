@@ -338,14 +338,12 @@ namespace FAC_api.Controllers.INV
                             if (!d.Exportar)
                             {
                                 xrpTransaccProc.ExportToPdf(stream, null);
-                                stream.Seek(0, SeekOrigin.Begin);
+                  
                             }
                             else
                             {
                                 xrpTransaccProc.ExportToXlsx(stream, null);
-                                stream.Seek(0, SeekOrigin.Begin);
-
-
+             
 
                                 Workbook workbook = new Workbook();
 
@@ -405,9 +403,7 @@ namespace FAC_api.Controllers.INV
                             else
                             {
                                 xrpRevConsecutivo.ExportToXlsx(stream, null);
-                                stream.Seek(0, SeekOrigin.Begin);
-
-
+              
 
                                 Workbook workbook = new Workbook();
 
@@ -465,13 +461,12 @@ namespace FAC_api.Controllers.INV
                             if (!d.Exportar)
                             {
                                 xrpTransInv.ExportToPdf(stream, null);
-                                stream.Seek(0, SeekOrigin.Begin);
+
                             }
                             else
                             {
                                 xrpTransInv.ExportToXlsx(stream, null);
-                                stream.Seek(0, SeekOrigin.Begin);
-
+                                
 
 
                                 Workbook workbook = new Workbook();
@@ -499,14 +494,70 @@ namespace FAC_api.Controllers.INV
 
 
 
-
                             stream.Seek(0, SeekOrigin.Begin);
                             DatosReporte.d = stream.ToArray();
                             DatosReporte.Nombre = d.TipoReporte;
 
                             break;
-                         case "6":
-                             break;
+                         case "Transacciones de Inventario Resumen":
+                            if (d.Param[0] == null) d.Param[0] = string.Empty;
+                            if (d.Param[1] == null) d.Param[1] = string.Empty;
+
+
+                            RPT_TransaccionesInventarioResumenTableAdapter adpRevTransInvResumen = new RPT_TransaccionesInventarioResumenTableAdapter();
+                            adpRevTransInvResumen.Fill(DsetReporte.RPT_TransaccionesInventarioResumen, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]));
+
+                            xrTransaccionInvResumen xrpTransInvResumen = new xrTransaccionInvResumen();
+                            xrpTransInvResumen.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrpTransInvResumen.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                            xrpTransInvResumen.DataSource = DsetReporte;
+                            xrpTransInvResumen.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
+
+                            xrpTransInvResumen.ShowPrintMarginsWarning = false;
+
+
+
+                            if (!d.Exportar)
+                            {
+                                xrpTransInvResumen.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpTransInvResumen.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Resumen";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                                workbook.BeginUpdate();
+
+                                CellRange range = worksheet["A6:H6"];
+                                worksheet["A6:H6"].Style.Font.Bold = true;
+                                worksheet.AutoFilter.Apply(range);
+
+                                workbook.EndUpdate();
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+
+                            break;
                          case "7":
                              break;
                      }
