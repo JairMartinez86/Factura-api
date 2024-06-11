@@ -380,11 +380,66 @@ namespace FAC_api.Controllers.INV
 
                             break;
 
-                         case "4":
+                         case "Control de Consecutividad":
+
+                            if (d.Param[0] == null) d.Param[0] = string.Empty;
+                            if (d.Param[1] == null) d.Param[1] = string.Empty;
+                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+
+                            RPT_DetTRevisionConsecutivoTableAdapter adpRevConsecutivo = new RPT_DetTRevisionConsecutivoTableAdapter();
+                            adpRevConsecutivo.Fill(DsetReporte.RPT_DetTRevisionConsecutivo, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), d.Param[2].ToString());
+
+                            xrInvRevConsecutivo xrpRevConsecutivo = new xrInvRevConsecutivo();
+                            xrpRevConsecutivo.DataSource = DsetReporte;
+                            xrpRevConsecutivo.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
+
+                            xrpRevConsecutivo.ShowPrintMarginsWarning = false;
 
 
 
-                             break;
+                            if (!d.Exportar)
+                            {
+                                xrpRevConsecutivo.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpRevConsecutivo.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Control de Consecutividad";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                                workbook.BeginUpdate();
+
+                                CellRange range = worksheet["A5:F5"];
+                                worksheet["A6:F6"].Style.Font.Bold = true;
+                                worksheet.AutoFilter.Apply(range);
+                                workbook.EndUpdate();
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+
+
+                            stream.Seek(0, SeekOrigin.Begin);
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+
+                            break;
 
 
                          case "5":

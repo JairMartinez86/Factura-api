@@ -624,6 +624,12 @@
     <Compile Include="Reporte\INV\xrDetTransaccDiariasXLS.Designer.cs">
       <DependentUpon>xrDetTransaccDiariasXLS.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrInvRevConsecutivo.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrInvRevConsecutivo.Designer.cs">
+      <DependentUpon>xrInvRevConsecutivo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrTransaccionesEnProceso.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -823,6 +829,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrDetTransaccDiariasXLS.resx">
       <DependentUpon>xrDetTransaccDiariasXLS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrInvRevConsecutivo.resx">
+      <DependentUpon>xrInvRevConsecutivo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrTransaccionesEnProceso.resx">
       <DependentUpon>xrTransaccionesEnProceso.cs</DependentUpon>
