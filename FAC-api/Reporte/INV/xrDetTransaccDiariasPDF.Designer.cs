@@ -371,11 +371,11 @@
             new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "Concat(\'DEL \', FormatString(\'{0:dd/MM/yyyy}\', ?P_Fecha1), \' AL \', FormatString(\'{" +
                     "0:dd/MM/yyyy}\', ?P_Fecha2))")});
             this.xrLabel3.Font = new System.Drawing.Font("Times New Roman", 12F);
-            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(6.103516E-05F, 68.5F);
+            this.xrLabel3.LocationFloat = new DevExpress.Utils.PointFloat(5.086263E-05F, 68.5F);
             this.xrLabel3.Multiline = true;
             this.xrLabel3.Name = "xrLabel3";
             this.xrLabel3.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel3.SizeF = new System.Drawing.SizeF(814.9999F, 23F);
+            this.xrLabel3.SizeF = new System.Drawing.SizeF(736.2499F, 23F);
             this.xrLabel3.StylePriority.UseFont = false;
             this.xrLabel3.StylePriority.UseTextAlignment = false;
             this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
