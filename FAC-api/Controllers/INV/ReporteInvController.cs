@@ -321,11 +321,64 @@ namespace FAC_api.Controllers.INV
                              
                              break;
 
-                         case "2":
+                         case "Transacciones En Proceso":
+
+
+                            RPT_DetTransaccEnProcesoTableAdapter adpTransaccProc = new RPT_DetTransaccEnProcesoTableAdapter();
+                            adpTransaccProc.Fill(DsetReporte.RPT_DetTransaccEnProceso);
+
+                            xrTransaccionesEnProceso xrpTransaccProc = new xrTransaccionesEnProceso();
+                            xrpTransaccProc.DataSource = DsetReporte;
+                            xrpTransaccProc.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
+
+                            xrpTransaccProc.ShowPrintMarginsWarning = false;
+
+                   
+                           
+                            if (!d.Exportar)
+                            {
+                                xrpTransaccProc.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpTransaccProc.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
 
 
 
-                             break;
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Transacciones En Proceso";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                                workbook.BeginUpdate();
+
+                                CellRange range = worksheet["A5:E5"];
+                                worksheet["A6:L6"].Style.Font.Bold = true;
+                                worksheet.AutoFilter.Apply(range);
+                                workbook.EndUpdate();
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+                                
+
+
+                            stream.Seek(0, SeekOrigin.Begin);
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+
+
+                            break;
 
                          case "4":
 
