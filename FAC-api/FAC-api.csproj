@@ -636,6 +636,12 @@
     <Compile Include="Reporte\INV\xrTransaccionesEnProceso.Designer.cs">
       <DependentUpon>xrTransaccionesEnProceso.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrTransaccionesInventario.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrTransaccionesInventario.Designer.cs">
+      <DependentUpon>xrTransaccionesInventario.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -835,6 +841,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrTransaccionesEnProceso.resx">
       <DependentUpon>xrTransaccionesEnProceso.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrTransaccionesInventario.resx">
+      <DependentUpon>xrTransaccionesInventario.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
