@@ -612,6 +612,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DsetInventario.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrDetFacturaCosto.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrDetFacturaCosto.Designer.cs">
+      <DependentUpon>xrDetFacturaCosto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrDetTransaccDiariasPDF.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -836,6 +842,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Reporte\INV\xrDetFacturaCosto.resx">
+      <DependentUpon>xrDetFacturaCosto.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrDetTransaccDiariasPDF.resx">
       <DependentUpon>xrDetTransaccDiariasPDF.cs</DependentUpon>
     </EmbeddedResource>

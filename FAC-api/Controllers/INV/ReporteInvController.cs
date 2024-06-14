@@ -558,9 +558,68 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
 
                             break;
-                         case "7":
-                             break;
-                     }
+                         case "Factura Costo":
+                            if (d.Param[0] == null) d.Param[0] = string.Empty;
+
+
+
+                            RPT_DetFacturaCostoTableAdapter adpFacturaCosto = new RPT_DetFacturaCostoTableAdapter();
+                            adpFacturaCosto.Fill(DsetReporte.RPT_DetFacturaCosto, d.Param[0].ToString(), Convert.ToDateTime(d.Param[1]), Convert.ToDateTime(d.Param[2]));
+
+                            xrDetFacturaCosto xrpFacturaCosto = new xrDetFacturaCosto();
+                            xrpFacturaCosto.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[1]);
+                            xrpFacturaCosto.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[2]);
+                            xrpFacturaCosto.DataSource = DsetReporte;
+                            xrpFacturaCosto.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
+
+                            xrpFacturaCosto.ShowPrintMarginsWarning = false;
+
+
+
+                            if (!d.Exportar)
+                            {
+                                xrpFacturaCosto.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpFacturaCosto.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Costo Factura";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                                workbook.BeginUpdate();
+
+                                CellRange range = worksheet["A6:H6"];
+                                worksheet["A6:H6"].Style.Font.Bold = true;
+                                worksheet.AutoFilter.Apply(range);
+
+                                workbook.EndUpdate();
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+                            break;
+
+                        case "":
+                            break;
+                    }
 
 
 

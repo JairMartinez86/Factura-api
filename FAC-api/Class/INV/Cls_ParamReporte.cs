@@ -7,7 +7,7 @@ namespace FAC_api.Class.INV
 {
     public class Cls_ParamReporte
     {
-        public string[] Param;
+        public object[] Param;
         public string TipoReporte;
         public bool Exportar;
     }
