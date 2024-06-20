@@ -112,8 +112,8 @@ namespace FAC_api.Controllers.FACT
                             Cls_EstadoCuenta[] EstadoCuentaDolar = _Conexion.Database.SqlQuery<Cls_EstadoCuenta>(Sql).ToArray();
 
       
-                            EstadoCuentaCordoba.Select(c => { c.IdMoneda = cl.MonedaLocal; c.DiasV = (c.Corriente != 0 && c.Debe != 0 ? (DateTime.Now.Date - c.FechaDoc).Days : c.DiasV); return c; }).ToList();
-                            EstadoCuentaDolar.Select(c => { c.IdMoneda = cl.MonedaSistema; c.DiasV = (c.Corriente != 0  && c.Debe != 0? (DateTime.Now.Date - c.FechaDoc).Days : c.DiasV) ; return c; }).ToList();
+                            EstadoCuentaCordoba.Select(c => { c.IdMoneda = cl.MonedaLocal; c.DiasV = (c.Corriente != 0 && c.Debe != 0 ? (DateTime.Now.Date - c.FechaDoc).Days +1 : c.DiasV); return c; }).ToList();
+                            EstadoCuentaDolar.Select(c => { c.IdMoneda = cl.MonedaSistema; c.DiasV = (c.Corriente != 0  && c.Debe != 0? (DateTime.Now.Date - c.FechaDoc).Days +1 : c.DiasV) ; return c; }).ToList();
 
 
                             List<Cls_EstadoCuenta> EstadoCuenta = new List<Cls_EstadoCuenta>();
