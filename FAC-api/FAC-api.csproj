@@ -392,6 +392,8 @@
     <Compile Include="Class\Cls_ConexionAPI_BD.cs" />
     <Compile Include="Class\Cls_Datos.cs" />
     <Compile Include="Class\Cls_Mensaje.cs" />
+    <Compile Include="Class\CXC\Cls_ClienteCartera.cs" />
+    <Compile Include="Class\CXC\Cls_EstadoCuenta.cs" />
     <Compile Include="Class\CXP\Cls_Proveedor.cs" />
     <Compile Include="Class\FACT\Cls_Bodega.cs" />
     <Compile Include="Class\FACT\Cls_Bonificacion.cs" />
@@ -412,6 +414,7 @@
     <Compile Include="Class\PRE\Cls_SubGrupo.cs" />
     <Compile Include="Class\SIS\Cls_Letras.cs" />
     <Compile Include="Class\SIS\Cls_ListToDataTableConverter.cs" />
+    <Compile Include="Controllers\CXC\EstadoCuentaController.cs" />
     <Compile Include="Controllers\INV\ReporteInvController.cs" />
     <Compile Include="Controllers\INV\RequisaController.cs" />
     <Compile Include="Controllers\SIS\ServerController.cs" />
@@ -761,6 +764,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Reporte\FAC\" />
     <Folder Include="Views\Default\" />
+    <Folder Include="Views\EstadoCuenta\" />
     <Folder Include="Views\Factura\" />
     <Folder Include="Views\ReporteInv\" />
     <Folder Include="Views\Requisa\" />
