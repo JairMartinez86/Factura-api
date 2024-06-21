@@ -294,6 +294,7 @@ namespace FAC_api.Controllers.FACT
                         Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == d.Usuario);
 
                         cl.Vendedor = d.CodVendedor;
+                        cl.IdConceptoPrecio = (int)d.IdConceptoPrecio;
                         cl.ClienteClave = d.CuentaClave;
                         cl.EsMoroso = (bool)d.SuspendidoMoroso;
                         cl.FacturarVencido = d.ConfianzaFactVencido;
