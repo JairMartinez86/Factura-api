@@ -469,6 +469,9 @@
     <Compile Include="Models\ClienteClave.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClienteTienda.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConceptoPrecio.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>

@@ -63,6 +63,7 @@
           <Property Name="CodTipoCliente" Type="nvarchar" MaxLength="10" />
           <Property Name="IdContribuyente" Type="int" />
           <Property Name="ClasificacionFinanciera" Type="nvarchar" MaxLength="30" />
+          <Property Name="ActualizacionDatos" Type="bit" />
         </EntityType>
         <EntityType Name="ClienteClave">
           <Key>
@@ -71,6 +72,19 @@
           <Property Name="IdClienteClave" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CodigoCliente" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="IdVendedor" Type="int" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="FechaCierre" Type="datetime2" Precision="7" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="IdUsuarioCrea" Type="int" Nullable="false" />
+          <Property Name="IdUsuarioInactiva" Type="int" />
+        </EntityType>
+        <EntityType Name="ClienteTienda">
+          <Key>
+            <PropertyRef Name="IdCteTienda" />
+          </Key>
+          <Property Name="IdCteTienda" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoCliente" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="IdBodega" Type="int" Nullable="false" />
           <Property Name="FechaAsignacion" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="FechaCierre" Type="datetime2" Precision="7" />
           <Property Name="Activo" Type="bit" Nullable="false" />
@@ -1305,6 +1319,7 @@
           <EntitySet Name="Bancos" EntityType="Self.Bancos" Schema="BAN" store:Type="Tables" />
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="ClienteClave" EntityType="Self.ClienteClave" Schema="CXC" store:Type="Tables" />
+          <EntitySet Name="ClienteTienda" EntityType="Self.ClienteTienda" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Departamento" EntityType="Self.Departamento" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="DireccionCliente" EntityType="Self.DireccionCliente" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="CXC" store:Type="Tables" />
@@ -1763,6 +1778,7 @@
           <EntitySet Name="Grupos" EntityType="BalancesModel.Grupos" />
           <EntitySet Name="TipoMov" EntityType="BalancesModel.TipoMov" />
           <EntitySet Name="SubGrupos" EntityType="BalancesModel.SubGrupos" />
+          <EntitySet Name="ClienteTienda" EntityType="BalancesModel.ClienteTienda" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -1832,6 +1848,7 @@
           <Property Name="IdContribuyente" Type="Int32" />
           <NavigationProperty Name="DireccionCliente" Relationship="BalancesModel.FK_DireccionCliente_Cliente" FromRole="Cliente" ToRole="DireccionCliente" />
           <Property Name="ClasificacionFinanciera" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ActualizacionDatos" Type="Boolean" />
         </EntityType>
         <EntityType Name="Vendedor">
           <Key>
@@ -2847,6 +2864,19 @@
           <Property Name="Codigo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SubGrupo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="ClienteTienda">
+          <Key>
+            <PropertyRef Name="IdCteTienda" />
+          </Key>
+          <Property Name="IdCteTienda" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoCliente" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IdBodega" Type="Int32" Nullable="false" />
+          <Property Name="FechaAsignacion" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="FechaCierre" Type="DateTime" Precision="7" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioCrea" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuarioInactiva" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2980,6 +3010,7 @@
           <EntitySetMapping Name="Cliente">
             <EntityTypeMapping TypeName="BalancesModel.Cliente">
               <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="ActualizacionDatos" ColumnName="ActualizacionDatos" />
                 <ScalarProperty Name="ClasificacionFinanciera" ColumnName="ClasificacionFinanciera" />
                 <ScalarProperty Name="IdContribuyente" ColumnName="IdContribuyente" />
                 <ScalarProperty Name="CodTipoCliente" ColumnName="CodTipoCliente" />
@@ -3959,6 +3990,20 @@
                 <ScalarProperty Name="Codigo" ColumnName="Codigo" />
                 <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
                 <ScalarProperty Name="IdSubGrupo" ColumnName="IdSubGrupo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClienteTienda">
+            <EntityTypeMapping TypeName="BalancesModel.ClienteTienda">
+              <MappingFragment StoreEntitySet="ClienteTienda">
+                <ScalarProperty Name="IdUsuarioInactiva" ColumnName="IdUsuarioInactiva" />
+                <ScalarProperty Name="IdUsuarioCrea" ColumnName="IdUsuarioCrea" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="FechaCierre" ColumnName="FechaCierre" />
+                <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
+                <ScalarProperty Name="CodigoCliente" ColumnName="CodigoCliente" />
+                <ScalarProperty Name="IdCteTienda" ColumnName="IdCteTienda" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

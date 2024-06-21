@@ -26,6 +26,17 @@ namespace FAC_api.Class.CXC
         public string UltimoRocMoneda { get; set; }
         public string MonedaSistema { get; set; }
         public string MonedaLocal { get; set; }
+
+        public int? IdConceptoPrecio;
+        public string CodVendedor;
+        public bool? CuentaClave;
+        public bool? SuspendidoMoroso;
+        public bool? ConfianzaFactSiempre;
+        public bool? ConfianzaFactVencido;
+        public bool? ConfianzaFactUnaVez;
+        public string Estado;
+        public string[] Bodegas;
+        public string Usuario;
     }
    
 }

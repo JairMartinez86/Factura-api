@@ -74,6 +74,7 @@ namespace FAC_api.Models
         public virtual DbSet<Grupos> Grupos { get; set; }
         public virtual DbSet<TipoMov> TipoMov { get; set; }
         public virtual DbSet<SubGrupos> SubGrupos { get; set; }
+        public virtual DbSet<ClienteTienda> ClienteTienda { get; set; }
     
         public virtual ObjectResult<sp_AnularFacturaVenta_Result> sp_AnularFacturaVenta(Nullable<int> p_IdFactura, string p_Serie, string p_NoFactura, Nullable<int> p_IdBodega, string p_MotivoAnulacion, Nullable<int> p_IdusuarioAnula)
         {

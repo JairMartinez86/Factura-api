@@ -63,6 +63,7 @@ namespace FAC_api.Models
         public string CodTipoCliente { get; set; }
         public Nullable<int> IdContribuyente { get; set; }
         public string ClasificacionFinanciera { get; set; }
+        public Nullable<bool> ActualizacionDatos { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DireccionCliente> DireccionCliente { get; set; }

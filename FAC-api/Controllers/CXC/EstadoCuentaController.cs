@@ -16,6 +16,8 @@ using RouteAttribute = System.Web.Http.RouteAttribute;
 using ReporteBalance;
 using System.Data;
 using FastMember;
+using System.Transactions;
+using IsolationLevel = System.Transactions.IsolationLevel;
 
 namespace FAC_api.Controllers.FACT
 {
@@ -50,14 +52,14 @@ namespace FAC_api.Controllers.FACT
                         var qClientes = (from _q in _Conexion.Cliente
                                          select new
                                          {
-                                             IdCliente = _q.IdCliente,
+                                             _q.IdCliente,
                                              Codigo = _q.Codigo.TrimStart().TrimEnd(),
                                              Cliente = _q.Nombre.TrimStart().TrimEnd(),
                                              Ruc = _q.NoCedula.TrimStart().TrimEnd(),
                                              Cedula = _q.NoCedula.TrimStart().TrimEnd(),
                                              Correo = (_q.Correo.TrimStart().TrimEnd() != string.Empty ? _q.Correo.TrimStart().TrimEnd() + ";" : string.Empty) + (_q.Correo2.TrimStart().TrimEnd() != string.Empty ? _q.Correo2.TrimStart().TrimEnd() : string.Empty),
                                              Contacto = string.Concat(_q.Celular.TrimStart().TrimEnd(), "/", _q.Telefono1.TrimStart().TrimEnd(), "/", _q.Telefono2.TrimStart().TrimEnd(), "/", _q.Telefono3.TrimStart().TrimEnd()),
-                                             Limite = _q.Limite,
+                                             _q.Limite,
                                              Moneda = _q.IdMoneda,
                                              CodVendedor = (_q.Vendedor == null ? string.Empty : _q.Vendedor.TrimStart().TrimEnd()),
                                              EsClave = _q.ClienteClave,
@@ -65,7 +67,46 @@ namespace FAC_api.Controllers.FACT
                                              Key = string.Concat(_q.Codigo, " ", _q.Nombre.TrimStart().TrimEnd())
                                          }).ToList();
 
-                        datos.d = qClientes;
+   
+
+                        var qVendedores = (from _q in _Conexion.Vendedor
+                                           select new
+                                           {
+                                               Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                               Vendedor = _q.Nombre.TrimStart().TrimEnd(),
+                                               Key = string.Concat(_q.Codigo, " ", _q.Nombre.TrimStart().TrimEnd())
+                                           }).ToList();
+
+
+              
+
+
+
+                        var qBodegas = (from _q in _Conexion.Bodegas
+                                        orderby _q.Codigo
+                                        select new 
+                                        {
+                                            _q.IdBodega,
+                                            Codigo = _q.Codigo.TrimStart().TrimEnd(),
+                                            Bodega = _q.Bodega.TrimStart().TrimEnd(),
+                                            Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.Bodega.TrimStart().TrimEnd())
+                                        }).ToList();
+
+
+
+
+
+                        var qListaPrecio = (from _q in _Conexion.ConceptoPrecio
+                                        orderby _q.Descripcion
+                                        select new
+                                        {
+                                            _q.IdConceptoPrecio,
+                                            Descripcion = _q.Descripcion.TrimStart().TrimEnd()
+                                        }).ToList();
+
+
+
+                        datos.d = new object[] { qClientes, qVendedores, qBodegas, qListaPrecio };
 
                     }
                     else
@@ -94,6 +135,27 @@ namespace FAC_api.Controllers.FACT
                             cl.Telefono = string.Concat(Cliente.Celular?.TrimStart().TrimEnd(), "/", Cliente.Telefono1?.TrimStart().TrimEnd(), "/", Cliente.Telefono2?.TrimStart().TrimEnd(), "/", Cliente.Telefono3?.TrimStart().TrimEnd());
                             cl.Limite = Cliente.Limite;
                             cl.Moneda = Cliente.IdMoneda;
+
+
+                            cl.IdConceptoPrecio = Cliente.IdConceptoPrecio;
+                            cl.CodVendedor = Cliente.Vendedor;
+                            cl.CuentaClave = Cliente.ClienteClave;
+                            cl.SuspendidoMoroso = Cliente.EsMoroso;
+                            cl.ConfianzaFactVencido = Cliente.FacturarVencido;
+                            cl.ConfianzaFactSiempre = Cliente.ClienteConfFacSiempre;
+                            cl.ConfianzaFactUnaVez = Cliente.FactSiempre;
+                            cl.Estado = Cliente.Estado;
+                           
+
+                            cl.Bodegas  = (from q in _Conexion.ClienteTienda
+                                     join b in _Conexion.Bodegas on q.IdBodega equals b.IdBodega
+                                     where q.CodigoCliente == Param
+                                     select b.Codigo).ToArray();
+
+                             if(cl.Bodegas.Length > 0)cl.CuentaClave = true;
+
+
+                            List < ClienteTienda > BOC = _Conexion.ClienteTienda.Where(w => w.CodigoCliente == Param).ToList();
 
 
                             if(cl.Moneda == cl.MonedaLocal)
@@ -193,5 +255,130 @@ namespace FAC_api.Controllers.FACT
 
             return json;
         }
+
+
+
+        [Route("api/CXC/EstadoCuenta/GuardarPermiso")]
+        [System.Web.Http.HttpPost]
+        public IHttpActionResult GuardarPermiso(Cls_ClienteCartera d)
+        {
+            if (ModelState.IsValid)
+            {
+
+                return Ok(V_GuardarPermiso(d));
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        private string V_GuardarPermiso(Cls_ClienteCartera d)
+        {
+
+            string json = string.Empty;
+
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    using (BalancesEntities _Conexion = new BalancesEntities())
+                    {
+
+
+
+                        Cliente cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == d.Codigo);
+                        Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == d.Usuario);
+
+                        cl.Vendedor = d.CodVendedor;
+                        cl.ClienteClave = d.CuentaClave;
+                        cl.EsMoroso = (bool)d.SuspendidoMoroso;
+                        cl.FacturarVencido = d.ConfianzaFactVencido;
+                        cl.ClienteConfFacSiempre = (bool)d.ConfianzaFactSiempre;
+                        cl.FactSiempre = (bool)d.ConfianzaFactUnaVez;
+                        cl.Estado = d.Estado;
+
+                        _Conexion.SaveChanges();
+
+
+                        d.Bodegas.ForEach(f =>
+                        {
+                            Bodegas b = _Conexion.Bodegas.FirstOrDefault(w => w.Codigo == f);
+
+                            if(b != null)
+                            {
+                                ClienteTienda ct = _Conexion.ClienteTienda.FirstOrDefault(w => w.IdBodega == b.IdBodega);
+
+                                if(ct == null)
+                                {
+                                    ct = new ClienteTienda();
+                                    ct.CodigoCliente = d.Codigo;
+                                    ct.IdBodega = b.IdBodega;
+                                    ct.FechaAsignacion = DateTime.Now;
+                                    ct.CodigoCliente = d.Codigo;
+                                    ct.IdUsuarioCrea = u.IdUsuario;
+                                    ct.Activo = true;
+                                    _Conexion.SaveChanges();
+                                }
+                            }
+
+                            
+                        });
+
+                     
+
+                        foreach(ClienteTienda t in _Conexion.ClienteTienda.Where(w => w.CodigoCliente == cl.Codigo))
+                        {
+                            Bodegas b = _Conexion.Bodegas.FirstOrDefault(w => w.IdBodega == t.IdBodega);
+
+                            if(!d.Bodegas.Contains(b.Codigo))
+                            {
+                                t.Activo = false;
+                                t.IdUsuarioInactiva = u.IdUsuario;
+                                t.FechaCierre = DateTime.Now;
+                                _Conexion.SaveChanges();
+                            }
+
+                        }
+
+
+                        _Conexion.Database.ExecuteSqlCommand($"\tDECLARE @P_IdConceptoPrecio INT = {cl.IdConceptoPrecio},\r\n\t@Distribuidor BIT,\r\n\t@PrecioLista NVARCHAR(2),\r\n\t@P_IdMoneda NVARCHAR(10),\r\n\t@ModenaInv NVARCHAR(2)\r\n\r\n\r\n\r\nIF @P_IdConceptoPrecio = 8 \r\nBEGIN\r\n\t\tset @Distribuidor = 1\r\n\t\tset @PrecioLista = 1\r\n\t\t\t\t\t\r\nEND\r\nELSE\r\n\tBEGIN\r\n\t\tset @PrecioLista = (select Codigo from FAC.ConceptoPrecio where IdConceptoPrecio = @P_IdConceptoPrecio)\r\n\t\tset @Distribuidor = 0\r\n\tEND\r\nIF @P_IdMoneda = 'DOL'\r\n\tBEGIN\r\n\t\tSET @ModenaInv = 'D'\r\n\tEND\r\nELSE\r\n\tBEGIN \r\n\t\tSET @ModenaInv = 'C'\r\n\tEND\r\n\r\n\r\n\t\t\t\r\nUPDATE INVESCASAN..Clientes\r\nSET   \t\t\t\t\t\r\n[Plazo] = {d.Plazo}\r\n,[vendedor] = ''\r\n,[techo] = {d.Limite}\r\n,[facturarvencido] = {(d.ConfianzaFactVencido == true ? 1 : 0)}\r\n,[clave] = {(d.CuentaClave == true ? 1 : 0)}\r\n,[Moneda] = @ModenaInv\r\n,[Lista] = @PrecioLista\t\t\r\nWHERE  [codcta] = '{d.Codigo}'");
+
+                        _Conexion.SaveChanges();
+
+                        Cls_Datos datos = new Cls_Datos();
+                        datos.Nombre = "GUARDAR";
+                        datos.d = "<b>Registro Guardado<b/>";
+              
+
+
+
+                        scope.Complete();
+
+
+
+                        json = Cls_Mensaje.Tojson(datos, 1, string.Empty, string.Empty, 0);
+
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                json = Cls_Mensaje.Tojson(null, 0, "1", ex.Message, 1);
+            }
+
+            return json;
+
+        }
+
+
+
+
     }
 }
