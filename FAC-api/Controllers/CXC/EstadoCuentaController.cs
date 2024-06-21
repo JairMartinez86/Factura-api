@@ -13,6 +13,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
+using ReporteBalance;
+using System.Data;
+using FastMember;
 
 namespace FAC_api.Controllers.FACT
 {
@@ -81,7 +84,7 @@ namespace FAC_api.Controllers.FACT
 
                             string Sql = $"DECLARE @P_CodCliente NVARCHAR(20) = '{Param}',\r\n@P_SaldoCordoba DECIMAL(18,2) = 0,\r\n@P_SaldoDolar DECIMAL(18,2) = 0,\r\n@P_MonedaLocal NVARCHAR(3),\r\n@P_MonedaSistema NVARCHAR(3),\r\n@P_UltimoRoc NVARCHAR(20),\r\n@P_UltimoRocFecha DATE,\r\n@P_UltimoRocMonto DECIMAL(18,2),\r\n@P_UltimoRocMoneda NVARCHAR(3),\r\n@P_Direccion NVARCHAR(MAX)\r\n\r\n\r\n\r\nSELECT TOP 1 @P_MonedaLocal = T.MonedaLocal, @P_MonedaSistema = T.MonedaFacturacion FROM SIS.Parametros AS T\r\n\r\n\r\nSELECT TOP 1 @P_Direccion = ISNULL(T.Direccion, '') FROM CXC.DireccionCliente AS T WHERE T.IdCliente = {Cliente.IdCliente} AND T.Activo = 1  ORDER BY T.EsDirPrincipal DESC\r\n\r\n\r\n\r\nSELECT @P_SaldoDolar = IIF( T.IdMoneda = @P_MonedaLocal, 0,  SUM(T.TotalDolar)), @P_SaldoCordoba =  IIF( T.IdMoneda = @P_MonedaLocal,  SUM(T.TotalCordoba), 0)\r\nFROM SIS.MovimientoDoc AS T\r\nWHERE T.CodigoCliente = @P_CodCliente AND T.Activo = 1 \r\nGROUP BY T.IdMoneda\r\n\r\n\r\nSELECT @P_UltimoRoc = MAX(T.NoDocOrigen), @P_UltimoRocFecha = T.FechaDocumento, @P_UltimoRocMonto = ABS(SUM(T.Total)), @P_UltimoRocMoneda = T.IdMoneda\r\nFROM SIS.MovimientoDoc AS T\r\nWHERE T.CodigoCliente = @P_CodCliente AND T.Activo = 1  AND T.TipoDocumentoOrigen = 'ROC.'\r\nGROUP BY T.TipoDocumentoOrigen, T.FechaDocumento, T.Total, T.IdMoneda\r\n\r\n\r\n\r\nSELECT ISNULL(@P_Direccion, '') AS Direccion,  ISNULL(@P_SaldoDolar, 0) AS SaldoDolar, ISNULL(@P_SaldoCordoba, 0) AS SaldoCordoba, ISNULL(@P_UltimoRoc, '') AS UltimoRoc, @P_UltimoRocFecha AS UltimoRocFecha, ISNULL(@P_UltimoRocMonto, 0) AS UltimoRocMonto, ISNULL(@P_UltimoRocMoneda, '') AS UltimoRocMoneda, @P_MonedaSistema AS MonedaSistema, @P_MonedaLocal AS MonedaLocal\r\n\r\n\r\n";
                             Cls_ClienteCartera cl = _Conexion.Database.SqlQuery<Cls_ClienteCartera>(Sql).Single();
-
+                           
                       
                             cl.Codigo = Cliente.Codigo.TrimStart().TrimEnd();
                             cl.Cliente = Cliente.Nombre.TrimStart().TrimEnd();
@@ -116,14 +119,52 @@ namespace FAC_api.Controllers.FACT
                             EstadoCuentaDolar.Select(c => { c.IdMoneda = cl.MonedaSistema; c.DiasV = (c.Corriente != 0  && c.Debe != 0? (DateTime.Now.Date - c.FechaDoc).Days +1 : c.DiasV) ; return c; }).ToList();
 
 
+
+
+
+
                             List<Cls_EstadoCuenta> EstadoCuenta = new List<Cls_EstadoCuenta>();
                             EstadoCuenta.AddRange(EstadoCuentaCordoba);
                             EstadoCuenta.AddRange(EstadoCuentaDolar);
 
+                            DataTable table = new DataTable("SP_ReporteEstadoCuentaCliente");
+                            DataSet ds = new DataSet();
+                            using (var reader = ObjectReader.Create(EstadoCuentaCordoba))
+                            {
+                                table.Load(reader);
+                            }
+                            ds.Tables.Add(table);
+
+
+                            cReporteCartera cReporte = new cReporteCartera();
+                            object[] obj = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Cordoba", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha.Value, cl.UltimoRocMonto, cl.Telefono);
+
+
+                            if (obj[0].ToString() != string.Empty)
+                            {
+                                return json = Cls_Mensaje.Tojson(null, 0, "1", obj[0].ToString(), 1);
+                            }
+
+                            table = new DataTable("SP_ReporteEstadoCuentaCliente");
+                            ds = new DataSet();
+                            using (var reader = ObjectReader.Create(EstadoCuentaDolar))
+                            {
+                                table.Load(reader);
+                            }
+                            ds.Tables.Add(table);
+                            object[] obj2 = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Dolares", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha.Value, cl.UltimoRocMonto, cl.Telefono);
 
 
 
-                            datos.d = new object [] {cl, EstadoCuenta };
+                            if (obj2[0].ToString() != string.Empty)
+                            {
+                                return json = Cls_Mensaje.Tojson(null, 0, "1", obj2[0].ToString(), 1);
+                            }
+
+
+
+
+                            datos.d = new object [] {cl, EstadoCuenta, obj[1], obj2[1] };
 
 
 
