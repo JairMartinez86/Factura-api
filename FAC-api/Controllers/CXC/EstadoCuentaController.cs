@@ -27,12 +27,12 @@ namespace FAC_api.Controllers.FACT
 
         [Route("api/CXC/EstadoCuenta/Datos")]
         [HttpGet]
-        public string Datos(string Tipo, string Param)
+        public string Datos(string Tipo, string Param, bool Permiso)
         {
-            return v_Datos(Tipo, Param);
+            return v_Datos(Tipo, Param, Permiso);
         }
 
-        private string v_Datos(string Tipo, string Param)
+        private string v_Datos(string Tipo, string Param, bool Permiso)
         {
             string json = string.Empty;
             if (Tipo == null) Tipo = string.Empty;
@@ -199,7 +199,7 @@ namespace FAC_api.Controllers.FACT
 
 
                             cReporteCartera cReporte = new cReporteCartera();
-                            object[] obj = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Cordoba", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha, cl.UltimoRocMonto, cl.Telefono);
+                            object[] obj = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Cordoba", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha, cl.UltimoRocMonto, cl.Telefono, Permiso);
 
 
                             if (obj[0].ToString() != string.Empty)
@@ -214,7 +214,7 @@ namespace FAC_api.Controllers.FACT
                                 table.Load(reader);
                             }
                             ds.Tables.Add(table);
-                            object[] obj2 = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Dolares", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha, cl.UltimoRocMonto, cl.Telefono);
+                            object[] obj2 = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Dolares", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha, cl.UltimoRocMonto, cl.Telefono, Permiso);
 
 
 
