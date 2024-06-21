@@ -137,7 +137,7 @@ namespace FAC_api.Controllers.FACT
 
 
                             cReporteCartera cReporte = new cReporteCartera();
-                            object[] obj = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Cordoba", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha.Value, cl.UltimoRocMonto, cl.Telefono);
+                            object[] obj = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Cordoba", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha, cl.UltimoRocMonto, cl.Telefono);
 
 
                             if (obj[0].ToString() != string.Empty)
@@ -152,7 +152,7 @@ namespace FAC_api.Controllers.FACT
                                 table.Load(reader);
                             }
                             ds.Tables.Add(table);
-                            object[] obj2 = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Dolares", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha.Value, cl.UltimoRocMonto, cl.Telefono);
+                            object[] obj2 = cReporte.EstadoCuenta(ds, cl.Codigo, cl.Cliente, cl.Direccion, cl.Limite, "Dolares", cl.Ruc, cl.UltimoRoc, cl.UltimoRocFecha, cl.UltimoRocMonto, cl.Telefono);
 
 
 
