@@ -293,6 +293,9 @@ namespace FAC_api.Controllers.FACT
                         Cliente cl = _Conexion.Cliente.FirstOrDefault(f => f.Codigo == d.Codigo);
                         Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == d.Usuario);
 
+                        cl.Limite = d.Limite;
+                        cl.Plazo = d.Plazo;
+                        cl.IdMoneda = d.Moneda;
                         cl.Vendedor = d.CodVendedor;
                         cl.IdConceptoPrecio = (int)d.IdConceptoPrecio;
                         cl.ClienteClave = d.CuentaClave;
