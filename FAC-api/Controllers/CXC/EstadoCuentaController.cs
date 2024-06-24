@@ -145,6 +145,7 @@ namespace FAC_api.Controllers.FACT
                             cl.ConfianzaFactSiempre = Cliente.ClienteConfFacSiempre;
                             cl.ConfianzaFactUnaVez = Cliente.FactSiempre;
                             cl.Estado = Cliente.Estado;
+                            cl.Observaciones = string.Empty;
                            
 
                             cl.Bodegas  = (from q in _Conexion.ClienteTienda
