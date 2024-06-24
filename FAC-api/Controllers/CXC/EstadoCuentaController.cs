@@ -304,6 +304,8 @@ namespace FAC_api.Controllers.FACT
                         cl.ClienteConfFacSiempre = (bool)d.ConfianzaFactSiempre;
                         cl.FactSiempre = (bool)d.ConfianzaFactUnaVez;
                         cl.Estado = d.Estado;
+                        cl.IdUsuarioModifica = u.IdUsuario;
+                        cl.FechaModificacion = DateTime.Now;
 
                         _Conexion.SaveChanges();
 
@@ -347,6 +349,17 @@ namespace FAC_api.Controllers.FACT
                             }
 
                         }
+
+
+
+                        Anotaciones an = new Anotaciones();
+                        an.CodCliente = cl.Codigo;
+                        an.Nota = d.Observaciones;
+                        an.Fecha = (DateTime) cl.FechaModificacion;
+                        an.IdUsuario = u.IdUsuario;
+                        an.Hora = string.Format("{0:hh:mm: tt}", cl.FechaModificacion);
+                        _Conexion.Anotaciones.Add(an);
+                        _Conexion.SaveChanges();
 
 
                         _Conexion.Database.ExecuteSqlCommand($"\tDECLARE @P_IdConceptoPrecio INT = {cl.IdConceptoPrecio},\r\n\t@Distribuidor BIT,\r\n\t@PrecioLista NVARCHAR(2),\r\n\t@P_IdMoneda NVARCHAR(10),\r\n\t@ModenaInv NVARCHAR(2)\r\n\r\n\r\n\r\nIF @P_IdConceptoPrecio = 8 \r\nBEGIN\r\n\t\tset @Distribuidor = 1\r\n\t\tset @PrecioLista = 1\r\n\t\t\t\t\t\r\nEND\r\nELSE\r\n\tBEGIN\r\n\t\tset @PrecioLista = (select Codigo from FAC.ConceptoPrecio where IdConceptoPrecio = @P_IdConceptoPrecio)\r\n\t\tset @Distribuidor = 0\r\n\tEND\r\nIF @P_IdMoneda = 'DOL'\r\n\tBEGIN\r\n\t\tSET @ModenaInv = 'D'\r\n\tEND\r\nELSE\r\n\tBEGIN \r\n\t\tSET @ModenaInv = 'C'\r\n\tEND\r\n\r\n\r\n\t\t\t\r\nUPDATE INVESCASAN..Clientes\r\nSET   \t\t\t\t\t\r\n[Plazo] = {d.Plazo}\r\n,[vendedor] = ''\r\n,[techo] = {d.Limite}\r\n,[facturarvencido] = {(d.ConfianzaFactVencido == true ? 1 : 0)}\r\n,[clave] = {(d.CuentaClave == true ? 1 : 0)}\r\n,[Moneda] = @ModenaInv\r\n,[Lista] = @PrecioLista\t\t\r\nWHERE  [codcta] = '{d.Codigo}'");

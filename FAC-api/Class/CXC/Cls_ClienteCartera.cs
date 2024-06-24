@@ -36,6 +36,7 @@ namespace FAC_api.Class.CXC
         public bool? ConfianzaFactUnaVez;
         public string Estado;
         public string[] Bodegas;
+        public string Observaciones;
         public string Usuario;
     }
    
