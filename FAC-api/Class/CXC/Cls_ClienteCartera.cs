@@ -12,6 +12,7 @@ namespace FAC_api.Class.CXC
         public string Cliente;
         public string Ruc;
         public string Correo;
+        public int? IdPlazo;
         public int Plazo;
         public string Telefono;
         public string Direccion { get; set; }

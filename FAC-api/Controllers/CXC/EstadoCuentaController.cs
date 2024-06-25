@@ -106,7 +106,18 @@ namespace FAC_api.Controllers.FACT
 
 
 
-                        datos.d = new object[] { qClientes, qVendedores, qBodegas, qListaPrecio };
+                        var qPlazo = (from _q in _Conexion.PlazoCartera
+                                      where _q.TipoPlazo == "Cliente"
+                                      orderby _q.Plazo
+                                      select new
+                                      {
+                                          _q.IdPlazo,
+                                          _q.Plazo
+                                      }).ToList();
+
+
+
+                        datos.d = new object[] { qClientes, qVendedores, qBodegas, qListaPrecio, qPlazo };
 
                     }
                     else
@@ -130,6 +141,7 @@ namespace FAC_api.Controllers.FACT
                             cl.Codigo = Cliente.Codigo.TrimStart().TrimEnd();
                             cl.Cliente = Cliente.Nombre.TrimStart().TrimEnd();
                             cl.Ruc = Cliente.NoCedula.TrimStart().TrimEnd();
+                            cl.IdPlazo = Cliente.IdPlazo;
                             cl.Plazo = Cliente.Plazo;
                             cl.Correo = Cliente.Correo.TrimStart().TrimEnd();
                             cl.Telefono = string.Concat(Cliente.Celular?.TrimStart().TrimEnd(), "/", Cliente.Telefono1?.TrimStart().TrimEnd(), "/", Cliente.Telefono2?.TrimStart().TrimEnd(), "/", Cliente.Telefono3?.TrimStart().TrimEnd());
@@ -295,6 +307,7 @@ namespace FAC_api.Controllers.FACT
                         Usuarios u = _Conexion.Usuarios.FirstOrDefault(f => f.Usuario == d.Usuario);
 
                         cl.Limite = d.Limite;
+                        cl.IdPlazo = d.IdPlazo;
                         cl.Plazo = d.Plazo;
                         cl.IdMoneda = d.Moneda;
                         cl.Vendedor = d.CodVendedor;

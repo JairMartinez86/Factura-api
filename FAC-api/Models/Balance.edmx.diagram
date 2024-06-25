@@ -65,6 +65,7 @@
         <EntityTypeShape EntityType="BalancesModel.SubGrupos" Width="1.5" PointX="22.375" PointY="6.75" />
         <EntityTypeShape EntityType="BalancesModel.ClienteTienda" Width="1.5" PointX="22.375" PointY="12.75" />
         <EntityTypeShape EntityType="BalancesModel.Anotaciones" Width="1.5" PointX="22.375" PointY="16.75" />
+        <EntityTypeShape EntityType="BalancesModel.PlazoCartera" Width="1.5" PointX="22.375" PointY="19.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

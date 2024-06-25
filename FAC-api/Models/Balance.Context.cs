@@ -76,6 +76,7 @@ namespace FAC_api.Models
         public virtual DbSet<SubGrupos> SubGrupos { get; set; }
         public virtual DbSet<ClienteTienda> ClienteTienda { get; set; }
         public virtual DbSet<Anotaciones> Anotaciones { get; set; }
+        public virtual DbSet<PlazoCartera> PlazoCartera { get; set; }
     
         public virtual ObjectResult<sp_AnularFacturaVenta_Result> sp_AnularFacturaVenta(Nullable<int> p_IdFactura, string p_Serie, string p_NoFactura, Nullable<int> p_IdBodega, string p_MotivoAnulacion, Nullable<int> p_IdusuarioAnula)
         {

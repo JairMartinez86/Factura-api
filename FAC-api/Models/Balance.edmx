@@ -136,6 +136,14 @@
           <Property Name="Municipio" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="IdDepartamento" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="PlazoCartera">
+          <Key>
+            <PropertyRef Name="IdPlazo" />
+          </Key>
+          <Property Name="IdPlazo" Type="int" Nullable="false" />
+          <Property Name="Plazo" Type="int" Nullable="false" />
+          <Property Name="TipoPlazo" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Vendedor">
           <Key>
             <PropertyRef Name="IdVendedor" />
@@ -1335,6 +1343,7 @@
           <EntitySet Name="Departamento" EntityType="Self.Departamento" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="DireccionCliente" EntityType="Self.DireccionCliente" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="CXC" store:Type="Tables" />
+          <EntitySet Name="PlazoCartera" EntityType="Self.PlazoCartera" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Vendedor" EntityType="Self.Vendedor" Schema="CXC" store:Type="Tables" />
           <EntitySet Name="Proveedor" EntityType="Self.Proveedor" Schema="CXP" store:Type="Tables" />
           <EntitySet Name="Bonificaciones" EntityType="Self.Bonificaciones" Schema="FAC" store:Type="Tables" />
@@ -1792,6 +1801,7 @@
           <EntitySet Name="SubGrupos" EntityType="BalancesModel.SubGrupos" />
           <EntitySet Name="ClienteTienda" EntityType="BalancesModel.ClienteTienda" />
           <EntitySet Name="Anotaciones" EntityType="BalancesModel.Anotaciones" />
+          <EntitySet Name="PlazoCartera" EntityType="BalancesModel.PlazoCartera" />
         </EntityContainer>
         <EntityType Name="BodegaSerie">
           <Key>
@@ -2900,6 +2910,14 @@
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="IdUsuario" Type="Int32" Nullable="false" />
           <Property Name="Hora" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PlazoCartera">
+          <Key>
+            <PropertyRef Name="IdPlazo" />
+          </Key>
+          <Property Name="IdPlazo" Type="Int32" Nullable="false" />
+          <Property Name="Plazo" Type="Int32" Nullable="false" />
+          <Property Name="TipoPlazo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4040,6 +4058,15 @@
                 <ScalarProperty Name="Nota" ColumnName="Nota" />
                 <ScalarProperty Name="CodCliente" ColumnName="CodCliente" />
                 <ScalarProperty Name="IdAnotaciones" ColumnName="IdAnotaciones" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlazoCartera">
+            <EntityTypeMapping TypeName="BalancesModel.PlazoCartera">
+              <MappingFragment StoreEntitySet="PlazoCartera">
+                <ScalarProperty Name="TipoPlazo" ColumnName="TipoPlazo" />
+                <ScalarProperty Name="Plazo" ColumnName="Plazo" />
+                <ScalarProperty Name="IdPlazo" ColumnName="IdPlazo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

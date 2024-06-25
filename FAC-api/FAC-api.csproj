@@ -535,6 +535,9 @@
     <Compile Include="Models\PermisoFactura.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PlazoCartera.cs">
+      <DependentUpon>Balance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PrecioVenta.cs">
       <DependentUpon>Balance.tt</DependentUpon>
     </Compile>
