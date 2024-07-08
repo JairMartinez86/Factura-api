@@ -617,6 +617,73 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
 
+
+
+                        case "Columnar Existencia":
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Empty;
+                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+                            if (d.Param[3] == null) d.Param[3] = string.Empty;
+                            if (d.Param[4] == null) d.Param[4] = string.Empty;
+                            if (d.Param[5] == null) d.Param[5] = string.Empty;
+                            if (d.Param[6] == null) d.Param[6] = string.Empty;
+                            if (d.Param[7] == null) d.Param[7] = string.Empty;
+                            if (d.Param[8] == null) d.Param[8] = false;
+
+
+                            XRP_ExistenciaColumnarTableAdapter adpConlumnarInv = new XRP_ExistenciaColumnarTableAdapter();
+                            adpConlumnarInv.Fill(DsetReporte.XRP_ExistenciaColumnar, Convert.ToDateTime(d.Param[0]), d.Param[1].ToString(), d.Param[2].ToString(), d.Param[3].ToString(), d.Param[4].ToString(), d.Param[5].ToString(), d.Param[6].ToString(), d.Param[7].ToString(), Convert.ToBoolean(d.Param[8]));
+
+                            xrExistenciaColumnar xrpColumnarInv = new xrExistenciaColumnar();
+                            xrpColumnarInv.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrpColumnarInv.DataSource = DsetReporte;
+                            xrpColumnarInv.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
+
+                            xrpColumnarInv.ShowPrintMarginsWarning = false;
+
+
+
+                            if (!d.Exportar)
+                            {
+                                xrpColumnarInv.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpColumnarInv.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Columnar Inventario";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                                workbook.BeginUpdate();
+
+                                CellRange range = worksheet["A6:AC6"];
+                                worksheet["A6:H6"].Style.Font.Bold = true;
+                                worksheet.AutoFilter.Apply(range);
+
+                                workbook.EndUpdate();
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+                            break;
+
                         case "":
                             break;
                     }

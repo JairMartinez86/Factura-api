@@ -645,6 +645,12 @@
     <Compile Include="Reporte\INV\xrDetTransaccDiariasXLS.Designer.cs">
       <DependentUpon>xrDetTransaccDiariasXLS.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrExistenciaColumnar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrExistenciaColumnar.Designer.cs">
+      <DependentUpon>xrExistenciaColumnar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrInvRevConsecutivo.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -866,6 +872,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrDetTransaccDiariasXLS.resx">
       <DependentUpon>xrDetTransaccDiariasXLS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrExistenciaColumnar.resx">
+      <DependentUpon>xrExistenciaColumnar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrInvRevConsecutivo.resx">
       <DependentUpon>xrInvRevConsecutivo.cs</DependentUpon>
