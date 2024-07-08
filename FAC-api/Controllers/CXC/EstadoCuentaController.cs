@@ -314,7 +314,8 @@ namespace FAC_api.Controllers.FACT
                         cl.IdConceptoPrecio = (int)d.IdConceptoPrecio;
                         cl.ClienteClave = d.CuentaClave;
                         cl.EsMoroso = (bool)d.SuspendidoMoroso;
-                        cl.FacturarVencido = d.ConfianzaFactVencido;
+                        cl.FactVencido = (bool)d.ConfianzaFactVencido;
+                        cl.FacturarVencido = (bool)d.ConfianzaFactVencido;
                         cl.ClienteConfFacSiempre = (bool)d.ConfianzaFactSiempre;
                         cl.FactSiempre = (bool)d.ConfianzaFactUnaVez;
                         cl.Estado = d.Estado;
