@@ -190,6 +190,24 @@ namespace FAC_api.Controllers.INV
 
 
 
+                    var qClientes = (from _q in _Conexion.Cliente
+                                    orderby _q.Codigo
+                                    select new
+                                    {
+                                        _q.Codigo,
+                                        _q.Nombre,
+                                        Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.Nombre.TrimStart().TrimEnd())
+                                    }).ToList();
+
+
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "CLIENTES";
+                    datos.d = qClientes;
+                    lstDatos.Add(datos);
+
+
 
 
 
@@ -683,6 +701,10 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.d = stream.ToArray();
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
+
+                        case "Ventas Por Cliente":
+                            break;
+
 
                         case "":
                             break;
