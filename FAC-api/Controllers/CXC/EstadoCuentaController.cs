@@ -153,7 +153,7 @@ namespace FAC_api.Controllers.FACT
                             cl.CodVendedor = Cliente.Vendedor;
                             cl.CuentaClave = Cliente.ClienteClave;
                             cl.SuspendidoMoroso = Cliente.EsMoroso;
-                            cl.ConfianzaFactVencido = Cliente.FacturarVencido;
+                            cl.ConfianzaFactVencido = Cliente.FactVencido;
                             cl.ConfianzaFactSiempre = Cliente.ClienteConfFacSiempre;
                             cl.ConfianzaFactUnaVez = Cliente.FactSiempre;
                             cl.Estado = Cliente.Estado;
