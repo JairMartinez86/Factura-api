@@ -209,6 +209,7 @@
             // dsetInventario1
             // 
             this.dsetInventario1.DataSetName = "DsetInventario";
+            this.dsetInventario1.EnforceConstraints = false;
             this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // rPT_DetTransaccDiariasTableAdapter
