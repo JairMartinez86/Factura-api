@@ -687,6 +687,12 @@
     <Compile Include="Reporte\INV\xrVentasPorClienteDet.Designer.cs">
       <DependentUpon>xrVentasPorClienteDet.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrVentasPorSucursal.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrVentasPorSucursal.Designer.cs">
+      <DependentUpon>xrVentasPorSucursal.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -905,6 +911,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrVentasPorClienteDet.resx">
       <DependentUpon>xrVentasPorClienteDet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrVentasPorSucursal.resx">
+      <DependentUpon>xrVentasPorSucursal.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

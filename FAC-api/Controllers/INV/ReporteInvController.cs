@@ -495,11 +495,7 @@ namespace FAC_api.Controllers.INV
                                 workbook.Worksheets.ActiveWorksheet = worksheet;
 
 
-                                workbook.BeginUpdate();
-
-                                CellRange range = worksheet["A6:I6"];
-                                worksheet["A6:I6"].Style.Font.Bold = true;
-                                workbook.EndUpdate();
+                     
 
                                 stream = new MemoryStream();
 
@@ -554,12 +550,6 @@ namespace FAC_api.Controllers.INV
                                 workbook.Worksheets.ActiveWorksheet = worksheet;
 
 
-                                workbook.BeginUpdate();
-
-                                CellRange range = worksheet["A6:H6"];
-                                worksheet["A6:H6"].Style.Font.Bold = true;
-
-                                workbook.EndUpdate();
 
                                 stream = new MemoryStream();
 
@@ -612,12 +602,7 @@ namespace FAC_api.Controllers.INV
                                 workbook.Worksheets.ActiveWorksheet = worksheet;
 
 
-                                workbook.BeginUpdate();
-
-                                CellRange range = worksheet["A6:H6"];
-                                worksheet["A6:H6"].Style.Font.Bold = true;
-
-                                workbook.EndUpdate();
+                   
 
                                 stream = new MemoryStream();
 
@@ -678,12 +663,6 @@ namespace FAC_api.Controllers.INV
                                 workbook.Worksheets.ActiveWorksheet = worksheet;
 
 
-                                workbook.BeginUpdate();
-
-                                CellRange range = worksheet["A6:AC6"];
-                                worksheet["A6:H6"].Style.Font.Bold = true;
-
-                                workbook.EndUpdate();
 
                                 stream = new MemoryStream();
 
@@ -751,16 +730,7 @@ namespace FAC_api.Controllers.INV
                                     workbook.Worksheets.ActiveWorksheet = worksheet;
 
 
-                                    workbook.BeginUpdate();
-
-
-
-                                    CellRange range = worksheet["B7:D7"];
-                                    worksheet["A7:H7"].Style.Font.Bold = true;
-
-
-                                    workbook.EndUpdate();
-
+                       
                                     stream = new MemoryStream();
 
                                     workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
@@ -837,6 +807,67 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
 
 
+                            break;
+
+                        case "Ventas Por Sucursal":
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+                            if (d.Param[3] == null) d.Param[3] = string.Empty;
+
+
+                            XRP_VentasPorBodegaColumnarTableAdapter adpVentasSucursal = new XRP_VentasPorBodegaColumnarTableAdapter();
+                            adpVentasSucursal.Fill(DsetReporte.XRP_VentasPorBodegaColumnar, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), string.Empty, d.Param[2].ToString(), d.Param[3].ToString());
+
+                            xrVentasPorSucursal xrpVentasSucursal = new xrVentasPorSucursal();
+                            xrpVentasSucursal.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrpVentasSucursal.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                            xrpVentasSucursal.DataSource = DsetReporte;
+                            xrpVentasSucursal.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
+
+                            xrpVentasSucursal.ShowPrintMarginsWarning = false;
+
+
+
+                            if (!d.Exportar)
+                            {
+                                xrpVentasSucursal.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpVentasSucursal.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Ventas (SUCURSAL)";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                                workbook.BeginUpdate();
+
+                                CellRange range = worksheet["A6:AC6"];
+                                worksheet["A6:AC6"].Style.Font.Bold = true;
+
+                                workbook.EndUpdate();
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
 
