@@ -870,6 +870,70 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
 
+                        case "Ventas Mensuales":
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+                            if (d.Param[3] == null) d.Param[3] = string.Empty;
+                            if (d.Param[4] == null) d.Param[4] = string.Empty;
+                            if (d.Param[5] == null) d.Param[5] = string.Empty;
+
+                            d.Param[0] = new DateTime(Convert.ToDateTime(d.Param[1]).Year, 1, 1);
+
+
+                            RPT_VentasMensualesTableAdapter adpVentasMensules = new RPT_VentasMensualesTableAdapter();
+                            adpVentasMensules.Fill(DsetReporte.RPT_VentasMensuales, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), d.Param[2].ToString(), d.Param[3].ToString(), d.Param[4].ToString(), d.Param[5].ToString());
+
+                            xrpVentasMensuales xrpVentasMensuales = new xrpVentasMensuales();
+                            xrpVentasMensuales.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrpVentasMensuales.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                            xrpVentasMensuales.DataSource = DsetReporte;
+                            xrpVentasMensuales.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
+
+                            xrpVentasMensuales.ShowPrintMarginsWarning = false;
+
+
+
+                            if (!d.Exportar)
+                            {
+                                xrpVentasMensuales.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpVentasMensuales.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Ventas (MENSUALES)";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                                workbook.BeginUpdate();
+
+                                CellRange range = worksheet["A6:AC6"];
+                                worksheet["A6:AC6"].Style.Font.Bold = true;
+
+                                workbook.EndUpdate();
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+                            break;
 
                         case "":
                             break;
