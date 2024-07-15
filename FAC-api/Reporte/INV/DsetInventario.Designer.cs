@@ -4813,6 +4813,8 @@ namespace FAC_api.Reporte.INV {
             
             private global::System.Data.DataColumn columnCodigo;
             
+            private global::System.Data.DataColumn columnProducto;
+            
             private global::System.Data.DataColumn columnCant_enero;
             
             private global::System.Data.DataColumn columnenero;
@@ -4905,6 +4907,14 @@ namespace FAC_api.Reporte.INV {
             public global::System.Data.DataColumn CodigoColumn {
                 get {
                     return this.columnCodigo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn ProductoColumn {
+                get {
+                    return this.columnProducto;
                 }
             }
             
@@ -5163,6 +5173,7 @@ namespace FAC_api.Reporte.INV {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public RPT_VentasMensualesRow AddRPT_VentasMensualesRow(
                         string Codigo, 
+                        string Producto, 
                         decimal Cant_enero, 
                         decimal enero, 
                         decimal Cant_febrero, 
@@ -5193,6 +5204,7 @@ namespace FAC_api.Reporte.INV {
                 RPT_VentasMensualesRow rowRPT_VentasMensualesRow = ((RPT_VentasMensualesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Codigo,
+                        Producto,
                         Cant_enero,
                         enero,
                         Cant_febrero,
@@ -5243,6 +5255,7 @@ namespace FAC_api.Reporte.INV {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             internal void InitVars() {
                 this.columnCodigo = base.Columns["Codigo"];
+                this.columnProducto = base.Columns["Producto"];
                 this.columnCant_enero = base.Columns["Cant_enero"];
                 this.columnenero = base.Columns["enero"];
                 this.columnCant_febrero = base.Columns["Cant_febrero"];
@@ -5277,6 +5290,8 @@ namespace FAC_api.Reporte.INV {
             private void InitClass() {
                 this.columnCodigo = new global::System.Data.DataColumn("Codigo", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCodigo);
+                this.columnProducto = new global::System.Data.DataColumn("Producto", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnProducto);
                 this.columnCant_enero = new global::System.Data.DataColumn("Cant_enero", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCant_enero);
                 this.columnenero = new global::System.Data.DataColumn("enero", typeof(decimal), null, global::System.Data.MappingType.Element);
@@ -5333,6 +5348,8 @@ namespace FAC_api.Reporte.INV {
                 base.Columns.Add(this.columnTotal);
                 this.columnCodigo.AllowDBNull = false;
                 this.columnCodigo.MaxLength = 12;
+                this.columnProducto.AllowDBNull = false;
+                this.columnProducto.MaxLength = 1000;
                 this.columnCant_enero.ReadOnly = true;
                 this.columnenero.ReadOnly = true;
                 this.columnCant_febrero.ReadOnly = true;
@@ -8434,6 +8451,17 @@ namespace FAC_api.Reporte.INV {
                 }
                 set {
                     this[this.tableRPT_VentasMensuales.CodigoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string Producto {
+                get {
+                    return ((string)(this[this.tableRPT_VentasMensuales.ProductoColumn]));
+                }
+                set {
+                    this[this.tableRPT_VentasMensuales.ProductoColumn] = value;
                 }
             }
             
@@ -12221,6 +12249,7 @@ namespace FAC_api.Reporte.INV.DsetInventarioTableAdapters {
             tableMapping.SourceTable = "Table";
             tableMapping.DataSetTable = "RPT_VentasMensuales";
             tableMapping.ColumnMappings.Add("Codigo", "Codigo");
+            tableMapping.ColumnMappings.Add("Producto", "Producto");
             tableMapping.ColumnMappings.Add("Cant_enero", "Cant_enero");
             tableMapping.ColumnMappings.Add("enero", "enero");
             tableMapping.ColumnMappings.Add("Cant_febrero", "Cant_febrero");

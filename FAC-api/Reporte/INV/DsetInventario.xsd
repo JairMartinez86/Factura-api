@@ -349,7 +349,7 @@
           </TableAdapter>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="RPT_VentasMensualesTableAdapter" GeneratorDataComponentClassName="RPT_VentasMensualesTableAdapter" Name="RPT_VentasMensuales" UserDataComponentName="RPT_VentasMensualesTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="BalancesEntities (FAC-api)" DbObjectName="Balances.INV.RPT_VentasMensuales" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="BalancesEntities (FAC-api)" DbObjectName="Balances.INV.RPT_VentasMensuales" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
                     <CommandText>INV.RPT_VentasMensuales</CommandText>
@@ -368,6 +368,7 @@
             </MainSource>
             <Mappings>
               <Mapping SourceColumn="Codigo" DataSetColumn="Codigo" />
+              <Mapping SourceColumn="Producto" DataSetColumn="Producto" />
               <Mapping SourceColumn="Cant_enero" DataSetColumn="Cant_enero" />
               <Mapping SourceColumn="enero" DataSetColumn="enero" />
               <Mapping SourceColumn="Cant_febrero" DataSetColumn="Cant_febrero" />
@@ -840,6 +841,13 @@
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="12" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Producto" msprop:Generator_ColumnPropNameInRow="Producto" msprop:Generator_ColumnPropNameInTable="ProductoColumn" msprop:Generator_ColumnVarNameInTable="columnProducto" msprop:Generator_UserColumnName="Producto">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1000" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
