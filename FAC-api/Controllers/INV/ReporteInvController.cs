@@ -1051,6 +1051,131 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
 
+                        case "Ventas Por Proveedor":
+
+
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now.AddYears(-1));
+                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+                            if (d.Param[3] == null) d.Param[3] = string.Empty;
+                            if (d.Param[4] == null) d.Param[4] = string.Empty;
+                            if (d.Param[5] == null) d.Param[5] = string.Empty;
+                            if (d.Param[6] == null) d.Param[6] = string.Empty;
+                            if (d.Param[7] == null) d.Param[7] = string.Empty;
+                            if (d.Param[8] == null) d.Param[8] = string.Empty;
+                            if (d.Param[9] == null) d.Param[9] = string.Empty;
+                            if (d.Param[10] == null) d.Param[10] = false;
+
+                            if (Convert.ToDateTime((d.Param[0])).Year == Convert.ToDateTime((d.Param[1])).Year) d.Param[0] = string.Format("{0:dd-MM-yyyy}", DateTime.Now.AddYears(-1));
+
+                            if (d.Param[11].ToString() == "D")
+                            {
+
+
+                                RPT_Ventas_X_Proveedor_DetTableAdapter adpVentaXProvDet = new RPT_Ventas_X_Proveedor_DetTableAdapter();
+                                adpVentaXProvDet.Fill(DsetReporte.RPT_Ventas_X_Proveedor_Det, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), d.Param[2].ToString(), d.Param[3].ToString(), d.Param[4].ToString(), d.Param[5].ToString(), d.Param[6].ToString(), d.Param[7].ToString(), d.Param[8].ToString(), d.Param[9].ToString(), Convert.ToBoolean(d.Param[10]));
+
+
+                                xrVentasPorProveedorDet xrVentasPorProveedorDet = new xrVentasPorProveedorDet();
+                                xrVentasPorProveedorDet.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                                xrVentasPorProveedorDet.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                                xrVentasPorProveedorDet.DataSource = DsetReporte;
+                                xrVentasPorProveedorDet.ExportOptions.Pdf.DocumentOptions.Title = "Ventas x Proveedor (D)";
+
+                                xrVentasPorProveedorDet.ShowPrintMarginsWarning = false;
+
+                                if (!d.Exportar)
+                                {
+                                    xrVentasPorProveedorDet.ExportToPdf(stream, null);
+                                    stream.Seek(0, SeekOrigin.Begin);
+                                }
+                                else
+                                {
+                                    xrVentasPorProveedorDet.ExportToXlsx(stream, null);
+                                    stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                    Workbook workbook = new Workbook();
+
+                                    workbook.LoadDocument(stream);
+                                    Worksheet worksheet = workbook.Worksheets[0];
+                                    workbook.Worksheets[0].Name = "Ventas x Poveedor (D)";
+                                    workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+
+                                    stream = new MemoryStream();
+
+                                    workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                    DatosReporte.d = stream.ToArray();
+                                    DatosReporte.Nombre = d.TipoReporte;
+
+                                }
+
+
+
+
+                            }
+                            else
+                            {
+                                RPT_Ventas_X_ProveedorTableAdapter adpVentaXProveedor = new RPT_Ventas_X_ProveedorTableAdapter();
+                                adpVentaXProveedor.Fill(DsetReporte.RPT_Ventas_X_Proveedor, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), d.Param[2].ToString(), d.Param[3].ToString(), d.Param[4].ToString(), d.Param[5].ToString(), d.Param[6].ToString(), d.Param[7].ToString(), d.Param[8].ToString(), d.Param[9].ToString(), Convert.ToBoolean(d.Param[10]));
+
+                                xrVentasPorProveedorC xrVentasPorProveedorC = new xrVentasPorProveedorC();
+                                xrVentasPorProveedorC.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                                xrVentasPorProveedorC.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                                xrVentasPorProveedorC.DataSource = DsetReporte;
+                                xrVentasPorProveedorC.ExportOptions.Pdf.DocumentOptions.Title = "Ventas por Proveedor (C)";
+
+                                xrVentasPorProveedorC.ShowPrintMarginsWarning = false;
+
+                                if (!d.Exportar)
+                                {
+                                    xrVentasPorProveedorC.ExportToPdf(stream, null);
+                                    stream.Seek(0, SeekOrigin.Begin);
+                                }
+                                else
+                                {
+                                    xrVentasPorProveedorC.ExportToXlsx(stream, null);
+                                    stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                    Workbook workbook = new Workbook();
+
+                                    workbook.LoadDocument(stream);
+                                    Worksheet worksheet = workbook.Worksheets[0];
+                                    workbook.Worksheets[0].Name = "Ventas por Proveedor (C)";
+                                    workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                         
+
+                                    stream = new MemoryStream();
+
+                                    workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                    DatosReporte.d = stream.ToArray();
+                                    DatosReporte.Nombre = d.TipoReporte;
+
+                                }
+                            }
+
+
+
+
+
+
+
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+
+
+                            break;
+
                         case "":
                             break;
                     }

@@ -705,6 +705,18 @@
     <Compile Include="Reporte\INV\xrVentasPorClienteDet.Designer.cs">
       <DependentUpon>xrVentasPorClienteDet.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrVentasPorProveedorC.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrVentasPorProveedorC.Designer.cs">
+      <DependentUpon>xrVentasPorProveedorC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporte\INV\xrVentasPorProveedorDet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrVentasPorProveedorDet.Designer.cs">
+      <DependentUpon>xrVentasPorProveedorDet.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrVentasPorSucursal.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -938,6 +950,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrVentasPorClienteDet.resx">
       <DependentUpon>xrVentasPorClienteDet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrVentasPorProveedorC.resx">
+      <DependentUpon>xrVentasPorProveedorC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrVentasPorProveedorDet.resx">
+      <DependentUpon>xrVentasPorProveedorDet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrVentasPorSucursal.resx">
       <DependentUpon>xrVentasPorSucursal.cs</DependentUpon>
