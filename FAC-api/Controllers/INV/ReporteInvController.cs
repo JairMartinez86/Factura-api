@@ -621,7 +621,7 @@ namespace FAC_api.Controllers.INV
 
 
                         case "Columnar Existencia":
-                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
                             if (d.Param[1] == null) d.Param[1] = string.Empty;
                             if (d.Param[2] == null) d.Param[2] = string.Empty;
                             if (d.Param[3] == null) d.Param[3] = string.Empty;
@@ -682,8 +682,8 @@ namespace FAC_api.Controllers.INV
 
 
                             if (d.Param[0] == null) d.Param[0] = string.Empty;
-                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
-                            if (d.Param[2] == null) d.Param[2] = string.Format("{0:yyyy-MM-dd}", DateTime.Now.AddYears(-1));
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[2] == null) d.Param[2] = string.Format("{0:dd/MM/yyyy}", DateTime.Now.AddYears(-1));
                             if (d.Param[3] == null) d.Param[3] = string.Empty;
                             if (d.Param[4] == null) d.Param[4] = string.Empty;
                             if (d.Param[5] == null) d.Param[5] = string.Empty;
@@ -694,7 +694,7 @@ namespace FAC_api.Controllers.INV
                             if (d.Param[10] == null) d.Param[10] = string.Empty;
                             if (d.Param[11] == null) d.Param[11] = false;
 
-                            if (Convert.ToDateTime((d.Param[1])).Year == Convert.ToDateTime((d.Param[2])).Year) d.Param[2] = string.Format("{0:yyyy-MM-dd}", DateTime.Now.AddYears(-1));
+                            if (Convert.ToDateTime((d.Param[1])).Year == Convert.ToDateTime((d.Param[2])).Year) d.Param[2] = string.Format("{0:dd/MM/yyyy}", DateTime.Now.AddYears(-1));
 
                             if (d.Param[12].ToString() == "D")
                             {
@@ -812,8 +812,8 @@ namespace FAC_api.Controllers.INV
 
                         case "Ventas Por Sucursal":
 
-                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
-                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
                             if (d.Param[2] == null) d.Param[2] = string.Empty;
                             if (d.Param[3] == null) d.Param[3] = string.Empty;
 
@@ -873,8 +873,8 @@ namespace FAC_api.Controllers.INV
 
                         case "Ventas Mensuales":
 
-                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
-                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
                             if (d.Param[2] == null) d.Param[2] = string.Empty;
                             if (d.Param[3] == null) d.Param[3] = string.Empty;
                             if (d.Param[4] == null) d.Param[4] = string.Empty;
@@ -976,6 +976,75 @@ namespace FAC_api.Controllers.INV
                                 DatosReporte.Nombre = d.TipoReporte;
 
                             }
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+                            break;
+
+
+                        case "Ventas Por Producto":
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now.AddYears(-1));
+                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+                            if (d.Param[3] == null) d.Param[3] = string.Empty;
+                            if (d.Param[4] == null) d.Param[4] = string.Empty;
+                            if (d.Param[5] == null) d.Param[5] = string.Empty;
+                            if (d.Param[6] == null) d.Param[6] = string.Empty;
+                            if (d.Param[7] == null) d.Param[7] = string.Empty;
+                            if (d.Param[8] == null) d.Param[8] = string.Empty;
+                            if (d.Param[9] == null) d.Param[9] = string.Empty;
+                            if (d.Param[10] == null) d.Param[10] = false;
+
+                            if (Convert.ToDateTime((d.Param[0])).Year == Convert.ToDateTime((d.Param[1])).Year) d.Param[0] = string.Format("{0:dd-MM-yyyy}", DateTime.Now.AddYears(-1));
+
+                            RPT_Ventas_X_ProductoTableAdapter adpVentaXProducto = new RPT_Ventas_X_ProductoTableAdapter();
+                            adpVentaXProducto.Fill(DsetReporte.RPT_Ventas_X_Producto, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), d.Param[2].ToString(), d.Param[3].ToString(), d.Param[4].ToString(), d.Param[5].ToString(), d.Param[6].ToString(), d.Param[7].ToString(), d.Param[8].ToString(), d.Param[9].ToString(), Convert.ToBoolean(d.Param[10]));
+
+                            xrpVentasPorProducto xrpVentasPorProducto = new xrpVentasPorProducto();
+                            xrpVentasPorProducto.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrpVentasPorProducto.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                            xrpVentasPorProducto.DataSource = DsetReporte;
+                            xrpVentasPorProducto.ExportOptions.Pdf.DocumentOptions.Title = "Ventas por Producto";
+
+                            xrpVentasPorProducto.ShowPrintMarginsWarning = false;
+
+                            if (!d.Exportar)
+                            {
+                                xrpVentasPorProducto.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpVentasPorProducto.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Ventas por Producto";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+                    
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+
+
+
+
 
 
                             DatosReporte.d = stream.ToArray();
