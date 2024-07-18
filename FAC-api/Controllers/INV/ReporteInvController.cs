@@ -19,6 +19,7 @@ using DevExpress.Spreadsheet;
 using DevExpress.XtraSpreadsheet;
 using System.Drawing;
 using Azure;
+using FAC_api.Reporte;
 
 namespace FAC_api.Controllers.INV
 {
@@ -205,6 +206,26 @@ namespace FAC_api.Controllers.INV
                     datos = new Cls_Datos();
                     datos.Nombre = "CLIENTES";
                     datos.d = qClientes;
+                    lstDatos.Add(datos);
+
+
+
+
+                    var qVendedores = (from _q in _Conexion.Vendedor
+                                     orderby _q.Codigo
+                                     select new
+                                     {
+                                         _q.Codigo,
+                                         _q.Nombre,
+                                         Key = string.Concat(_q.Codigo.TrimStart().TrimEnd(), " ", _q.Nombre.TrimStart().TrimEnd())
+                                     }).ToList();
+
+
+
+
+                    datos = new Cls_Datos();
+                    datos.Nombre = "VENDEDORES";
+                    datos.d = qVendedores;
                     lstDatos.Add(datos);
 
 
@@ -1174,6 +1195,68 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
 
 
+                            break;
+
+
+
+
+                        case "Ventas Por Vendedor":
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now.AddYears(-1));
+                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+
+
+                            RPT_VentasPorVendedorTableAdapter adpVentaXVendedor = new RPT_VentasPorVendedorTableAdapter();
+                            adpVentaXVendedor.Fill(DsetReporte.RPT_VentasPorVendedor, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), d.Param[2].ToString());
+
+                            xrpVentasPorVendedor xrpVentasPorVendedor = new xrpVentasPorVendedor();
+                            xrpVentasPorVendedor.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrpVentasPorVendedor.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                            xrpVentasPorVendedor.DataSource = DsetReporte;
+                            xrpVentasPorVendedor.ExportOptions.Pdf.DocumentOptions.Title = "Ventas por Vendedor";
+
+                            xrpVentasPorVendedor.ShowPrintMarginsWarning = false;
+
+                            if (!d.Exportar)
+                            {
+                                xrpVentasPorVendedor.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpVentasPorVendedor.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Ventas por Vendedor";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+
+
+
+
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
                         case "":
