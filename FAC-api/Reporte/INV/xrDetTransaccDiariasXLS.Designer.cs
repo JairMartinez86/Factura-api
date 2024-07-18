@@ -177,7 +177,7 @@
             this.xrTableCell13.Name = "xrTableCell13";
             this.xrTableCell13.StylePriority.UseTextAlignment = false;
             this.xrTableCell13.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
-            this.xrTableCell13.TextFormatString = "{0:###,###,###0..0000; - ###,###,###0..0000; #}";
+            this.xrTableCell13.TextFormatString = "{0:###,###,###0; - ###,###,###0; #}";
             this.xrTableCell13.Weight = 0.194032747805708D;
             // 
             // xrTableCell14
@@ -188,7 +188,7 @@
             this.xrTableCell14.Name = "xrTableCell14";
             this.xrTableCell14.StylePriority.UseTextAlignment = false;
             this.xrTableCell14.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
-            this.xrTableCell14.TextFormatString = "{0:###,###,###0..0000; - ###,###,###0..0000; #}";
+            this.xrTableCell14.TextFormatString = "{0:###,###,###0.0000; - ###,###,###0.0000; #}";
             this.xrTableCell14.Weight = 0.19403239886275053D;
             // 
             // xrTableCell2
@@ -199,7 +199,7 @@
             this.xrTableCell2.Name = "xrTableCell2";
             this.xrTableCell2.StylePriority.UseTextAlignment = false;
             this.xrTableCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
-            this.xrTableCell2.TextFormatString = "{0:###,###,###0..0000; - ###,###,###0..0000; #}";
+            this.xrTableCell2.TextFormatString = "{0:###,###,###0.0000; - ###,###,###0.0000; #}";
             this.xrTableCell2.Weight = 0.1940324014248534D;
             // 
             // xrTableCell18
@@ -210,7 +210,7 @@
             this.xrTableCell18.Name = "xrTableCell18";
             this.xrTableCell18.StylePriority.UseTextAlignment = false;
             this.xrTableCell18.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
-            this.xrTableCell18.TextFormatString = "{0:###,###,###0..0000; - ###,###,###0..0000; #}";
+            this.xrTableCell18.TextFormatString = "{0:###,###,###0.0000; - ###,###,###0.0000; #}";
             this.xrTableCell18.Weight = 0.1940322817331202D;
             // 
             // xrTableCell21
@@ -485,6 +485,7 @@
             // dsetInventario1
             // 
             this.dsetInventario1.DataSetName = "DsetInventario";
+            this.dsetInventario1.EnforceConstraints = false;
             this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // P_Fecha1

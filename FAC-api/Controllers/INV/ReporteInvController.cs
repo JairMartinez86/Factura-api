@@ -259,6 +259,7 @@ namespace FAC_api.Controllers.INV
                      Cls_Datos DatosReporte = new Cls_Datos();
 
                     DsetInventario DsetReporte = new DsetInventario();
+                    
 
                      MemoryStream stream = new MemoryStream();
 
@@ -406,7 +407,7 @@ namespace FAC_api.Controllers.INV
                             adpRevConsecutivo.Fill(DsetReporte.RPT_DetTRevisionConsecutivo, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), d.Param[2].ToString());
 
                             xrInvRevConsecutivo xrpRevConsecutivo = new xrInvRevConsecutivo();
-                            xrpRevConsecutivo.DataSource = DsetReporte;
+                            xrpRevConsecutivo.DataSource = DsetReporte.RPT_DetTRevisionConsecutivo;
                             xrpRevConsecutivo.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
 
                             xrpRevConsecutivo.ShowPrintMarginsWarning = false;
@@ -915,12 +916,58 @@ namespace FAC_api.Controllers.INV
                                 workbook.Worksheets.ActiveWorksheet = worksheet;
 
 
-                                workbook.BeginUpdate();
+                
 
-                                CellRange range = worksheet["A6:AC6"];
-                                worksheet["A6:AC6"].Style.Font.Bold = true;
+                                stream = new MemoryStream();
 
-                                workbook.EndUpdate();
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+                            break;
+
+                        case "Margen Producto":
+
+         
+                            if (d.Param[0] == null) d.Param[0] = string.Empty;
+                            if (d.Param[1] == null) d.Param[1] = string.Empty;
+
+
+                            RPT_MargenProductoTableAdapter adpMargenProcuto = new RPT_MargenProductoTableAdapter();
+                            adpMargenProcuto.Fill(DsetReporte.RPT_MargenProducto, d.Param[0].ToString(), d.Param[1].ToString());
+
+                            xrMargenProducto xrpMargenProducto = new xrMargenProducto();
+                            xrpMargenProducto.DataSource = DsetReporte;
+                            xrpMargenProducto.ExportOptions.Pdf.DocumentOptions.Title = d.TipoReporte;
+
+                            xrpMargenProducto.ShowPrintMarginsWarning = false;
+
+
+
+                            if (!d.Exportar)
+                            {
+                                xrpMargenProducto.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpMargenProducto.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Margen Productos";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
 
                                 stream = new MemoryStream();
 

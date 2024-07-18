@@ -53,10 +53,10 @@
             this.xrLabel2 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrPageInfo2 = new DevExpress.XtraReports.UI.XRPageInfo();
-            this.dsetInventario1 = new FAC_api.Reporte.INV.DsetInventario();
             this.rPT_DetTransaccDiariasTableAdapter = new FAC_api.Reporte.INV.DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter();
             this.PageFooter = new DevExpress.XtraReports.UI.PageFooterBand();
             this.xrPageInfo1 = new DevExpress.XtraReports.UI.XRPageInfo();
+            this.dsetInventario1 = new FAC_api.Reporte.INV.DsetInventario();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dsetInventario1)).BeginInit();
@@ -334,11 +334,6 @@
             this.xrPageInfo2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
             this.xrPageInfo2.TextFormatString = "{0:dd-MMM-yyyy hh:mm tt}";
             // 
-            // dsetInventario1
-            // 
-            this.dsetInventario1.DataSetName = "DsetInventario";
-            this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // rPT_DetTransaccDiariasTableAdapter
             // 
             this.rPT_DetTransaccDiariasTableAdapter.ClearBeforeFill = true;
@@ -359,6 +354,12 @@
             this.xrPageInfo1.SizeF = new System.Drawing.SizeF(40.9295F, 15.62822F);
             this.xrPageInfo1.StylePriority.UseTextAlignment = false;
             this.xrPageInfo1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
+            // 
+            // dsetInventario1
+            // 
+            this.dsetInventario1.DataSetName = "DsetInventario";
+            this.dsetInventario1.EnforceConstraints = false;
+            this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // xrInvRevConsecutivo
             // 
@@ -408,11 +409,11 @@
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell13;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell5;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell6;
-        private DsetInventario dsetInventario1;
         private DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter rPT_DetTransaccDiariasTableAdapter;
         private DevExpress.XtraReports.UI.PageFooterBand PageFooter;
         private DevExpress.XtraReports.UI.XRPageInfo xrPageInfo1;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell14;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell11;
+        private DsetInventario dsetInventario1;
     }
 }

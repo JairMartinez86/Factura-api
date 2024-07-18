@@ -173,7 +173,7 @@
             this.xrTableCell13.Name = "xrTableCell13";
             this.xrTableCell13.StylePriority.UseTextAlignment = false;
             this.xrTableCell13.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
-            this.xrTableCell13.TextFormatString = "{0:###,###,###0..0000; - ###,###,###0..0000; #}";
+            this.xrTableCell13.TextFormatString = "{0:###,###,###0; - ###,###,###0; #}";
             this.xrTableCell13.Weight = 0.18066184261860241D;
             // 
             // xrTableCell14
@@ -195,7 +195,7 @@
             this.xrTableCell2.Name = "xrTableCell2";
             this.xrTableCell2.StylePriority.UseTextAlignment = false;
             this.xrTableCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
-            this.xrTableCell2.TextFormatString = "{0:###,###,###0..0000; - ###,###,###0..0000; #}";
+            this.xrTableCell2.TextFormatString = "{0:###,###,###0.0000; - ###,###,###0.0000; #}";
             this.xrTableCell2.Weight = 0.18066153976065205D;
             // 
             // TopMargin
@@ -207,7 +207,7 @@
             // 
             // BottomMargin
             // 
-            this.BottomMargin.HeightF = 8F;
+            this.BottomMargin.HeightF = 11.53539F;
             this.BottomMargin.Name = "BottomMargin";
             this.BottomMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.BottomMargin.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
@@ -215,6 +215,7 @@
             // dsetInventario1
             // 
             this.dsetInventario1.DataSetName = "DsetInventario";
+            this.dsetInventario1.EnforceConstraints = false;
             this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // xrTable1
@@ -668,7 +669,7 @@
             this.dsetInventario1});
             this.DataMember = "RPT_DetTransaccDiarias";
             this.DataSource = this.dsetInventario1;
-            this.Margins = new System.Drawing.Printing.Margins(21, 14, 16, 8);
+            this.Margins = new System.Drawing.Printing.Margins(21, 14, 16, 12);
             this.Parameters.AddRange(new DevExpress.XtraReports.Parameters.Parameter[] {
             this.P_Fecha1,
             this.P_Fecha2});
