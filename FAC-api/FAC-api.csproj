@@ -663,6 +663,12 @@
     <Compile Include="Reporte\INV\xrMargenProducto.Designer.cs">
       <DependentUpon>xrMargenProducto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrpResumenCompras.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrpResumenCompras.Designer.cs">
+      <DependentUpon>xrpResumenCompras.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrpVentasMensuales.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -723,10 +729,10 @@
     <Compile Include="Reporte\INV\xrVentasPorSucursal.Designer.cs">
       <DependentUpon>xrVentasPorSucursal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Reporte\xrpVentasPorVendedor.cs">
+    <Compile Include="Reporte\INV\xrpVentasPorVendedor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reporte\xrpVentasPorVendedor.Designer.cs">
+    <Compile Include="Reporte\INV\xrpVentasPorVendedor.Designer.cs">
       <DependentUpon>xrpVentasPorVendedor.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -936,6 +942,9 @@
     <EmbeddedResource Include="Reporte\INV\xrMargenProducto.resx">
       <DependentUpon>xrMargenProducto.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrpResumenCompras.resx">
+      <DependentUpon>xrpResumenCompras.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrpVentasMensuales.resx">
       <DependentUpon>xrpVentasMensuales.cs</DependentUpon>
     </EmbeddedResource>
@@ -966,7 +975,7 @@
     <EmbeddedResource Include="Reporte\INV\xrVentasPorSucursal.resx">
       <DependentUpon>xrVentasPorSucursal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reporte\xrpVentasPorVendedor.resx">
+    <EmbeddedResource Include="Reporte\INV\xrpVentasPorVendedor.resx">
       <DependentUpon>xrpVentasPorVendedor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

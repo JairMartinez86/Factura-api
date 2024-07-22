@@ -1259,6 +1259,66 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
 
+
+                        case "Resumen Compras":
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[2] == null) d.Param[2] = string.Empty;
+
+
+                            ResumenComprasTableAdapter adpResumenCompras = new ResumenComprasTableAdapter();
+                            adpResumenCompras.Fill(DsetReporte.ResumenCompras, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]), d.Param[2].ToString());
+
+                            xrpResumenCompras xrpResumenCompras = new xrpResumenCompras();
+                            xrpResumenCompras.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrpResumenCompras.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                            xrpResumenCompras.DataSource = DsetReporte;
+                            xrpResumenCompras.ExportOptions.Pdf.DocumentOptions.Title = "Resumen Compras";
+
+                            xrpResumenCompras.ShowPrintMarginsWarning = false;
+
+                            if (!d.Exportar)
+                            {
+                                xrpResumenCompras.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrpResumenCompras.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Resumen Compras";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+
+
+
+
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+                            break;
+
                         case "":
                             break;
                     }
