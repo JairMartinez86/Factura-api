@@ -699,6 +699,12 @@
     <Compile Include="Reporte\INV\xrTransaccionInvResumen.Designer.cs">
       <DependentUpon>xrTransaccionInvResumen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrValidacionInventario.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrValidacionInventario.Designer.cs">
+      <DependentUpon>xrValidacionInventario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrVentasPorClienteC.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -959,6 +965,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrTransaccionInvResumen.resx">
       <DependentUpon>xrTransaccionInvResumen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrValidacionInventario.resx">
+      <DependentUpon>xrValidacionInventario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrVentasPorClienteC.resx">
       <DependentUpon>xrVentasPorClienteC.cs</DependentUpon>

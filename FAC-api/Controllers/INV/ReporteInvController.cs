@@ -1319,6 +1319,62 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
 
+
+                        case "Validacion Inventario":
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+
+
+                            RPT_VALIDACION_INVENTARIOTableAdapter adpValidacionInventario = new RPT_VALIDACION_INVENTARIOTableAdapter();
+                            adpValidacionInventario.Fill(DsetReporte.RPT_VALIDACION_INVENTARIO, Convert.ToDateTime(d.Param[0]));
+
+                            xrValidacionInventario xrValidacionInventario = new xrValidacionInventario();
+                            xrValidacionInventario.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrValidacionInventario.DataSource = DsetReporte;
+                            xrValidacionInventario.ExportOptions.Pdf.DocumentOptions.Title = "Validacion Inventario";
+
+                            xrValidacionInventario.ShowPrintMarginsWarning = false;
+
+                            if (!d.Exportar)
+                            {
+                                xrValidacionInventario.ExportToPdf(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+                            }
+                            else
+                            {
+                                xrValidacionInventario.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Validacion Inventario";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+
+
+
+
+
+
+                            DatosReporte.d = stream.ToArray();
+                            DatosReporte.Nombre = d.TipoReporte;
+                            break;
+
                         case "":
                             break;
                     }
