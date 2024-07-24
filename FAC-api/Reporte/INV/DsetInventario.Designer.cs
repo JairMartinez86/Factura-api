@@ -7977,8 +7977,6 @@ namespace FAC_api.Reporte.INV {
             
             private global::System.Data.DataColumn columnsaldoUnidadesTotal;
             
-            private global::System.Data.DataColumn columnOrden;
-            
             private global::System.Data.DataColumn columnProducto;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -8112,14 +8110,6 @@ namespace FAC_api.Reporte.INV {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn OrdenColumn {
-                get {
-                    return this.columnOrden;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public global::System.Data.DataColumn ProductoColumn {
                 get {
                     return this.columnProducto;
@@ -8163,7 +8153,7 @@ namespace FAC_api.Reporte.INV {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RPT_VALIDACION_INVENTARIORow AddRPT_VALIDACION_INVENTARIORow(System.DateTime fecha, string tipo, string documento, int entrada, int salidas, int saldoUnidades, decimal costo, decimal valorentrada, decimal valorsalida, decimal saldoValor, string codiprod, int saldoUnidadesTotal, int Orden, string Producto) {
+            public RPT_VALIDACION_INVENTARIORow AddRPT_VALIDACION_INVENTARIORow(System.DateTime fecha, string tipo, string documento, int entrada, int salidas, int saldoUnidades, decimal costo, decimal valorentrada, decimal valorsalida, decimal saldoValor, string codiprod, int saldoUnidadesTotal, string Producto) {
                 RPT_VALIDACION_INVENTARIORow rowRPT_VALIDACION_INVENTARIORow = ((RPT_VALIDACION_INVENTARIORow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         fecha,
@@ -8178,7 +8168,6 @@ namespace FAC_api.Reporte.INV {
                         saldoValor,
                         codiprod,
                         saldoUnidadesTotal,
-                        Orden,
                         Producto};
                 rowRPT_VALIDACION_INVENTARIORow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowRPT_VALIDACION_INVENTARIORow);
@@ -8214,7 +8203,6 @@ namespace FAC_api.Reporte.INV {
                 this.columnsaldoValor = base.Columns["saldoValor"];
                 this.columncodiprod = base.Columns["codiprod"];
                 this.columnsaldoUnidadesTotal = base.Columns["saldoUnidadesTotal"];
-                this.columnOrden = base.Columns["Orden"];
                 this.columnProducto = base.Columns["Producto"];
             }
             
@@ -8245,8 +8233,6 @@ namespace FAC_api.Reporte.INV {
                 base.Columns.Add(this.columncodiprod);
                 this.columnsaldoUnidadesTotal = new global::System.Data.DataColumn("saldoUnidadesTotal", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnsaldoUnidadesTotal);
-                this.columnOrden = new global::System.Data.DataColumn("Orden", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnOrden);
                 this.columnProducto = new global::System.Data.DataColumn("Producto", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnProducto);
                 this.columntipo.MaxLength = 10;
@@ -13746,23 +13732,6 @@ namespace FAC_api.Reporte.INV {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public int Orden {
-                get {
-                    try {
-                        return ((int)(this[this.tableRPT_VALIDACION_INVENTARIO.OrdenColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Orden\' de la tabla \'RPT_VALIDACION_INVENTARIO\' es DBNull." +
-                                "", e);
-                    }
-                }
-                set {
-                    this[this.tableRPT_VALIDACION_INVENTARIO.OrdenColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public string Producto {
                 get {
                     return ((string)(this[this.tableRPT_VALIDACION_INVENTARIO.ProductoColumn]));
@@ -13914,18 +13883,6 @@ namespace FAC_api.Reporte.INV {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetsaldoUnidadesTotalNull() {
                 this[this.tableRPT_VALIDACION_INVENTARIO.saldoUnidadesTotalColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsOrdenNull() {
-                return this.IsNull(this.tableRPT_VALIDACION_INVENTARIO.OrdenColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetOrdenNull() {
-                this[this.tableRPT_VALIDACION_INVENTARIO.OrdenColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -19073,7 +19030,6 @@ namespace FAC_api.Reporte.INV.DsetInventarioTableAdapters {
             tableMapping.ColumnMappings.Add("saldoValor", "saldoValor");
             tableMapping.ColumnMappings.Add("codiprod", "codiprod");
             tableMapping.ColumnMappings.Add("saldoUnidadesTotal", "saldoUnidadesTotal");
-            tableMapping.ColumnMappings.Add("Orden", "Orden");
             tableMapping.ColumnMappings.Add("Producto", "Producto");
             this._adapter.TableMappings.Add(tableMapping);
         }

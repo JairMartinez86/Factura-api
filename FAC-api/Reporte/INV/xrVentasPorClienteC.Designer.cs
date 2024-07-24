@@ -68,7 +68,6 @@
             this.P_Fecha1 = new DevExpress.XtraReports.Parameters.Parameter();
             this.P_Fecha2 = new DevExpress.XtraReports.Parameters.Parameter();
             this.dsetInventario1 = new FAC_api.Reporte.INV.DsetInventario();
-            this.rPT_DetTransaccDiariasTableAdapter = new FAC_api.Reporte.INV.DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter();
             this.xrTableCell4 = new DevExpress.XtraReports.UI.XRTableCell();
             this.xrTableCell5 = new DevExpress.XtraReports.UI.XRTableCell();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable2)).BeginInit();
@@ -499,10 +498,6 @@
             this.dsetInventario1.EnforceConstraints = false;
             this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // rPT_DetTransaccDiariasTableAdapter
-            // 
-            this.rPT_DetTransaccDiariasTableAdapter.ClearBeforeFill = true;
-            // 
             // xrTableCell4
             // 
             this.xrTableCell4.Borders = ((DevExpress.XtraPrinting.BorderSide)((DevExpress.XtraPrinting.BorderSide.Top | DevExpress.XtraPrinting.BorderSide.Bottom)));
@@ -539,7 +534,6 @@
             this.ReportFooter});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
             this.dsetInventario1});
-            this.DataAdapter = this.rPT_DetTransaccDiariasTableAdapter;
             this.DataMember = "RPT_Ventas_X_Cliente";
             this.DataSource = this.dsetInventario1;
             this.Font = new System.Drawing.Font("Arial", 9.75F);
@@ -594,7 +588,6 @@
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell33;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell34;
         private DsetInventario dsetInventario1;
-        private DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter rPT_DetTransaccDiariasTableAdapter;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell4;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell5;
     }

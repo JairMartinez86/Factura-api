@@ -94,7 +94,6 @@
             this.xrPageInfo2 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.P_Fecha1 = new DevExpress.XtraReports.Parameters.Parameter();
             this.dsetInventario1 = new FAC_api.Reporte.INV.DsetInventario();
-            this.rPT_DetTransaccDiariasTableAdapter = new FAC_api.Reporte.INV.DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter();
             this.ReportFooter = new DevExpress.XtraReports.UI.ReportFooterBand();
             this.xrTable3 = new DevExpress.XtraReports.UI.XRTable();
             this.xrTableRow3 = new DevExpress.XtraReports.UI.XRTableRow();
@@ -928,10 +927,6 @@
             this.dsetInventario1.EnforceConstraints = false;
             this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // rPT_DetTransaccDiariasTableAdapter
-            // 
-            this.rPT_DetTransaccDiariasTableAdapter.ClearBeforeFill = true;
-            // 
             // ReportFooter
             // 
             this.ReportFooter.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
@@ -1013,7 +1008,6 @@
             this.ReportFooter});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
             this.dsetInventario1});
-            this.DataAdapter = this.rPT_DetTransaccDiariasTableAdapter;
             this.DataMember = "XRP_ExistenciaColumnar";
             this.DataSource = this.dsetInventario1;
             this.Font = new System.Drawing.Font("Arial", 9.75F);
@@ -1046,7 +1040,6 @@
         private DevExpress.XtraReports.UI.XRPageInfo xrPageInfo2;
         private DevExpress.XtraReports.Parameters.Parameter P_Fecha1;
         private DsetInventario dsetInventario1;
-        private DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter rPT_DetTransaccDiariasTableAdapter;
         private DevExpress.XtraReports.UI.XRTable xrTable1;
         private DevExpress.XtraReports.UI.XRTableRow xrTableRow1;
         private DevExpress.XtraReports.UI.XRTableCell xrTableCell1;

@@ -621,7 +621,6 @@
               <Mapping SourceColumn="saldoValor" DataSetColumn="saldoValor" />
               <Mapping SourceColumn="codiprod" DataSetColumn="codiprod" />
               <Mapping SourceColumn="saldoUnidadesTotal" DataSetColumn="saldoUnidadesTotal" />
-              <Mapping SourceColumn="Orden" DataSetColumn="Orden" />
               <Mapping SourceColumn="Producto" DataSetColumn="Producto" />
             </Mappings>
             <Sources />
@@ -1373,7 +1372,6 @@
                 </xs:simpleType>
               </xs:element>
               <xs:element name="saldoUnidadesTotal" msprop:Generator_ColumnPropNameInRow="saldoUnidadesTotal" msprop:Generator_ColumnPropNameInTable="saldoUnidadesTotalColumn" msprop:Generator_ColumnVarNameInTable="columnsaldoUnidadesTotal" msprop:Generator_UserColumnName="saldoUnidadesTotal" type="xs:int" minOccurs="0" />
-              <xs:element name="Orden" msprop:Generator_ColumnPropNameInRow="Orden" msprop:Generator_ColumnPropNameInTable="OrdenColumn" msprop:Generator_ColumnVarNameInTable="columnOrden" msprop:Generator_UserColumnName="Orden" type="xs:int" minOccurs="0" />
               <xs:element name="Producto" msprop:Generator_ColumnPropNameInRow="Producto" msprop:Generator_ColumnPropNameInTable="ProductoColumn" msprop:Generator_ColumnVarNameInTable="columnProducto" msprop:Generator_UserColumnName="Producto">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">

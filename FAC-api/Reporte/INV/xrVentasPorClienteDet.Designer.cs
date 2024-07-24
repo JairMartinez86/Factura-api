@@ -46,7 +46,6 @@
             this.P_Fecha1 = new DevExpress.XtraReports.Parameters.Parameter();
             this.P_Fecha2 = new DevExpress.XtraReports.Parameters.Parameter();
             this.dsetInventario1 = new FAC_api.Reporte.INV.DsetInventario();
-            this.rPT_DetTransaccDiariasTableAdapter = new FAC_api.Reporte.INV.DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter();
             this.xrTable1 = new DevExpress.XtraReports.UI.XRTable();
             this.xrTableRow1 = new DevExpress.XtraReports.UI.XRTableRow();
             this.xrTableCell1 = new DevExpress.XtraReports.UI.XRTableCell();
@@ -223,10 +222,6 @@
             this.dsetInventario1.DataSetName = "DsetInventario";
             this.dsetInventario1.EnforceConstraints = false;
             this.dsetInventario1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // rPT_DetTransaccDiariasTableAdapter
-            // 
-            this.rPT_DetTransaccDiariasTableAdapter.ClearBeforeFill = true;
             // 
             // xrTable1
             // 
@@ -605,7 +600,6 @@
             this.PageHeader});
             this.ComponentStorage.AddRange(new System.ComponentModel.IComponent[] {
             this.dsetInventario1});
-            this.DataAdapter = this.rPT_DetTransaccDiariasTableAdapter;
             this.DataMember = "RPT_Ventas_X_Cliente_Det";
             this.DataSource = this.dsetInventario1;
             this.Font = new System.Drawing.Font("Arial", 9.75F);
@@ -631,7 +625,6 @@
         private DevExpress.XtraReports.Parameters.Parameter P_Fecha1;
         private DevExpress.XtraReports.Parameters.Parameter P_Fecha2;
         private DsetInventario dsetInventario1;
-        private DsetInventarioTableAdapters.RPT_DetTransaccDiariasTableAdapter rPT_DetTransaccDiariasTableAdapter;
         private DevExpress.XtraReports.UI.XRPageInfo xrPageInfo2;
         private DevExpress.XtraReports.UI.XRLabel xrLabel1;
         private DevExpress.XtraReports.UI.XRLabel xrLabel2;
