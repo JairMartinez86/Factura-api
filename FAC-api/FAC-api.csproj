@@ -411,6 +411,7 @@
     <Compile Include="Class\INV\Cls_LiberarPrecios.cs" />
     <Compile Include="Class\INV\Cls_ParamReporte.cs" />
     <Compile Include="Class\INV\Cls_RequisaAutorisaPermiso.cs" />
+    <Compile Include="Class\INV\Cls_UltimasCompras.cs" />
     <Compile Include="Class\INV\ExistenciaUbicacion.cs" />
     <Compile Include="Class\PRE\Cls_Grupo.cs" />
     <Compile Include="Class\PRE\Cls_GrupoPresupuesto.cs" />
@@ -699,6 +700,12 @@
     <Compile Include="Reporte\INV\xrTransaccionInvResumen.Designer.cs">
       <DependentUpon>xrTransaccionInvResumen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrUltimasEntrasProducto.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrUltimasEntrasProducto.Designer.cs">
+      <DependentUpon>xrUltimasEntrasProducto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrValidacionInventario.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -965,6 +972,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrTransaccionInvResumen.resx">
       <DependentUpon>xrTransaccionInvResumen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrUltimasEntrasProducto.resx">
+      <DependentUpon>xrUltimasEntrasProducto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrValidacionInventario.resx">
       <DependentUpon>xrValidacionInventario.cs</DependentUpon>

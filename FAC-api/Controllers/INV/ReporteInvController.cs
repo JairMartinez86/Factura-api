@@ -20,6 +20,8 @@ using DevExpress.XtraSpreadsheet;
 using System.Drawing;
 using Azure;
 using FAC_api.Reporte;
+using FAC_api.Class.SIS;
+using System.Data;
 
 namespace FAC_api.Controllers.INV
 {
@@ -556,6 +558,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpTransInvResumen.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -581,10 +585,6 @@ namespace FAC_api.Controllers.INV
 
                             }
 
-
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
-
                             break;
                         case "Factura Costo":
                             if (d.Param[0] == null) d.Param[0] = string.Empty;
@@ -608,6 +608,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpFacturaCosto.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -635,8 +637,6 @@ namespace FAC_api.Controllers.INV
                             }
 
 
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
 
@@ -669,6 +669,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpColumnarInv.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -695,8 +697,6 @@ namespace FAC_api.Controllers.INV
                             }
 
 
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
                         case "Ventas Por Cliente":
@@ -782,6 +782,8 @@ namespace FAC_api.Controllers.INV
                                 {
                                     xrpVentaXClienteC.ExportToPdf(stream, null);
                                     stream.Seek(0, SeekOrigin.Begin);
+                                    DatosReporte.d = stream.ToArray();
+                                    DatosReporte.Nombre = d.TipoReporte;
                                 }
                                 else
                                 {
@@ -821,14 +823,6 @@ namespace FAC_api.Controllers.INV
 
 
 
-
-                            
-
-
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
-
-
                             break;
 
                         case "Ventas Por Sucursal":
@@ -856,6 +850,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpVentasSucursal.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -888,8 +884,6 @@ namespace FAC_api.Controllers.INV
                             }
 
 
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
                         case "Ventas Mensuales":
@@ -921,6 +915,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpVentasMensuales.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -948,8 +944,6 @@ namespace FAC_api.Controllers.INV
                             }
 
 
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
                         case "Margen Producto":
@@ -974,6 +968,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpMargenProducto.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -999,8 +995,6 @@ namespace FAC_api.Controllers.INV
                             }
 
 
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
 
@@ -1035,6 +1029,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpVentasPorProducto.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -1066,10 +1062,6 @@ namespace FAC_api.Controllers.INV
 
 
 
-
-
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
                         case "Ventas Por Proveedor":
@@ -1156,6 +1148,8 @@ namespace FAC_api.Controllers.INV
                                 {
                                     xrVentasPorProveedorC.ExportToPdf(stream, null);
                                     stream.Seek(0, SeekOrigin.Begin);
+                                    DatosReporte.d = stream.ToArray();
+                                    DatosReporte.Nombre = d.TipoReporte;
                                 }
                                 else
                                 {
@@ -1189,12 +1183,6 @@ namespace FAC_api.Controllers.INV
 
 
 
-
-
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
-
-
                             break;
 
 
@@ -1222,6 +1210,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpVentasPorVendedor.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -1254,9 +1244,6 @@ namespace FAC_api.Controllers.INV
 
 
 
-
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
                             break;
 
 
@@ -1282,6 +1269,8 @@ namespace FAC_api.Controllers.INV
                             {
                                 xrpResumenCompras.ExportToPdf(stream, null);
                                 stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -1309,14 +1298,7 @@ namespace FAC_api.Controllers.INV
                             }
 
 
-
-
-
-
-
-
-                            DatosReporte.d = stream.ToArray();
-                            DatosReporte.Nombre = d.TipoReporte;
+                          
                             break;
 
 
@@ -1337,7 +1319,9 @@ namespace FAC_api.Controllers.INV
                             if (!d.Exportar)
                             {
                                 xrValidacionInventario.ExportToPdf(stream, null);
+                                DatosReporte.d = stream.ToArray();
                                 stream.Seek(0, SeekOrigin.Begin);
+                                 DatosReporte.Nombre = d.TipoReporte;
                             }
                             else
                             {
@@ -1366,14 +1350,83 @@ namespace FAC_api.Controllers.INV
 
 
 
+                            break;
+
+
+                        case "Ultima Compra":
+
+      
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Empty;
+
+                            Ultimas_Entradas_ProductoTableAdapter adpUltimaCompra = new Ultimas_Entradas_ProductoTableAdapter();
+                            adpUltimaCompra.Fill(DsetReporte.Ultimas_Entradas_Producto, Convert.ToDateTime(d.Param[0]), d.Param[1].ToString());
+
+                            xrUltimasEntrasProducto xrUltimasEntrasProducto = new xrUltimasEntrasProducto();
+                            xrUltimasEntrasProducto.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrUltimasEntrasProducto.DataSource = DsetReporte;
+                            xrUltimasEntrasProducto.ExportOptions.Pdf.DocumentOptions.Title = "Ultimas Compras";
+
+                            xrUltimasEntrasProducto.ShowPrintMarginsWarning = false;
+
+                            if (!d.Exportar)
+                            {
+                                //xrUltimasEntrasProducto.ExportToPdf(stream, null);
+                                //stream.Seek(0, SeekOrigin.Begin);
+
+                                List<Cls_UltimasCompras> qCompras = (from _q in DsetReporte.Ultimas_Entradas_Producto.AsEnumerable()
+                                                select new Cls_UltimasCompras
+                                                {
+                                                    NoPoliza = _q.Field<string>("NoPoliza"),
+                                                    Codigo = _q.Field<string>("Codigo"),
+                                                    Producto = _q.Field<string>("Producto"),
+                                                    Fecha = _q.Field<DateTime>("Fecha"),
+                                                    Cantidad = _q.Field<int>("Cantidad"),
+                                                    Bonificacion = _q.Field<int>("Bonificacion"),
+                                                    CostoFOB = _q.Field<decimal>("CostoFOB"),
+                                                    CostoCIF = _q.Field<decimal>("CostoCIF"),
+                                                    CostoFinal = _q.Field<decimal>("CostoFinal"),
+                                                    NoLote = _q.Field<string>("NoLote"),
+                                                    Vence = _q.Field<Nullable<DateTime>>("Vence"),
+                                                }).ToList();
+
+
+                                DatosReporte.d = new object[] { qCompras , false};
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+                            else
+                            {
+                                xrUltimasEntrasProducto.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Ultimas Compras";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
 
 
 
 
+                                stream = new MemoryStream();
 
-                            DatosReporte.d = stream.ToArray();
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = new object[] { stream.ToArray(), true };
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+
+
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
+
 
                         case "":
                             break;
