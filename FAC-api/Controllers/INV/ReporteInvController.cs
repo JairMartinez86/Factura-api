@@ -1481,6 +1481,115 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
 
+                        case "Factura Proveedor":
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+
+
+                            if (d.Param[2].ToString() == "D")
+                            {
+
+
+                                RPT_FacturacionProveedor_DetTableAdapter adpFacProvDet = new RPT_FacturacionProveedor_DetTableAdapter();
+                                adpFacProvDet.Fill(DsetReporte.RPT_FacturacionProveedor_Det, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]));
+
+                                xrpFacturacionProveedorDet xrpFacturacionProveedorDet = new xrpFacturacionProveedorDet();
+                                xrpFacturacionProveedorDet.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                                xrpFacturacionProveedorDet.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                                xrpFacturacionProveedorDet.DataSource = DsetReporte;
+                                xrpFacturacionProveedorDet.ExportOptions.Pdf.DocumentOptions.Title = "Fact ProveedorDet";
+
+                                xrpFacturacionProveedorDet.DataSource = DsetReporte;
+                                xrpFacturacionProveedorDet.ShowPrintMarginsWarning = false;
+
+
+                                if (!d.Exportar)
+                                {
+                                    xrpFacturacionProveedorDet.ExportToPdf(stream, null);
+                                    DatosReporte.d = stream.ToArray();
+                                    stream.Seek(0, SeekOrigin.Begin);
+                                    DatosReporte.Nombre = d.TipoReporte;
+                                }
+                                else
+                                {
+                                    xrpFacturacionProveedorDet.ExportToXlsx(stream, null);
+                                    stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                    Workbook workbook = new Workbook();
+
+                                    workbook.LoadDocument(stream);
+                                    Worksheet worksheet = workbook.Worksheets[0];
+                                    workbook.Worksheets[0].Name = "Fact ProveedorDet";
+                                    workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+
+
+                                    stream = new MemoryStream();
+
+                                    workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                    DatosReporte.d = stream.ToArray();
+                                    DatosReporte.Nombre = d.TipoReporte;
+
+                                }
+
+
+                            }
+                            else
+                            {
+
+                                RPT_FacturacionProveedor_ResumenTableAdapter adpFacProvRes = new RPT_FacturacionProveedor_ResumenTableAdapter();
+                                adpFacProvRes.Fill(DsetReporte.RPT_FacturacionProveedor_Resumen, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]));
+
+                                xrpFacturacionProveedorResumen xrpFacturacionProveedorResumen = new xrpFacturacionProveedorResumen();
+                                xrpFacturacionProveedorResumen.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                                xrpFacturacionProveedorResumen.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                                xrpFacturacionProveedorResumen.DataSource = DsetReporte;
+                                xrpFacturacionProveedorResumen.ExportOptions.Pdf.DocumentOptions.Title = "Fact Proveedor";
+
+                                xrpFacturacionProveedorResumen.DataSource = DsetReporte;
+                                xrpFacturacionProveedorResumen.ShowPrintMarginsWarning = false;
+
+
+                                if (!d.Exportar)
+                                {
+                                    xrpFacturacionProveedorResumen.ExportToPdf(stream, null);
+                                    DatosReporte.d = stream.ToArray();
+                                    stream.Seek(0, SeekOrigin.Begin);
+                                    DatosReporte.Nombre = d.TipoReporte;
+                                }
+                                else
+                                {
+                                    xrpFacturacionProveedorResumen.ExportToXlsx(stream, null);
+                                    stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                    Workbook workbook = new Workbook();
+
+                                    workbook.LoadDocument(stream);
+                                    Worksheet worksheet = workbook.Worksheets[0];
+                                    workbook.Worksheets[0].Name = "Fact Proveedor";
+                                    workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+
+
+                                    stream = new MemoryStream();
+
+                                    workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                    DatosReporte.d = stream.ToArray();
+                                    DatosReporte.Nombre = d.TipoReporte;
+
+                                }
+                            }
+
+
+                            break;
+
 
                         case "":
                             break;

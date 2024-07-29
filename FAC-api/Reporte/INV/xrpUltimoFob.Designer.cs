@@ -254,7 +254,6 @@
             this.xrTableCell8.StylePriority.UseTextAlignment = false;
             this.xrTableCell8.Text = "Fecha Ultima Poliza";
             this.xrTableCell8.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopCenter;
-            this.xrTableCell8.TextFormatString = "{0:yyyy}";
             this.xrTableCell8.Weight = 0.48219759850187588D;
             // 
             // xrPageInfo2

@@ -664,6 +664,18 @@
     <Compile Include="Reporte\INV\xrMargenProducto.Designer.cs">
       <DependentUpon>xrMargenProducto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrpFacturacionProveedorDet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrpFacturacionProveedorDet.Designer.cs">
+      <DependentUpon>xrpFacturacionProveedorDet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporte\INV\xrpFacturacionProveedorResumen.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrpFacturacionProveedorResumen.Designer.cs">
+      <DependentUpon>xrpFacturacionProveedorResumen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrpResumenCompras.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -960,6 +972,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrMargenProducto.resx">
       <DependentUpon>xrMargenProducto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrpFacturacionProveedorDet.resx">
+      <DependentUpon>xrpFacturacionProveedorDet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrpFacturacionProveedorResumen.resx">
+      <DependentUpon>xrpFacturacionProveedorResumen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrpResumenCompras.resx">
       <DependentUpon>xrpResumenCompras.cs</DependentUpon>
