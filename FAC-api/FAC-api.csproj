@@ -670,6 +670,12 @@
     <Compile Include="Reporte\INV\xrpResumenCompras.Designer.cs">
       <DependentUpon>xrpResumenCompras.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporte\INV\xrpUltimoFob.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reporte\INV\xrpUltimoFob.Designer.cs">
+      <DependentUpon>xrpUltimoFob.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reporte\INV\xrpVentasMensuales.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -957,6 +963,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrpResumenCompras.resx">
       <DependentUpon>xrpResumenCompras.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\INV\xrpUltimoFob.resx">
+      <DependentUpon>xrpUltimoFob.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporte\INV\xrpVentasMensuales.resx">
       <DependentUpon>xrpVentasMensuales.cs</DependentUpon>

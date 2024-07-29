@@ -1427,6 +1427,60 @@ namespace FAC_api.Controllers.INV
                             DatosReporte.Nombre = d.TipoReporte;
                             break;
 
+                        case "Ultimo FOB":
+
+                            if (d.Param[0] == null) d.Param[0] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+                            if (d.Param[1] == null) d.Param[1] = string.Format("{0:dd/MM/yyyy}", DateTime.Now);
+
+                            RPT_UltimoFobTableAdapter adpUltimoFOB = new RPT_UltimoFobTableAdapter();
+                            adpUltimoFOB.Fill(DsetReporte.RPT_UltimoFob, Convert.ToDateTime(d.Param[0]), Convert.ToDateTime(d.Param[1]));
+
+                            xrpUltimoFob xrpUltimoFob = new xrpUltimoFob();
+                            xrpUltimoFob.Parameters["P_Fecha1"].Value = Convert.ToDateTime(d.Param[0]);
+                            xrpUltimoFob.Parameters["P_Fecha2"].Value = Convert.ToDateTime(d.Param[1]);
+                            xrpUltimoFob.DataSource = DsetReporte;
+                            xrpUltimoFob.ExportOptions.Pdf.DocumentOptions.Title = "Ultimo FOB";
+
+                            xrpUltimoFob.DataSource = DsetReporte;
+                            xrpUltimoFob.ShowPrintMarginsWarning = false;
+
+
+                            if (!d.Exportar)
+                            {
+                                xrpUltimoFob.ExportToPdf(stream, null);
+                                DatosReporte.d = stream.ToArray();
+                                stream.Seek(0, SeekOrigin.Begin);
+                                DatosReporte.Nombre = d.TipoReporte;
+                            }
+                            else
+                            {
+                                xrpUltimoFob.ExportToXlsx(stream, null);
+                                stream.Seek(0, SeekOrigin.Begin);
+
+
+
+                                Workbook workbook = new Workbook();
+
+                                workbook.LoadDocument(stream);
+                                Worksheet worksheet = workbook.Worksheets[0];
+                                workbook.Worksheets[0].Name = "Ultimo FOB";
+                                workbook.Worksheets.ActiveWorksheet = worksheet;
+
+
+
+
+                                stream = new MemoryStream();
+
+                                workbook.SaveDocument(stream, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                                DatosReporte.d = stream.ToArray();
+                                DatosReporte.Nombre = d.TipoReporte;
+
+                            }
+
+
+                            DatosReporte.Nombre = d.TipoReporte;
+                            break;
+
 
                         case "":
                             break;
